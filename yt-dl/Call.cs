@@ -36,7 +36,7 @@ namespace yt_dl
             string date = yt_dl.AssemblyInfo.Date.ToString("dd.MM.yyyy");
 
             WriteLine("{0} vesion: {1}git by KoleckOLP, HorseArmored Inc (C){2}\n" +
-                      "Builded on: {3}, -h, -?, --help to show this message.\n" +
+                      "Built on: {3}, -h, -?, --help to show this message.\n" +
                       "youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n" +
                       "           (C)2011-{4} youtube-dl developers\n" +
                       "ffmpeg (C)2000-{5} FFmpeg team", name, ver, year, date, year, year);
@@ -150,73 +150,98 @@ namespace yt_dl
 
         public void Audio()
         {
-            WriteLine("\n\nlink to audio");
+            Clear();
+            WriteLine("link to audio or 0 to go back");
             Write("#");
             url = ReadLine();
-            lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, cest ,url);
-            youtubedl.Arguments = lnk;
-            using (var process = System.Diagnostics.Process.Start(youtubedl))
+            if (url == "0")
             {
-                process.WaitForExit();
+                Clear();
             }
-            Write("\a");
-            this.Paktq();
-            Clear();
-            WriteLine("Audio Download Finished, check your download location.");
+            else
+            {
+                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, cest, url);
+                youtubedl.Arguments = lnk;
+                using (var process = System.Diagnostics.Process.Start(youtubedl))
+                {
+                    process.WaitForExit();
+                }
+                Write("\a");
+            }
         }
 
         public void PlAudio()
         {
-            WriteLine("\n\nlink to audio playlist");
+            Clear();
+            WriteLine("link to audio playlist or 0 to go back");
             Write("#");
             url = ReadLine();
-            WriteLine("Do you want to download the full playlist <Enter>\n" +
-                      "or only part of it folow this example 1-3,7,10-13");
-            Write("#");
-            numb = ReadLine();
-            if(numb == "")
+            if(url == "0")
             {
-                lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, cest, url);
+                Clear();
             }
             else
             {
-                lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --ffmpeg-location \"{2}\" --audio-format mp3 \"{3}\"", audiopath, numb, cest, url);
+                WriteLine("Do you want to download the full playlist <Enter>\n" +
+                      "or only part of it, folow this example 1-3,7,10-13 or 0 to go back to menu");
+                Write("#");
+                numb = ReadLine();
+                if (numb == "")
+                {
+                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, cest, url);
+                    youtubedl.Arguments = lnk;
+                    using (var process = System.Diagnostics.Process.Start(youtubedl))
+                    {
+                        process.WaitForExit();
+                    }
+                    Write("\a");
+                }
+                else if(numb == "0")
+                {
+                    Clear();
+                }
+                else
+                {
+                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --ffmpeg-location \"{2}\" --audio-format mp3 \"{3}\"", audiopath, numb, cest, url);
+                    youtubedl.Arguments = lnk;
+                    using (var process = System.Diagnostics.Process.Start(youtubedl))
+                    {
+                        process.WaitForExit();
+                    }
+                    Write("\a");
+                }
             }
-            youtubedl.Arguments = lnk;
-            using (var process = System.Diagnostics.Process.Start(youtubedl))
-            {
-                process.WaitForExit();
-            }
-            Write("\a");
-            this.Paktq();
-            Clear();
-            WriteLine("Audio Download Finished, check your download location.");
         }
 
         public void Video()
         {
-            WriteLine("\n\nlink to video");
+            Clear();
+            WriteLine("link to video or 0 to ga back");
             Write("#");
             url = ReadLine();
-            lnk = String.Format("-F --no-playlist {0}", url);
-            youtubedl.Arguments = lnk;
-            using (var process = System.Diagnostics.Process.Start(youtubedl))
+            if (url == "0")
             {
-                process.WaitForExit();
+                Clear();
             }
-            WriteLine("choose video and audio quality by typing numb+numb");
-            Write("#");
-            numb = ReadLine();
-            lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --prefer-ffmpeg --ffmpeg-location \"{2}\" \"{3}\"", videopath, numb, cest, url);
-            youtubedl.Arguments = lnk;
-            using (var process = System.Diagnostics.Process.Start(youtubedl))
+            else
             {
-                process.WaitForExit();
+                lnk = String.Format("-F --no-playlist {0}", url);
+                youtubedl.Arguments = lnk;
+                using (var process = System.Diagnostics.Process.Start(youtubedl))
+                {
+                    process.WaitForExit();
+                }
+                WriteLine("choose video and audio quality by typing numb+numb");
+                Write("#");
+                numb = ReadLine();
+                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --prefer-ffmpeg --ffmpeg-location \"{2}\" \"{3}\"", videopath, numb, cest, url);
+                youtubedl.Arguments = lnk;
+                using (var process = System.Diagnostics.Process.Start(youtubedl))
+                {
+                    process.WaitForExit();
+                }
+                Write("\a");
             }
-            Write("\a");
-            this.Paktq();
-            Clear();
-            WriteLine("Video Download Finished, check your download location.");
         }
     }
 }

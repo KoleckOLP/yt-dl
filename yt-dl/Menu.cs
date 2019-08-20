@@ -72,7 +72,7 @@ namespace yt_dl
                         else
                         {
                             Clear();
-                            WriteLine("choice is 1-6");
+                            WriteLine("choice is 1-???");
                         }
                     }
                 }

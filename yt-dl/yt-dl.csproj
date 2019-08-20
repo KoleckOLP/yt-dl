@@ -17,8 +17,8 @@
     <Description>multiplatform youtube-dl simplifier</Description>
     <NeutralLanguage>en-150</NeutralLanguage>
     <PackageProjectUrl>https://koleckolp.github.io/gallery/games/other/ytdl/ytdl.html</PackageProjectUrl>
-    <AssemblyVersion>1.9.1.0</AssemblyVersion>
-    <FileVersion>1.9.1.0</FileVersion>
+    <AssemblyVersion>1.9.2.0</AssemblyVersion>
+    <FileVersion>1.9.2.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
