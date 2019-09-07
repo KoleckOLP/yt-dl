@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Reflection;
 using static System.Console;
 
 
@@ -10,14 +11,17 @@ namespace yt_dl
         {
             Call app = new Call();
 
-            app.Osext();
-            app.name = "youtube-dl" + app.ext;
+            app.OS();
+
+            app.settings = (Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + app.slash + "settings.json");
+
+            string prog = app.youtubedl.FileName = (Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + app.slash + "youtube-dl" + app.ext);
 
             Clear();
-            if (File.Exists(app.name))
+            if (File.Exists(prog))
             {
-                app.name = "ffmpeg" + app.ext;
-                if (File.Exists(app.name))
+                prog = (Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + app.slash + "ffmpeg" + app.ext);
+                if (File.Exists(prog))
                 {
                     char choice;
 
@@ -65,9 +69,29 @@ namespace yt_dl
                             Clear();
                             app.Showpath();
                         }
-                        else if(choice == '9')
+                        else if (choice == '9')
                         {
                             app.Chngpath();
+                        }
+                        else if (choice == '`')
+                        {
+                            string console;
+
+                            WriteLine(" ### Welcome to console ###");
+                            Write(">");
+                            console = ReadLine();
+                            if (console == "debug")
+                            {
+                                Clear();
+                                WriteLine("Debug:\n\n" +
+                                          "install falder:\n\"{0}\"\n" +
+                                          "yt-dl location:\n\"{1}\"\n" +
+                                          "settings location:\n\"{4}\"\n" +
+                                          "youtube-dl location:\n\"{2}\"\n" +
+                                          "ffmpeg location:\n\"{3}\"", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().Location, app.youtubedl.FileName, "called by youtube-dl so it's not tracked", app.settings);
+                                app.Paktq();
+                                Clear();
+                            }
                         }
                         else
                         {

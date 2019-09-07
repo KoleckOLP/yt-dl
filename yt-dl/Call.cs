@@ -10,14 +10,17 @@ namespace yt_dl
 {
     class Call
     {
+
         public string path = ""; //download path
         public string url = "";  //url of video
         public string lnk = "";  //final command for youtube-dl
         public string numb = ""; //vid quality
         public string cest = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        public string ytp = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
         public string ext = "";  //extencion .exe or nothing
-        public string name = ""; //youtube-dl, ffmpeg, ffprobe
+        public string slash = ""; //linux and windows use different slashes
+        public string settings = ""; //settings.json location
 
         public string audiopath; //path for audio
         public string videopath; //path for video
@@ -37,26 +40,31 @@ namespace yt_dl
 
             WriteLine("{0} vesion: {1}git by KoleckOLP, HorseArmored Inc (C){2}\n" +
                       "Built on: {3}, -h, -?, --help to show this message.\n" +
+                      "My webpage: https://koleckolp.github.io/\n" +
+                      "Project page: https://github.com/KoleckOLP/yt-dl\n" +
                       "youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n" +
                       "           (C)2011-{4} youtube-dl developers\n" +
                       "ffmpeg (C)2000-{5} FFmpeg team", name, ver, year, date, year, year);
         }
 
-        public void Osext()
+        public void OS()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 this.ext = "";
+                this.slash = "/";
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 this.ext = ".exe";
+                this.slash = "\\";
             }
         }
 
         public void Load()
         {
-            string save = File.ReadAllText("settings.json");
+
+            string save = File.ReadAllText(this.settings);
             Save sv = JsonConvert.DeserializeObject<Save>(save);
             audiopath = sv.audiopath;
             videopath = sv.videopath;
@@ -64,11 +72,12 @@ namespace yt_dl
 
         public void Save()
         {
+
             Save sv = new Save();
             sv.audiopath = audiopath;
             sv.videopath = videopath;
 
-            File.WriteAllText("settings.json", JsonConvert.SerializeObject(sv));
+            File.WriteAllText(this.settings, JsonConvert.SerializeObject(sv));
         }
 
         public void Showpath()
@@ -119,7 +128,6 @@ namespace yt_dl
         {
             UseShellExecute = false,
             CreateNoWindow = false,
-            FileName = "youtube-dl",
             Arguments = ""
         };
 
