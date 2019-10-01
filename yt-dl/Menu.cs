@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Runtime;
 using static System.Console;
 
 
@@ -13,14 +14,12 @@ namespace yt_dl
 
             app.OS();
 
-            app.settings = (Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + app.slash + "settings.json");
-
-            string prog = app.youtubedl.FileName = (Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + app.slash + "youtube-dl" + app.ext);
+            string prog = app.youtubedl.FileName = "youtube-dl" + app.ext;
 
             Clear();
             if (File.Exists(prog))
             {
-                prog = (Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + app.slash + "ffmpeg" + app.ext);
+                prog = "ffmpeg" + app.ext;
                 if (File.Exists(prog))
                 {
                     char choice;
