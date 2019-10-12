@@ -18,16 +18,10 @@ namespace yt_dl
 
         public string ext = "";  //extencion .exe or nothing
         public string slash = ""; //linux and windows use different slashes
-        public string settings = "settings.json"; //settings.json location
+        public string settings = ""; //settings.json location
 
         public string audiopath; //path for audio
         public string videopath; //path for video
-
-        public void Paktq()
-        {
-            WriteLine("Press any key to quit");
-            ReadKey();
-        }
 
         public static void Help()
         {
@@ -45,6 +39,33 @@ namespace yt_dl
                       "ffmpeg (C)2000-{5} FFmpeg team", name, ver, year, date, year, year);
         }
 
+        public void Debug()
+        {
+            string console;
+
+            WriteLine("\nPress any key to quit");
+            Write(">");
+            console = ReadLine();
+            if (console == "paths")
+            {
+                Clear();
+                Call.Paths();
+            }
+        }
+
+        public static void Paths()
+        {
+            Write("Paths are:\n" +
+                      "SingleFile: {0}\n" +
+                      "TempLocExt: {1}\n" +
+                      "YouRunFrom: {2}\n", Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName), Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), Environment.CurrentDirectory);
+
+            WriteLine("Press any key to quit");
+            ReadKey();
+            Clear();
+        }
+
+        //Musti OS depend
         public void OS()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -59,6 +80,7 @@ namespace yt_dl
             }
         }
 
+        //Save & Load paths
         public void Load()
         {
 
@@ -70,7 +92,6 @@ namespace yt_dl
 
         public void Save()
         {
-
             Save sv = new Save();
             sv.audiopath = audiopath;
             sv.videopath = videopath;
@@ -122,6 +143,7 @@ namespace yt_dl
             this.Showpath();
         }
 
+        //Youtube-dl & Downloading
         public ProcessStartInfo youtubedl = new ProcessStartInfo
         {
             UseShellExecute = false,

@@ -33,6 +33,10 @@ namespace yt_dl
                 menu.Start();
                 Environment.Exit(0);
             }
+            else if (argus[1] == "--paths" || argus[1] == "-p")
+            {
+                Call.Paths();
+            }
             else
             {
                 WriteLine("Neplatný argument: {1}", argus[1]);

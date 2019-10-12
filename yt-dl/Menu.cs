@@ -1,8 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
-using System.Runtime;
+using System.Diagnostics;
 using static System.Console;
-
 
 namespace yt_dl
 {
@@ -14,12 +14,16 @@ namespace yt_dl
 
             app.OS();
 
-            string prog = app.youtubedl.FileName = "youtube-dl" + app.ext;
+            Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+
+            string prog = app.youtubedl.FileName = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "youtube-dl" + app.ext;
+
+            app.settings = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "settings.json";
 
             Clear();
             if (File.Exists(prog))
             {
-                prog = "ffmpeg" + app.ext;
+                prog = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "ffmpeg" + app.ext;
                 if (File.Exists(prog))
                 {
                     char choice;
@@ -74,23 +78,7 @@ namespace yt_dl
                         }
                         else if (choice == '`')
                         {
-                            string console;
-
-                            WriteLine(" ### Welcome to console ###");
-                            Write(">");
-                            console = ReadLine();
-                            if (console == "debug")
-                            {
-                                Clear();
-                                WriteLine("Debug:\n\n" +
-                                          "install falder:\n\"{0}\"\n" +
-                                          "yt-dl location:\n\"{1}\"\n" +
-                                          "settings location:\n\"{4}\"\n" +
-                                          "youtube-dl location:\n\"{2}\"\n" +
-                                          "ffmpeg location:\n\"{3}\"", Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), Assembly.GetEntryAssembly().Location, app.youtubedl.FileName, "called by youtube-dl so it's not tracked", app.settings);
-                                app.Paktq();
-                                Clear();
-                            }
+                            app.Debug();
                         }
                         else
                         {
@@ -101,16 +89,18 @@ namespace yt_dl
                 }
                 else //ffmpeg
                 {
-                    WriteLine("You are missing ffmpeg, get it here: https://www.ffmpeg.org/");
-                    app.Paktq();
+                    WriteLine("You are missing ffmpeg, get it here: https://www.ffmpeg.org/\n" +
+                              "Place it in the same folder as yt - dl!!!\n");
+                    app.Debug();
                 }
             }
             else //youtube-dl
             {
                 WriteLine("You are missing youtube-dl, get it here: https://youtube-dl.org/\n" +
+                          "Place it in the same folder as yt-dl!!!\n" +
                           "Beaware this program breaks youtube TOS section 9.1 https://www.youtube.com/static?template=terms\n" +
-                          "Go get it at your own risk.");
-                app.Paktq();
+                          "Go get it at your own risk.\n");
+                app.Debug();
             }
             System.Environment.Exit(1);
         }
