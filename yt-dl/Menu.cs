@@ -23,7 +23,7 @@ namespace yt_dl
             Clear();
             if (File.Exists(prog))
             {
-                prog = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "ffmpeg" + app.ext;
+                prog = app.ffmpeg = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "ffmpeg" + app.ext;
                 if (File.Exists(prog))
                 {
                     char choice;

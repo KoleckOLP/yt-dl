@@ -19,6 +19,7 @@ namespace yt_dl
         public string ext = "";  //extencion .exe or nothing
         public string slash = ""; //linux and windows use different slashes
         public string settings = ""; //settings.json location
+        public string ffmpeg = ""; //ffmpeg location
 
         public string audiopath; //path for audio
         public string videopath; //path for video
@@ -188,7 +189,7 @@ namespace yt_dl
             }
             else
             {
-                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --audio-format mp3 \"{1}\"", audiopath, url);
+                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, ffmpeg, url);
                 youtubedl.Arguments = lnk;
                 using (var process = System.Diagnostics.Process.Start(youtubedl))
                 {
@@ -216,7 +217,7 @@ namespace yt_dl
                 numb = ReadLine();
                 if (numb == "")
                 {
-                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --audio-format mp3 \"{1}\"", audiopath, url);
+                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, ffmpeg, url);
                     youtubedl.Arguments = lnk;
                     using (var process = System.Diagnostics.Process.Start(youtubedl))
                     {
@@ -230,7 +231,7 @@ namespace yt_dl
                 }
                 else
                 {
-                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --audio-format mp3 \"{2}\"", audiopath, numb, url);
+                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --ffmpeg-location \"{2}\" --audio-format mp3 \"{3}\"", audiopath, numb, ffmpeg, url);
                     youtubedl.Arguments = lnk;
                     using (var process = System.Diagnostics.Process.Start(youtubedl))
                     {
@@ -262,7 +263,7 @@ namespace yt_dl
                 WriteLine("choose video and audio quality by typing numb+numb");
                 Write("#");
                 numb = ReadLine();
-                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --prefer-ffmpeg \"{2}\"", videopath, numb, url);
+                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --ffmpeg-location \"{2}\" --prefer-ffmpeg \"{2}\"", videopath, numb, ffmpeg, url);
                 youtubedl.Arguments = lnk;
                 using (var process = System.Diagnostics.Process.Start(youtubedl))
                 {
