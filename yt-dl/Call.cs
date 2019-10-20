@@ -17,10 +17,10 @@ namespace yt_dl
         public string lnk = "";  //final command for youtube-dl
         public string numb = ""; //vid quality
 
+        public bool indir = false; //youtube-dl & ffmpeg local or nah
         public string ext = "";  //extencion .exe or nothing
         public string slash = ""; //linux and windows use different slashes
         public string settings = ""; //settings.json location
-        public string ffmpeg = ""; //ffmpeg location
 
         public string audiopath; //path for audio
         public string videopath; //path for video
@@ -80,10 +80,10 @@ namespace yt_dl
                 this.slash = "\\";
             }
 
-            string path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+            path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
 
             youtubedl.FileName = path + slash + "youtube-dl" + ext;
-            ffmpeg = path + slash + "ffmpeg" + ext;
+            ffmpeg.FileName = path + slash + "ffmpeg" + ext;
             settings = path + slash + "settings.json";
         }
 
@@ -107,42 +107,40 @@ namespace yt_dl
 
         public void Showpath()
         {
-            if(audiopath == "")
-            {
-                WriteLine("audio is saved to: same folder as yt-dl");
-            }
-            else
-            {
-                WriteLine("audio is saved to: {0}",audiopath);
-            }
-
-            if (videopath == "")
-            {
-                WriteLine("video is saved to: same folder as yt-dl");
-            }
-            else
-            {
-                WriteLine("video is saved to: {0}", videopath);
-            }
-
+            WriteLine("audio is saved to: {0}", audiopath); 
+            WriteLine("video is saved to: {0}", videopath);
         }
 
         public void Chngpath()
         {
-            WriteLine("\n\nType path you want to save your audio\n" +
-                      "don't forget to type slash after the last folder\n" +
+            string choice = "";
+
+            WriteLine("\nType path you want to save your audio\n" +
                       "Right now it's {0}\n" +
                       "to save rith next to yt-dl press <Enter>", audiopath);
             Write("#");
-            path = ReadLine();
-            audiopath = path;
+            choice = ReadLine();
+            if (choice == "")
+            {
+                audiopath = path + slash;
+            }
+            else 
+            {
+                audiopath = choice + slash;
+            }
             WriteLine("\nType path you want to save your videos to\n" +
-                        "don't forget to type slash after the last folder\n" +
                         "Right now it's {0}\n" +
                         "to save rith next to yt-dl press <Enter>", videopath);
             Write("#");
-            path = ReadLine();
-            videopath = path;
+            choice = ReadLine();
+            if (choice == "")
+            {
+                videopath = path + slash;
+            }
+            else
+            {
+                videopath = choice + slash;
+            }
             Save();
             Load();
             Clear();
@@ -152,10 +150,60 @@ namespace yt_dl
         //Youtube-dl & Downloading
         public ProcessStartInfo youtubedl = new ProcessStartInfo
         {
-            UseShellExecute = false,
-            CreateNoWindow = false,
-            Arguments = ""
+            WindowStyle = ProcessWindowStyle.Normal,
+            RedirectStandardOutput = false,
+            RedirectStandardError = false,
+            CreateNoWindow = false
         };
+
+
+        public ProcessStartInfo ffmpeg = new ProcessStartInfo
+        {
+            WindowStyle = ProcessWindowStyle.Hidden,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            UseShellExecute = false,
+            CreateNoWindow = true
+        };
+
+        public void yttest()
+        {
+            try
+            {
+                youtubedl.WindowStyle = ProcessWindowStyle.Hidden;
+                youtubedl.RedirectStandardOutput = true;
+                youtubedl.RedirectStandardError = true;
+                youtubedl.UseShellExecute = false;
+                youtubedl.CreateNoWindow = true;
+                Process.Start(youtubedl);
+                youtubedl.WindowStyle = ProcessWindowStyle.Normal;
+                youtubedl.RedirectStandardOutput = false;
+                youtubedl.RedirectStandardError = false;
+                youtubedl.CreateNoWindow = false;
+                
+
+            }
+            catch (Exception)
+            {
+                
+                WriteLine("You are missing youtube-dl, get it here: https://youtube-dl.org/\n" +
+                          "Beaware this program breaks youtube TOS section 9.1 https://www.youtube.com/static?template=terms\n" +
+                          "Go get it at your own risk.");
+                Debug();
+            }
+
+            try
+            {
+                Process.Start(ffmpeg);
+            }
+            catch (Exception)
+            {
+                WriteLine("You are missing ffmpeg, get it here: https://www.ffmpeg.org/");
+
+                Debug();
+                Environment.Exit(1);
+            }
+        }
 
         public void Update()
         {
@@ -197,9 +245,17 @@ namespace yt_dl
             }
             else
             {
-                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, ffmpeg, url);
+                if (indir == true)
+                {
+                    lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, ffmpeg.FileName, url);
+                }
+                else
+                {
+                    lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --audio-format mp3 \"{1}\"", audiopath, url);
+                }
+                
                 youtubedl.Arguments = lnk;
-                using (var process = System.Diagnostics.Process.Start(youtubedl))
+                using (var process = Process.Start(youtubedl))
                 {
                     process.WaitForExit();
                 }
@@ -225,9 +281,17 @@ namespace yt_dl
                 numb = ReadLine();
                 if (numb == "")
                 {
-                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, ffmpeg, url);
+                    if (indir == true)
+                    {
+                        lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --ffmpeg-location \"{1}\" --audio-format mp3 \"{2}\"", audiopath, ffmpeg.FileName, url);
+                    }
+                    else
+                    {
+                        lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -x --prefer-ffmpeg --audio-format mp3 \"{1}\"", audiopath, url);
+                    } 
+                    
                     youtubedl.Arguments = lnk;
-                    using (var process = System.Diagnostics.Process.Start(youtubedl))
+                    using (var process = Process.Start(youtubedl))
                     {
                         process.WaitForExit();
                     }
@@ -239,9 +303,17 @@ namespace yt_dl
                 }
                 else
                 {
-                    lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --ffmpeg-location \"{2}\" --audio-format mp3 \"{3}\"", audiopath, numb, ffmpeg, url);
+                    if (indir == true)
+                    {
+                        lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --ffmpeg-location \"{2}\" --audio-format mp3 \"{3}\"", audiopath, numb, ffmpeg.FileName, url);
+                    }
+                    else
+                    {
+                        lnk = String.Format("-o \"{0}%(playlist_index)s. %(title)s.%(ext)s\" --playlist-items {1} -x --prefer-ffmpeg --audio-format mp3 \"{2}\"", audiopath, numb, url);
+                    }
+                        
                     youtubedl.Arguments = lnk;
-                    using (var process = System.Diagnostics.Process.Start(youtubedl))
+                    using (var process = Process.Start(youtubedl))
                     {
                         process.WaitForExit();
                     }
@@ -264,16 +336,24 @@ namespace yt_dl
             {
                 lnk = String.Format("-F --no-playlist {0}", url);
                 youtubedl.Arguments = lnk;
-                using (var process = System.Diagnostics.Process.Start(youtubedl))
+                using (var process = Process.Start(youtubedl))
                 {
                     process.WaitForExit();
                 }
                 WriteLine("choose video and audio quality by typing numb+numb");
                 Write("#");
                 numb = ReadLine();
-                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --ffmpeg-location \"{2}\" --prefer-ffmpeg \"{3}\"", videopath, numb, ffmpeg, url);
+                if (indir == true)
+                {
+                    lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --ffmpeg-location \"{2}\" --prefer-ffmpeg \"{3}\"", videopath, numb, ffmpeg.FileName, url);
+                }
+                else
+                {
+                    lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --prefer-ffmpeg \"{2}\"", videopath, numb, url);
+                }
+                
                 youtubedl.Arguments = lnk;
-                using (var process = System.Diagnostics.Process.Start(youtubedl))
+                using (var process = Process.Start(youtubedl))
                 {
                     process.WaitForExit();
                 }

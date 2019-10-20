@@ -11,14 +11,14 @@
     <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
     <ApplicationIcon>dot.ico</ApplicationIcon>
     <StartupObject></StartupObject>
-    <Version>1.9.4.0</Version>
+    <Version>1.9.4.5</Version>
     <Authors>KoleckOLP</Authors>
     <Company>HorseArmored Inc.</Company>
     <Description>multiplatform youtube-dl simplifier</Description>
     <NeutralLanguage>en-150</NeutralLanguage>
     <PackageProjectUrl>https://koleckolp.github.io/gallery/games/other/ytdl/ytdl.html</PackageProjectUrl>
-    <AssemblyVersion>1.9.4.0</AssemblyVersion>
-    <FileVersion>1.9.4.0</FileVersion>
+    <AssemblyVersion>1.9.4.5</AssemblyVersion>
+    <FileVersion>1.9.4.5</FileVersion>
     <Product>yt-dl</Product>
     <Copyright>HorseArmored Inc ©2019</Copyright>
     <Configurations>Debug;Release</Configurations>
@@ -52,7 +52,7 @@
 
   <ItemGroup>
     <None Update="settings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
     </None>
   </ItemGroup>
