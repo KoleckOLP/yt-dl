@@ -9,9 +9,6 @@ namespace yt_dl
     {
         static void Main(string[] args)
         {
-            string rootApp = Assembly.GetEntryAssembly().GetName().CodeBase.ToString();
-            Menu menu = new Menu();
-
             String[] argus = new string[2];
             if (Environment.GetCommandLineArgs().Length == 1)
             {
@@ -30,6 +27,8 @@ namespace yt_dl
             }
             else if (argus[1] == null)
             {
+                Menu menu = new Menu();
+
                 menu.Start();
                 Environment.Exit(0);
             }

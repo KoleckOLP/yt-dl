@@ -3,8 +3,9 @@ using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using static System.Console;
 using Newtonsoft.Json;
+using static System.Console;
+
 
 namespace yt_dl
 {
@@ -26,18 +27,17 @@ namespace yt_dl
 
         public static void Help()
         {
-            string name = Assembly.GetEntryAssembly().GetName().Name.ToString();
             string ver = Assembly.GetEntryAssembly().GetName().Version.ToString();
             string year = DateTime.Now.Year.ToString();
             string date = yt_dl.AssemblyInfo.Date.ToString("dd.MM.yyyy");
 
-            WriteLine("{0} vesion: {1}git by KoleckOLP, HorseArmored Inc (C){2}\n" +
-                      "Built on: {3}, -h, -?, --help to show this message.\n" +
+            WriteLine("yt-dl vesion: {0}git by KoleckOLP, HorseArmored Inc (C){1}\n" +
+                      "Built on: {2}, -h, -?, --help to show this message.\n" +
                       "My webpage: https://koleckolp.github.io/\n" +
                       "Project page: https://github.com/KoleckOLP/yt-dl\n" +
                       "youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n" +
-                      "           (C)2011-{4} youtube-dl developers\n" +
-                      "ffmpeg (C)2000-{5} FFmpeg team", name, ver, year, date, year, year);
+                      "           (C)2011-{3} youtube-dl developers\n" +
+                      "ffmpeg (C)2000-{4} FFmpeg team", ver, year, date, year, year);
         }
 
         public void Debug()
@@ -79,12 +79,17 @@ namespace yt_dl
                 this.ext = ".exe";
                 this.slash = "\\";
             }
+
+            string path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
+
+            youtubedl.FileName = path + slash + "youtube-dl" + ext;
+            ffmpeg = path + slash + "ffmpeg" + ext;
+            settings = path + slash + "settings.json";
         }
 
         //Save & Load paths
         public void Load()
         {
-
             string save = File.ReadAllText(this.settings);
             Save sv = JsonConvert.DeserializeObject<Save>(save);
             audiopath = sv.audiopath;
@@ -154,6 +159,9 @@ namespace yt_dl
 
         public void Update()
         {
+            Clear();
+            WriteLine("Updating please wait...");
+
             youtubedl.Arguments = "-U";
 
             using (var process = Process.Start(youtubedl))
@@ -263,7 +271,7 @@ namespace yt_dl
                 WriteLine("choose video and audio quality by typing numb+numb");
                 Write("#");
                 numb = ReadLine();
-                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --ffmpeg-location \"{2}\" --prefer-ffmpeg \"{2}\"", videopath, numb, ffmpeg, url);
+                lnk = String.Format("-o \"{0}%(title)s.%(ext)s\" -f \"{1}\" --no-playlist --ffmpeg-location \"{2}\" --prefer-ffmpeg \"{3}\"", videopath, numb, ffmpeg, url);
                 youtubedl.Arguments = lnk;
                 using (var process = System.Diagnostics.Process.Start(youtubedl))
                 {

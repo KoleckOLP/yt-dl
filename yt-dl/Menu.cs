@@ -13,27 +13,18 @@ namespace yt_dl
             Call app = new Call();
 
             app.OS();
+            app.Load();
 
-            Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
-
-            string prog = app.youtubedl.FileName = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "youtube-dl" + app.ext;
-
-            app.settings = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "settings.json";
-
-            Clear();
-            if (File.Exists(prog))
+            //Clear();
+            if (File.Exists(app.youtubedl.FileName))
             {
-                prog = app.ffmpeg = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + app.slash + "ffmpeg" + app.ext;
-                if (File.Exists(prog))
+                
+                if (File.Exists(app.ffmpeg))
                 {
                     char choice;
 
-                    app.Update();
-
-                    app.Load();
-
-                    Write("\n");
-                    app.Showpath();
+                    Clear();
+                    WriteLine("yt-dl {0} by KoleckOLP (C){1}", Assembly.GetEntryAssembly().GetName().Version.ToString(), yt_dl.AssemblyInfo.Date.ToString("yyyy"));
 
                     while (true)
                     {
@@ -41,6 +32,7 @@ namespace yt_dl
                                     "4. Audio playlist\n" +
                                     "2. Video\n" +
                                     "3. Exit\n\n" +
+                                    "6. Update youtube-dl\n" +
                                     "7. About & Credits\n" +
                                     "8. Show Download path\n" +
                                     "9. Change Download path");
@@ -61,6 +53,10 @@ namespace yt_dl
                         else if (choice == '3')
                         {
                             break;
+                        }
+                        else if (choice == '6')
+                        {
+                            app.Update();
                         }
                         else if (choice == '7')
                         {
