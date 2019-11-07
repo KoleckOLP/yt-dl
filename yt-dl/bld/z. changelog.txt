@@ -1,0 +1,62 @@
+Menu:
+1. Audio (detecting if playlist, best audio to mp3 try if it's better)
+{
+	just change --extractaudio to -x
+}
+
+2. Video (detecting if playlist, asking quality best(bestaudio+bestvideo) and okay)
+{
+	2. Video
+	paste link
+	#link
+	.playlist(if link contains "playlist") https://docs.microsoft.com/en-us/dotnet/api/system.string.contains?view=netcore-3.0
+		all or some...
+		#<Enter> for best quality(bestvideo+bestaudio) 1 for +/-720(best)
+		#<Enter>
+			youtube-dl -f bestvideo+bestaudio "link"
+		#1
+			youtube-dl -f best "link"
+
+	.normal(if it doesn't)
+		#<Enter> for best quality(bestvideo+bestaudio) 1 for +/-720(best) 2 choose yourself
+		#<Enter>
+			youtube-dl -f bestvideo+bestaudio "link"
+		#1
+			youtube-dl -f best "link"
+		#2
+			youtube-dl -F "link"
+		#num
+			youhube-dl -f "num" "link"
+}
+
+3. Subtitles (Download probably enter to englist any else to else, convert to srt (ffmpeg -i lol.vtt lol.srt) hawe to find the file in the dawnload folder location) {I think this is a bug in youtube-dl}
+{
+	3. Subttitles
+	Press 1 to choose language or <Enter> to get the default one(or might force en-US)
+		#<Enter>
+			youtube-dl.exe --write-sub --write-auto-sub --convert-subs srt "link"
+		#1
+			youtube-dl.exe --list-subs
+			multi
+			line
+			list
+			of 
+			subs
+		Write language you want to download
+		#en-US
+			youtube-dl.exe --write-sub --write-auto-sub --sub-lang "en-US" --convert-subs srt "link"
+
+	if they don't fix this issue - I can download the sub titles with the video to temp and copy only the srt out to users video folder
+}
+
+
+
+#todo
+
+Some ideas:
+- The "yt-dl 1.9.9.9 by KoleckOLP" line in bold and white font + black bg
+- Colored options depending on category
+  - Download options blue (Audio Video Subtitles)
+  - Exit red
+  - Misc options yellow maybe?
+- Generally input prompts in bold (i.e. the '#' you're using for user input)
