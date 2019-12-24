@@ -5,27 +5,7 @@ using static System.Console;
 namespace yt_dl
 {
     class Menu
-    {
-        public char ReadSingleKey()
-        {
-            while (true) {
-                char c = ReadKey().KeyChar;
-                if (KeyAvailable) // Input was pasted in
-                {
-                    while (KeyAvailable)
-                    {
-                        Write("\b");
-                        ReadKey();
-                    }
-                    Write("\b \b");
-                }
-                else // There are no more chars queued, so user must
-                {    // have typed manually
-                    return c;
-                }
-            }
-        }
-        
+    {        
         public void Start()
         {
             Call app = new Call();
@@ -75,7 +55,7 @@ namespace yt_dl
                           "8. Show Download path\n" +
                           "9. Change Download path");
                 Write("#");
-                choice = ReadSingleKey();
+                choice = app.ReadSingleKey();
                 
                 if (choice == '1') //Audio
                 {

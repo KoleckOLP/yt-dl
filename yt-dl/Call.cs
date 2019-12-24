@@ -149,6 +149,25 @@ namespace yt_dl
             this.Showpath();
         }
 
+        //kangalioo's contribution
+        public char ReadSingleKey()
+        {
+            char c = ReadKey().KeyChar;
+            if (KeyAvailable) // Input was pasted in
+            {
+                while (KeyAvailable)
+                {
+                    Write("\b");
+                    ReadKey();
+                }
+                return 'z'; //returning char just to error get displayed
+            }
+            else // There are no more chars queued, so user must
+            {    // have typed manually
+                return c;
+            }
+        }
+
         //Youtube-dl & Downloading
         public ProcessStartInfo youtubedl = new ProcessStartInfo
         {
