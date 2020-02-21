@@ -108,7 +108,8 @@ def slpath():
 def upytdl():
     print("Updating yt-dl...")
     if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
-        os.system("cd "+os.path.realpath(os.path.dirname(sys.argv[0])))
+        os.system("cd "+spath)
+        os.system("echo %cd%")
         os.system("git pull")
     else:
         print("yt-dl wasn't installed trought git.\n"
@@ -255,6 +256,6 @@ def debug():
                 git = False
             print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
         else:
-            break
             clear()
             name()
+            break    
