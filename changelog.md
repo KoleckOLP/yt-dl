@@ -5,7 +5,7 @@ yt-dl 2.1.0.0 (Snow Leopard):
 + probably can even update itself
 + Tested on: Windows 10 x64, HaikuOS x64, Android(Termux) Arm64, Linux x64
 
-yt-dl 2.1.0.4
+yt-dl 2.1.0.5
 + fixed updating
 + rewriten first run
 + added reading of changelog.
