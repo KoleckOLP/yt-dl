@@ -107,15 +107,16 @@ def update():
     cmd = readchar("#")
     if(cmd == "1"):
         clear()
-        if(os.path.exists(".git")):
+        if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
             subprocess.call(['git', 'pull'])
         else:
             print("yt-dl wasn't installed trought git.")
         subprocess.call(['pip', 'install', '--upgrade', 'youtube-dl'])
     elif(cmd == "2"):
         clear()
-        if(os.path.exists(".git")):
-            subprocess.call(['git', 'pull'])
+        if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
+            os.system("cd "+os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))))
+            os.system("git pull")
         else:
             print("yt-dl wasn't installed trought git.")
     elif(cmd == "3"):
