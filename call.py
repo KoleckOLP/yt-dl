@@ -7,9 +7,8 @@ import sys, os
 import glob
 import json
 
-
 year = datetime.now().year
-ver = "2.1.0.5 Testing branch"
+ver = "2.1.0.5 git"
 lstupdt = "21.02.2020"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
@@ -138,8 +137,6 @@ def update():
             name()
     else:
         upytdl()
-        
-    
 
 def audiod():
     clear()
