@@ -7,11 +7,10 @@ import sys, os
 import glob
 import json
 
-
 year = datetime.now().year
-ver = "2.1.0.5"
+ver = "2.1.0.5 git"
 lstupdt = "21.02.2020"
-spath = os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep
+spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
 def name():
@@ -35,7 +34,7 @@ def readchar(o): #multiplatform readchar
 
 def about():
     clear()
-    print(f"yt-dl version: {ver}git by KoleckOLP,\n"
+    print(f"yt-dl version: {ver} by KoleckOLP,\n"
          +f"HorseArmored inc (C){year}\n"
          +f"Last updated on: {lstupdt}\n"
          +f"Proudly supporting:\n"
@@ -107,8 +106,9 @@ def slpath():
 
 def upytdl():
     print("Updating yt-dl...")
-    if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
-        os.system("cd "+os.path.realpath(os.path.dirname(sys.argv[0])))
+    if(os.path.exists(spath+".git")):
+        os.system("cd "+spath)
+        os.system("echo %cd%")
         os.system("git pull")
     else:
         print("yt-dl wasn't installed trought git.\n"
@@ -138,8 +138,6 @@ def update():
             name()
     else:
         upytdl()
-        
-    
 
 def audiod():
     clear()
@@ -255,6 +253,6 @@ def debug():
                 git = False
             print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
         else:
-            break
             clear()
             name()
+            break    
