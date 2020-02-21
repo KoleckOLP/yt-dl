@@ -107,7 +107,7 @@ def slpath():
 
 def upytdl():
     print("Updating yt-dl...")
-    if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
+    if(os.path.exists(spath+".git")):
         os.system("cd "+spath)
         os.system("git pull")
     else:
