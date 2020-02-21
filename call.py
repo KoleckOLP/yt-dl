@@ -9,9 +9,9 @@ import json
 
 
 year = datetime.now().year
-ver = "2.1.0.4"
+ver = "2.1.0.5"
 lstupdt = "21.02.2020"
-spath = os.path.realpath(os.path.dirname(__file__))+os.path.sep
+spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
 def name():
