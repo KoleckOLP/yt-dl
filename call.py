@@ -9,10 +9,13 @@ import json
 
 
 year = datetime.now().year
-ver = "2.1.0.2"
+ver = "2.1.0.5"
 lstupdt = "21.02.2020"
 spath = os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep
 settings = spath+"settings.json"
+
+def name():
+    print(f"yt-dl {ver} by KoleckOLP (C){year}\n")
 
 def clear():
     if(os.name == 'nt'):
@@ -27,36 +30,8 @@ def readchar(o): #multiplatform readchar
     x = getch()
     if isinstance(x, bytes): #fix if returned in bytes, need to fix when input is arrowkeys
          x = x.decode("UTF-8")
-    return x
-
-def firstrun():
-    print("Welcome to first time setup,\n"
-         +"We will need to install some dependencies.\n"
-         +"install py-getch with pip? [Y/n]]")
-    cmd = readchar("#")
-    if(cmd == "y"):
-        subprocess.call(["pip","install","py-getch"])
-    print("\ninstall youtube-dl (at your risk) with pip [Y/n]")
-    cmd = readchar("#")
-    if(cmd == "y"):
-        subprocess.call(["pip","install","youtube-dl"])
-    print("\nLast dependenci ffmpeg & ffprobe\n"
-         +"get them in package manager or\n"
-         +"https://ffbinaries.com/downloads")
-    readchar("Press any key to continue...")
-    print("\nOne last thing, We need to choose where to save audio and videos")
-    savepath()
-    print("That should be everything,\n"
-         +"quit if you need to install dependencies manually\n"
-         +"1. continue\n2. setup again\n3. quit")
-    cmd = readchar("#")
-    if(cmd == "1"):
-        clear()
-        loadpath()
-    elif(cmd == "2"):
-        firstrun()
-    else:
-        exit()
+    x = x.lower()
+    return x    
 
 def about():
     clear()
@@ -70,12 +45,22 @@ def about():
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
          +f"           (C)2011-{year} youtube-dl developers\n"
          +f"ffmpeg (C)2000-{year} FFmpeg team")
+    print("Do you want to see the changelog? [Y/n]")
+    cmd = readchar("#")
+    if (cmd == "y"): 
+        fh = open("changelog.md", "r")
+        print("\n\nchangelog.md:\n"+fh.read())
+        fh.close()
+    else:
+        clear()
+        name()
 
-def savepath():
+def savepath(x=""):
     print("Type path were you want to store audio 0. GoBack")
     aud = input("#")
     if(aud == "0"):
         clear()
+        name()
     else:
         if(aud == ""):
             aud = spath+"audio"
@@ -84,46 +69,77 @@ def savepath():
         vid = input("#")
         if(vid == "0"):
             clear()
+            name()
         else:
             if(vid == ""):
                 vid = spath+"videos"
-            file_handler = open(settings, "w")
-            json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep}, file_handler)
-            file_handler.close()
+            if(x == ""):
+                loadpath("hid")
+                x = ydpip
+            fh = open(settings, "w")
+            json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep, "ydpip": x}, fh)
+            fh.close()
 
-def loadpath():
+def loadpath(s="show"):
     global audio
     global videos
-    file_handler = open(settings, "r")
-    path = json.loads(file_handler.read())
-    file_handler.close()
+    global ydpip
+    fh = open(settings, "r")
+    path = json.loads(fh.read())
+    fh.close()
     audio = path["audio"]
     videos = path["videos"]
-    print(f"audio is saved to: {audio}\nvideo is saved to: {videos}")
+    ydpip = path["ydpip"]
+    if(s == "show"):
+        print(f"audio is saved to: {audio}\nvideo is saved to: {videos}")
+
+def slpath():
+    loadpath()
+    print("Do you want to change download path [Y/n]")
+    cmd = readchar("#")
+    if (cmd == "y"):
+        savepath()
+        clear()
+        loadpath()
+    else:
+        clear()
+        name()
+
+def upytdl():
+    print("Updating yt-dl...")
+    if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
+        os.system("cd "+os.path.realpath(os.path.dirname(sys.argv[0])))
+        os.system("git pull")
+    else:
+        print("yt-dl wasn't installed trought git.\n"
+        +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")    
+
+def upyd():
+    print("Updating youtube-dl...")
+    subprocess.call(['pip', 'install', '--upgrade', 'youtube-dl'])
 
 def update():
     clear()
-    print("What do you want to update?\n1. All(yt-dl & youtube-dl)\n2. yt-dl\n3. youtube-dl\n0. GoBack")
-    cmd = readchar("#")
-    if(cmd == "1"):
-        clear()
-        if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
-            subprocess.call(['git', 'pull'])
+    if(ydpip == True):
+        print("What do you want to update?\n1. All(yt-dl & youtube-dl)\n2. yt-dl\n3. youtube-dl\n0. GoBack")
+        cmd = readchar("#")
+        if(cmd == "1"): #All
+            clear()
+            upytdl()
+            upyd()
+        elif(cmd == "2"): #yt-dl
+            clear()
+            upytdl()
+        elif(cmd == "3"): #youtube-dl
+            clear()
+            upyd()
         else:
-            print("yt-dl wasn't installed trought git.")
-        subprocess.call(['pip', 'install', '--upgrade', 'youtube-dl'])
-    elif(cmd == "2"):
-        clear()
-        if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
-            os.system("cd "+os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))))
-            os.system("git pull")
-        else:
-            print("yt-dl wasn't installed trought git.")
-    elif(cmd == "3"):
-        clear()
-        subprocess.call(['pip', 'install', '--upgrade', 'youtube-dl'])
+            clear()
+            name()
     else:
-        clear()
+        upytdl()
+        
+    
 
 def audiod():
     clear()
@@ -131,6 +147,7 @@ def audiod():
     url = input("#")
     if(url == "0"):
         clear()
+        name()
     else:
         print("<Enter> a single audio, \n"
              +"1. to download full playlist or follow example 1-3,7,9")
@@ -150,6 +167,7 @@ def videod():
     url = input("#")
     if (url == "0"):
         clear()
+        name()
     else:
         print("<Enter> a single video, \n"
              +"1. to download full playlist or follow example 1-3,7,9")
@@ -192,6 +210,7 @@ def subd():
     url = input("#")
     if (url == "0"):
         clear()
+        name()
     else:
         print("<Enter> to download default sub (en),\n"
              +"1 to choose language")
@@ -213,8 +232,29 @@ def subd():
     print("\a")
 
 def debug():
-    clear()
-    print("Paths:")
-    for p in sys.path: print(p)
-    readchar("press any key to continue...")
-    clear()
+    print("Welcome to debug menu:")
+    while(True):
+        cmd = input(">")
+        if (cmd == "paths"):
+            print("Paths:")
+            for p in sys.path: print(p)
+        elif(cmd == "saves"):
+            print("Saves:")
+            if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
+                git = True
+            else:
+                git = False
+            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+        elif(cmd == "all"):
+            print("Paths:")
+            for p in sys.path: print(p)
+            print("Saves:")
+            if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
+                git = True
+            else:
+                git = False
+            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+        else:
+            break
+            clear()
+            name()

@@ -6,6 +6,13 @@ yt-dl 2.1.0.0 (Snow Leopard):
 + Tested on: Windows 10 x64, HaikuOS x64, Android(Termux) Arm64, Linux x64
 
 yt-dl 2.1.0.5
-+ add custom pip name (well kinda useless)
-+ rewrite to subprocess.call(s)
-+ add reading of changelog
++ fixed updating
++ rewriten first run
++ added reading of changelog.
++ youtube-dl from pip ("ydpip": "true/false")
+### ^Current/Done^ ###
+
+yt-dl 2.1.X.X
++ nothing but chickens
++ implement Osana.
+### ^Planned/ToBeDone^ ###
