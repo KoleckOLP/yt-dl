@@ -109,7 +109,7 @@ def upytdl():
     print("Updating yt-dl...")
     if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
         os.system("cd "+spath)
-        os.system("echo %cd%")
+
         os.system("git pull")
     else:
         print("yt-dl wasn't installed trought git.\n"
