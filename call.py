@@ -9,7 +9,7 @@ import json
 
 
 year = datetime.now().year
-ver = "2.1.0.5"
+ver = "2.1.0.5 testing"
 lstupdt = "21.02.2020"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
@@ -35,7 +35,7 @@ def readchar(o): #multiplatform readchar
 
 def about():
     clear()
-    print(f"yt-dl version: {ver}git by KoleckOLP,\n"
+    print(f"yt-dl version: {ver} by KoleckOLP,\n"
          +f"HorseArmored inc (C){year}\n"
          +f"Last updated on: {lstupdt}\n"
          +f"Proudly supporting:\n"
