@@ -142,12 +142,15 @@ def update():
             clear()
             upytdl()
             upyd()
+            print("\n!!!restart for chanes to take effect!!!\n")
         elif(cmd == "2"): #yt-dl
             clear()
             upytdl()
+            print("\n!!!restart for chanes to take effect!!!\n")
         elif(cmd == "3"): #youtube-dl
             clear()
             upyd()
+            print("")
         else:
             clear()
             name()
