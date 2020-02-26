@@ -9,7 +9,7 @@ else:
     firstrun()  
 
 while(True):
-    print("71. Audio\n2. Video\t6. Update\n3. Exit\t\t7. Download path\n4. Subtitles\t8. About, Changelog")
+    print("1. Audio\n2. Video\t6. Update\n3. Exit\t\t7. Download path\n4. Subtitles\t8. About, Changelog")
     cmd = readchar("#")
 
     if(cmd == "1"): #audio
