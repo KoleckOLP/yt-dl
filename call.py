@@ -8,8 +8,8 @@ import glob
 import json
 
 year = datetime.now().year
-ver = "2.1.0.5 git"
-lstupdt = "21.02.2020"
+ver = "2.1.0.6 git"
+lstupdt = "26.02.2020"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -30,7 +30,19 @@ def readchar(o): #multiplatform readchar
     if isinstance(x, bytes): #fix if returned in bytes, need to fix when input is arrowkeys
          x = x.decode("UTF-8")
     x = x.lower()
-    return x    
+    return x  
+
+def firstrun():
+    clear()
+    print("Have you installed youtube-dl with pip? [Y/n]]")
+    cmd = readchar("#")
+    if (cmd == "y"):
+        ydpip = True
+    else:
+        ydpip = False
+    savepath(ydpip)
+    loadpath("hid")
+    about()   
 
 def about():
     clear()
@@ -38,24 +50,25 @@ def about():
          +f"HorseArmored inc (C){year}\n"
          +f"Last updated on: {lstupdt}\n"
          +f"Proudly supporting:\n"
-         +f"Windows,Linux,Mac,haiku,Android anything python3\n"
+         +f"Windows, Linux, Mac, haiku, Android anything python3\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
          +f"           (C)2011-{year} youtube-dl developers\n"
          +f"ffmpeg (C)2000-{year} FFmpeg team")
-    print("Do you want to see the changelog? [Y/n]")
+    print("Do you want to see whats new? [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"): 
-        fh = open("changelog.md", "r")
-        print("\n\nchangelog.md:\n"+fh.read())
+        clear()
+        fh = open("whatsnew.md", "r")
+        print(fh.read())
         fh.close()
     else:
         clear()
         name()
 
 def savepath(x=""):
-    print("Type path were you want to store audio 0. GoBack")
+    print("\nType path were you want to store audio 0. GoBack")
     aud = input("#")
     if(aud == "0"):
         clear()
@@ -90,16 +103,19 @@ def loadpath(s="show"):
     videos = path["videos"]
     ydpip = path["ydpip"]
     if(s == "show"):
-        print(f"audio is saved to: {audio}\nvideo is saved to: {videos}")
+        print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\n")
 
 def slpath():
     loadpath()
-    print("Do you want to change download path [Y/n]")
+    print("1.  chonge download path\n2. delete settings\nor any key to continue...")
     cmd = readchar("#")
-    if (cmd == "y"):
+    if (cmd == "1"):
         savepath()
         clear()
         loadpath()
+    elif (cmd == "2"):
+        os.remove(settings)
+        firstrun()
     else:
         clear()
         name()
@@ -126,12 +142,15 @@ def update():
             clear()
             upytdl()
             upyd()
+            print("\n!!!restart for chanes to take effect!!!\n")
         elif(cmd == "2"): #yt-dl
             clear()
             upytdl()
+            print("\n!!!restart for chanes to take effect!!!\n")
         elif(cmd == "3"): #youtube-dl
             clear()
             upyd()
+            print("")
         else:
             clear()
             name()
