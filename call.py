@@ -8,7 +8,7 @@ import glob
 import json
 
 year = datetime.now().year
-ver = "2.1.0.6 git"
+ver = "2.1.3.1-testing" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
 lstupdt = "26.02.2020"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
@@ -49,8 +49,6 @@ def about():
     print(f"yt-dl version: {ver} by KoleckOLP,\n"
          +f"HorseArmored inc (C){year}\n"
          +f"Last updated on: {lstupdt}\n"
-         +f"Proudly supporting:\n"
-         +f"Windows, Linux, Mac, haiku, Android anything python3\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
@@ -61,7 +59,7 @@ def about():
     if (cmd == "y"): 
         clear()
         fh = open("whatsnew.md", "r")
-        print(fh.read())
+        print(fh.read()+"\n")
         fh.close()
     else:
         clear()
