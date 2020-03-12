@@ -293,6 +293,18 @@ def debug():
             else:
                 git = False
             print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+        elif(cmd == "deldown"):
+            print("Are you sure you want to delete all audio and videos [Y/n]")
+            cmd = readchar("")
+            if(cmd == "y"):
+                if(os.name == 'nt'):
+                    os.system('del '+audio)
+                    os.system('del '+videos)
+                elif(os.name == 'posix'):
+                    os.system('rm '+audio+os.pathsep)
+                    os.system('rm '+videos+os.pathsep)
+            else:
+                print("no than lol.")
         else:
             clear()
             name()
