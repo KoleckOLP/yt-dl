@@ -8,8 +8,8 @@ import glob
 import json
 
 year = datetime.now().year
-ver = "2.1.3.2-testing" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
-lstupdt = "12.03.2020"
+ver = "2.1.3"
+lstupdt = "13.03.2020"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
