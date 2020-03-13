@@ -8,8 +8,8 @@ import glob
 import json
 
 year = datetime.now().year
-ver = "2.1.0.6 git"
-lstupdt = "26.02.2020"
+ver = "2.1.3.2-testing" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
+lstupdt = "12.03.2020"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -34,13 +34,22 @@ def readchar(o): #multiplatform readchar
 
 def firstrun():
     clear()
+    print("What's the name of your python executable.\n<enter> for python")
+    py = input("#")
+    if (py == ""):
+        py = "python"
+    print("What's the name of your pip executable.\n<Enter> for pip")
+    pip = input("#")
+    if (pip == ""):
+        pip = "pip"
     print("Have you installed youtube-dl with pip? [Y/n]]")
     cmd = readchar("#")
+    print()
     if (cmd == "y"):
         ydpip = True
     else:
         ydpip = False
-    savepath(ydpip)
+    savepath(py,pip,ydpip)
     loadpath("hid")
     about()   
 
@@ -49,8 +58,6 @@ def about():
     print(f"yt-dl version: {ver} by KoleckOLP,\n"
          +f"HorseArmored inc (C){year}\n"
          +f"Last updated on: {lstupdt}\n"
-         +f"Proudly supporting:\n"
-         +f"Windows, Linux, Mac, haiku, Android anything python3\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
@@ -61,14 +68,15 @@ def about():
     if (cmd == "y"): 
         clear()
         fh = open("whatsnew.md", "r")
-        print(fh.read())
+        print(fh.read()+"\n")
         fh.close()
     else:
         clear()
         name()
 
-def savepath(x=""):
-    print("\nType path were you want to store audio 0. GoBack")
+def savepath(x="", y="", z=""):
+    print("Type path were you want to store audio,"
+             +"\n<Enter> a default subdir 0. GoBack")
     aud = input("#")
     if(aud == "0"):
         clear()
@@ -85,29 +93,44 @@ def savepath(x=""):
         else:
             if(vid == ""):
                 vid = spath+"videos"
-            if(x == ""):
+            if(x == "" and y == "" and z == ""):
                 loadpath("hid")
-                x = ydpip
+                x = py
+                y = pip
+                z = ydpip
             fh = open(settings, "w")
-            json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep, "ydpip": x}, fh)
+            json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z}, fh)
             fh.close()
 
 def loadpath(s="show"):
     global audio
     global videos
+    global py
+    global pip
     global ydpip
     fh = open(settings, "r")
     path = json.loads(fh.read())
     fh.close()
-    audio = path["audio"]
-    videos = path["videos"]
-    ydpip = path["ydpip"]
+    try:
+        path["audio"]
+        path["videos"]
+        path["py"]
+        path["pip"]
+        path["ydpip"]
+    except KeyError:
+        firstrun()
+    else:
+        audio = path["audio"]
+        videos = path["videos"]
+        py = path["py"]
+        pip = path["pip"]
+        ydpip = path["ydpip"]
     if(s == "show"):
         print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\n")
 
 def slpath():
     loadpath()
-    print("1.  chonge download path\n2. delete settings\nor any key to continue...")
+    print("1. change download path\n2. delete settings\nor any key to continue...")
     cmd = readchar("#")
     if (cmd == "1"):
         savepath()
@@ -131,7 +154,7 @@ def upytdl():
 
 def upyd():
     print("Updating youtube-dl...")
-    subprocess.call(['pip', 'install', '--upgrade', 'youtube-dl'])
+    subprocess.call([pip, 'install', '--upgrade', 'youtube-dl'])
 
 def update():
     clear()
@@ -216,13 +239,13 @@ def videod():
                     lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg \"{url}\""
                 else:
                     lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg \"{url}\""
-    os.system("youtube-dl "+lnk)
-    print("\a")
+        os.system("youtube-dl "+lnk)
+        print("\a")
 
 def subd():
     clear()
     temp = tempfile.mkdtemp()+os.path.sep
-    print("link to video with subs or 0 to go back")
+    print("link to video with subs or 0. GoBack")
     url = input("#")
     if (url == "0"):
         clear()
@@ -238,14 +261,14 @@ def subd():
             print("choose sub language")
             numb = input("#")
             lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-lang \"{numb}\" --sub-format vtt --skip-download --prefer-ffmpeg \"{url}\""
-    os.system("youtube-dl "+lnk)
-    pie = glob.glob(f"{temp}*.vtt")
-    cream = os.path.basename(pie[0])
-    cream = cream[:-3]
-    lick = videos+cream+"srt"
-    os.makedirs(videos, exist_ok=True)
-    os.system(f"ffmpeg -i \"{pie[0]}\" \"{lick}\"")
-    print("\a")
+        os.system("youtube-dl "+lnk)
+        pie = glob.glob(f"{temp}*.vtt")
+        cream = os.path.basename(pie[0])
+        cream = cream[:-3]
+        lick = videos+cream+"srt"
+        os.makedirs(videos, exist_ok=True)
+        os.system(f"ffmpeg -i \"{pie[0]}\" \"{lick}\"")
+        print("\a")
 
 def debug():
     print("Welcome to debug menu:")
@@ -260,7 +283,7 @@ def debug():
                 git = True
             else:
                 git = False
-            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
         elif(cmd == "all"):
             print("Paths:")
             for p in sys.path: print(p)
@@ -269,7 +292,19 @@ def debug():
                 git = True
             else:
                 git = False
-            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+        elif(cmd == "deldown"):
+            print("Are you sure you want to delete all audio and videos [Y/n]")
+            cmd = readchar("")
+            if(cmd == "y"):
+                if(os.name == 'nt'):
+                    os.system('del '+audio)
+                    os.system('del '+videos)
+                elif(os.name == 'posix'):
+                    os.system('rm '+audio+os.pathsep)
+                    os.system('rm '+videos+os.pathsep)
+            else:
+                print("no than lol.")
         else:
             clear()
             name()
