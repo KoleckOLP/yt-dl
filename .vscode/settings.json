@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "env\\Scripts\\python.exe",
+    "terminal.integrated.shellArgs.windows": "-ExecutionPolicy ByPass"
+}

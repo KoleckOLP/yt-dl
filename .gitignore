@@ -1,2 +1,6 @@
 settings.json
 __pycache__
+env
+audio
+videos
+!.vscode/settings.json

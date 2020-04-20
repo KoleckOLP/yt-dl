@@ -7,9 +7,13 @@ import sys, os
 import glob
 import json
 
+def is_venv():
+    return (hasattr(sys, 'real_prefix') or
+            (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
+
 year = datetime.now().year
-ver = "2.1.3.2-testing" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
-lstupdt = "12.03.2020"
+ver = "2.1.4.1-testing" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
+lstupdt = "2020-04-20"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -153,13 +157,13 @@ def upytdl():
         +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")    
 
 def upyd():
-    print("Updating youtube-dl...")
-    subprocess.call([pip, 'install', '--upgrade', 'youtube-dl'])
+    print("Updating dependencies...")
+    os.system("pip install -r requirements.txt")
 
 def update():
     clear()
     if(ydpip == True):
-        print("What do you want to update?\n1. All(yt-dl & youtube-dl)\n2. yt-dl\n3. youtube-dl\n0. GoBack")
+        print("What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n0. GoBack")
         cmd = readchar("#")
         if(cmd == "1"): #All
             clear()
@@ -293,6 +297,11 @@ def debug():
             else:
                 git = False
             print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}")
+            if is_venv():
+                venv = True
+            else:
+                venv = False
+            print(f"in venv: {venv}")
         elif(cmd == "deldown"):
             print("Are you sure you want to delete all audio and videos [Y/n]")
             cmd = readchar("")
