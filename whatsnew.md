@@ -2,6 +2,9 @@ New in 2.1.4
 I switched to venv you should too,
 dependecie are now in requirements.txt
 update now uses requirements.txt to update all dependencies
+added a text so the program does not look like it froze when it's starting youtube-dl
+dependecy upglade uses the pip name you set
+launch script generator
 
 New in 2.1.3
 new versioning system, Lang, Featureset, patch/bugfix
@@ -15,5 +18,5 @@ Osana is still not finished, lol.
 To do:
         [    ] option to change branch
         [    ] autoupdate true false
-        [    ] generate yt-dl.bat/.sh (after sutup and option in 6. Update)
+        [done] generate yt-dl.bat/.sh (after sutup and option in 6. Update)
         [    ] help people export their path, copy ffmpeg to dir 

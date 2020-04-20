@@ -3,4 +3,5 @@ __pycache__
 env
 audio
 videos
+*.bat
 !.vscode/settings.json

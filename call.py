@@ -12,10 +12,12 @@ def is_venv():
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
 year = datetime.now().year
-ver = "2.1.4.1-testing" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
+curb = "testing"
+ver = f"2.1.4.1-{curb}" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
 lstupdt = "2020-04-20"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
+
 
 def name():
     print(f"yt-dl {ver} by KoleckOLP (C){year}\n")
@@ -54,8 +56,40 @@ def firstrun():
     else:
         ydpip = False
     savepath(py,pip,ydpip)
+    print("Do you want a Launch script? [Y/n]")
+    cmd = readchar("#")
+    if (cmd == "y"):
+        launchs()
+    else:
+        pass
     loadpath("hid")
-    about()   
+    about()
+
+def launchs():
+    print(f"Do you have venv set up if yes type name of the venv")
+    cmd = input("#")
+    if(cmd != ""):
+        if(os.name == 'nt'):
+            f=open("yt-dl.bat","w")
+            f.write(f"@echo off\n\ncmd /k \"cd /d {spath}{cmd}\Scripts & activate & cd /d {spath} & {py} main.py\"")
+            f.close()
+        elif(os.name == 'posix'):
+            f=open("yt-dl.sh","w")
+            f.write(f"#!/bin/bash\n\ncd {spath}{cmd}\Scripts & activate & cd /d {spath} & {py} main.py")
+            f.close()
+        else:
+            print('####If you see this please contact the dev. 0x1015####')
+    else:
+        if(os.name == 'nt'):
+            f=open("yt-dl.bat","w")
+            f.write(f"@echo off\n\ncmd /k \"cd /d {spath} & {py} main.py\"")
+            f.close()
+        elif(os.name == 'posix'):
+            f=open("yt-dl.sh","w")
+            f.write(f"#!/bin/bash\n\ncd /d {spath} & {py} main.py")
+            f.close()
+        else:
+            print('####If you see this please contact the dev. 0x1005####')
 
 def about():
     clear()
@@ -134,7 +168,7 @@ def loadpath(s="show"):
 
 def slpath():
     loadpath()
-    print("1. change download path\n2. delete settings\nor any key to continue...")
+    print("1. change download path\n2. delete settings\n3. generate Launch script\nor any key to continue...")
     cmd = readchar("#")
     if (cmd == "1"):
         savepath()
@@ -143,6 +177,8 @@ def slpath():
     elif (cmd == "2"):
         os.remove(settings)
         firstrun()
+    elif (cmd == "3"):
+        launchs()
     else:
         clear()
         name()
@@ -158,12 +194,12 @@ def upytdl():
 
 def upyd():
     print("Updating dependencies...")
-    os.system("pip install -r requirements.txt")
+    os.system(f"{pip} install -r requirements.txt")
 
 def update():
     clear()
     if(ydpip == True):
-        print("What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n0. GoBack")
+        print("What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n4. change branch\n0. GoBack")
         cmd = readchar("#")
         if(cmd == "1"): #All
             clear()
@@ -178,6 +214,21 @@ def update():
             clear()
             upyd()
             print("")
+        elif(cmd == '4'):
+            clear()
+            print(f"What branch do you wat to change to? You are in a {curb}")
+            if (curb == "master"):
+                otherb = "testing"
+            else:
+                otherb = "master"
+            print(f"do you want to switch to {otherb} [Y/n]")
+            cmd = readchar("#")
+            if (cmd == "y"):
+                os.system(f"git checkout {otherb}")
+            else:
+                pass
+
+
         else:
             clear()
             name()
@@ -195,6 +246,7 @@ def audiod():
         print("<Enter> a single audio, \n"
              +"1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
+        print("starting youtube-dl please wait...")
         if(numb == ""):
             lnk = f"-o \"{audio}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
         elif(numb == "1"):
@@ -215,6 +267,7 @@ def videod():
         print("<Enter> a single video, \n"
              +"1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
+        print("starting youtube-dl please wait...")
         if(numb == ""): #no playlist
             print("<Enter> for best quality 1080p + if availeble,\n"
                  +"1 for 720 or lower\n"
