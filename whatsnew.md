@@ -5,6 +5,7 @@ update now uses requirements.txt to update all dependencies
 added a text so the program does not look like it froze when it's starting youtube-dl
 dependecy upglade uses the pip name you set
 launch script generator
+working autoupdate with a toggle
 
 New in 2.1.3
 new versioning system, Lang, Featureset, patch/bugfix
@@ -16,7 +17,8 @@ new debug feature
 Osana is still not finished, lol.
 
 To do:
-        [    ] option to change branch
-        [    ] autoupdate true false
-        [done] generate yt-dl.bat/.sh (after sutup and option in 6. Update)
-        [    ] help people export their path, copy ffmpeg to dir 
+        [done] option to change branch
+        [done] autoupdate true false actually working
+        [done] generate yt-dl.bat/.sh (after setup and option in 6. Update)
+        [    ] help people export their path, copy ffmpeg to dir
+        [done] rewrite save path so it can be done without chaging path
