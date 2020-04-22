@@ -82,11 +82,11 @@ def launchs():
     if(cmd != ""):
         if(os.name == 'nt'):
             f=open("yt-dl.bat","w")
-            f.write(f"@echo off\n\ncmd /k \"cd /d {spath}{cmd}\Scripts & activate & cd /d {spath} & {py} main.py\"")
+            f.write(f"@echo off\n\ncmd /k \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {py} main.py\"")
             f.close()
         elif(os.name == 'posix'):
             f=open("yt-dl.sh","w")
-            f.write(f"#!/bin/bash\n\ncd {spath}{cmd}\bin && source activate && cd {spath} && {py} main.py")
+            f.write(f"#!/bin/bash\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
             f.close()
         else:
             print('####If you see this please contact the dev. 0x1015####')
