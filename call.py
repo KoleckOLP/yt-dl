@@ -82,7 +82,7 @@ def launchs():
     if(cmd != ""):
         if(os.name == 'nt'):
             f=open("yt-dl.bat","w")
-            f.write(f"@echo off\n\ncmd /k \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {py} main.py\"")
+            f.write(f"@echo off\n\ncmd /c \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {py} main.py\"")
             f.close()
         elif(os.name == 'posix'):
             f=open("yt-dl.sh","w")
@@ -93,7 +93,7 @@ def launchs():
     else:
         if(os.name == 'nt'):
             f=open("yt-dl.bat","w")
-            f.write(f"@echo off\n\ncmd /k \"cd /d {spath} & {py} main.py\"")
+            f.write(f"@echo off\n\ncmd /c \"cd /d {spath} & {py} main.py\"")
             f.close()
         elif(os.name == 'posix'):
             f=open("yt-dl.sh","w")
