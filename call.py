@@ -86,7 +86,7 @@ def launchs():
             f.close()
         elif(os.name == 'posix'):
             f=open("yt-dl.sh","w")
-            f.write(f"#!/bin/bash\n\ncd {spath}{cmd}\Scripts && activate && cd /d {spath} && {py} main.py")
+            f.write(f"#!/bin/bash\n\ncd {spath}{cmd}\bin && source activate && cd {spath} && {py} main.py")
             f.close()
         else:
             print('####If you see this please contact the dev. 0x1015####')
@@ -97,7 +97,7 @@ def launchs():
             f.close()
         elif(os.name == 'posix'):
             f=open("yt-dl.sh","w")
-            f.write(f"#!/bin/bash\n\ncd /d {spath} && {py} main.py")
+            f.write(f"#!/bin/bash\n\ncd {spath} && {py} main.py")
             f.close()
         else:
             print('####If you see this please contact the dev. 0x1005####')
