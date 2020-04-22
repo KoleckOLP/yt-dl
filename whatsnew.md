@@ -22,4 +22,4 @@ To do:
         [done] generate yt-dl.bat/.sh (after setup and option in 6. Update)
         [    ] help people export their path, copy ffmpeg to dir
         [done] rewrite save path so it can be done without chaging path
-        [    ] fix linux launch script
+        [done] fix linux launch script
