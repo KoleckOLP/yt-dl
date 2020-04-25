@@ -256,6 +256,7 @@ def update():
             cmd = readchar("#")
             if (cmd == "y"):
                 os.system(f"git checkout {otherb}")
+                curb = otherb
             else:
                 pass
         else:
