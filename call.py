@@ -148,6 +148,10 @@ def savepath(a="chp", x="", y="", z="", q=""):
                     fh = open(settings, "w")
                     json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
                     fh.close()
+                else:
+                    fh = open(settings, "w")
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+                    fh.close()
     if (a != "chp"):
         loadpath()
         fh = open(settings, "w")
