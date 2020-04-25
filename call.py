@@ -256,6 +256,7 @@ def update():
             cmd = readchar("#")
             if (cmd == "y"):
                 os.system(f"git checkout {otherb}")
+                print("\n!!!restart for chanes to take effect!!!\n")
             else:
                 pass
         else:
