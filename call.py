@@ -57,13 +57,13 @@ def firstrun():
         ydpip = True
     else:
         ydpip = False
-    print()
-    print("Do you want autoudate on launch? [Y/n]")
+    print("\nDo you want autoudate on launch? [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"):
         aup = True
     else:
         pass
+    print()
     savepath("chp",py,pip,ydpip,aup)
     loadpath()
     print("Do you want a Launch script? [Y/n]")
@@ -145,6 +145,10 @@ def savepath(a="chp", x="", y="", z="", q=""):
             else:
                 if (vid == ""):
                     vid = spath+"videos"
+                    fh = open(settings, "w")
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+                    fh.close()
+                else:
                     fh = open(settings, "w")
                     json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
                     fh.close()
