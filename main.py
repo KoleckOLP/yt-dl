@@ -5,8 +5,9 @@ clear()
 if(os.path.exists(settings)):
     name()
     loadpath()
+    autoupdt()
 else:
-    firstrun()  
+    firstrun()
 
 while(True):
     print("1. Audio\n2. Video\t6. Update\n3. Exit\t\t7. Download path\n4. Subtitles\t8. About, Changelog")
