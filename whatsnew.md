@@ -23,3 +23,18 @@ To do:
         [    ] help people export their path, copy ffmpeg to dir
         [done] rewrite save path so it can be done without chaging path
         [done] fix linux launch script
+
+how to git:
+
+testing:
+git add . (stage changes)
+git commit -m "message" (commit)
+git push
+
+master:
+git checkout master
+git merge --squash testing
+Do all changes you need in master
+git add .
+git commit -m "message"
+git push
