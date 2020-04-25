@@ -12,7 +12,6 @@ def is_venv():
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
 year = datetime.now().year
-global curb
 curb = "testing"
 ver = f"2.1.4RC3-{curb}" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
 lstupdt = "2020-04-22"
@@ -248,7 +247,6 @@ def update():
             print("")
         elif(cmd == '4'):
             clear()
-            global curb
             print(f"What branch do you wat to change to? You are in a {curb}")
             if (curb == "master"):
                 otherb = "testing"
@@ -258,7 +256,6 @@ def update():
             cmd = readchar("#")
             if (cmd == "y"):
                 os.system(f"git checkout {otherb}")
-                curb = otherb
             else:
                 pass
         else:
