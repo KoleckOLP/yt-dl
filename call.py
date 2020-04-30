@@ -227,6 +227,8 @@ def upytdl():
 
 #==========UPDATE DEPEND==========#
 def upyd():
+    print("updating pip...")
+    os.system(f"{py} -m {pip} install --upgrade {pip}")
     print("Updating dependencies...")
     os.system(f"{pip} install -r requirements.txt")
 

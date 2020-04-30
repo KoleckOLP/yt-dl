@@ -1,3 +1,6 @@
+New in 2.1.5
+Updating pip before updating dependencies
+
 New in 2.1.4
 I switched to venv you should too,
 dependecie are now in requirements.txt
@@ -17,12 +20,10 @@ new debug feature
 Osana is still not finished, lol.
 
 To do:
-        [done] option to change branch
-        [done] autoupdate true false actually working
-        [done] generate yt-dl.bat/.sh (after setup and option in 6. Update)
         [    ] help people export their path, copy ffmpeg to dir
-        [done] rewrite save path so it can be done without chaging path
-        [done] fix linux launch script
+        [    ] add colors
+        [    ] detect if mobile if not detect if powershell
+        [done] update pip
 
 how to git:
 
