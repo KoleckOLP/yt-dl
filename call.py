@@ -230,7 +230,7 @@ def upyd():
     print("updating pip...")
     os.system(f"{py} -m {pip} install --upgrade {pip}")
     print("Updating dependencies...")
-    os.system(f"{pip} install -r requirements.txt")
+    os.system(f"{pip} install --upgrade --force-reinstall -r requirements.txt")
 
 #==========UPDATE MENU==========#
 def update():
