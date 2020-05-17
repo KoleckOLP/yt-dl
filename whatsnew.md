@@ -24,6 +24,9 @@ To do:
         [    ] add colors
         [    ] detect if mobile if not detect if powershell
         [done] update pip
+        [    ] to HEVC
+        [    ] custom ffmpeg
+        [    ] custom youtube-dl
 
 how to git:
 
