@@ -13,7 +13,7 @@ def is_venv():
 
 year = datetime.now().year
 curb = "testing"
-ver = f"2.1.4RC3-{curb}" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate)
+ver = f"2.1.5pre-{curb}" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate) pre, RC
 lstupdt = "2020-04-22"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
@@ -229,8 +229,12 @@ def upytdl():
 def upyd():
     print("updating pip...")
     os.system(f"{py} -m {pip} install --upgrade {pip}")
-    print("Updating dependencies...")
-    os.system(f"{pip} install --upgrade --force-reinstall -r requirements.txt")
+    print("Updating youtube-dl...")
+    os.system(f"{pip} install --upgrade --force-reinstall youtube-dl")
+    print("Do you want to update rest of the dependencies? [Y/n]")
+    cmd = readchar("#")
+    if (cmd == "y"): 
+        os.system(f"{pip} install --upgrade --force-reinstall -r requirements.txt")
 
 #==========UPDATE MENU==========#
 def update():
@@ -375,6 +379,56 @@ def subd():
         os.makedirs(videos, exist_ok=True)
         os.system(f"ffmpeg -i \"{pie[0]}\" \"{lick}\"")
         print("\a")
+
+#==========VID TO HEVC==========#
+def vidhevc():
+    clear()
+    print("<Enter> single video 1. numbered series")
+    cmd = input("#")
+    if(cmd == ""): #single
+        print("write path to the file you want to reencode")
+        url = input("#")
+        print("reenceded file will get \"_lib265.mkv\" appended, or type a different one")
+        append = input("#")
+        if(append == ""):
+            append = "_lib265.mkv"
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        print("\a")
+    elif(cmd == "1"): #numbered
+        print("Write path to the file until the number (don't write any number)")
+        url_pre = input("#")
+        print("Write the part after the number with extencion")
+        url_after = input("#")
+        print("Write the highest number of the video")
+        numb_last = input("#")
+        numb_last = int(numb_last)
+        print("Write the number you want to start from")
+        numb = input("#")
+        numb = int(numb)
+        print("does the numbers use zero padding [Y/n]")
+        zero = readchar("#")
+        print("\nreenceded file will get \"_lib265.mkv\" appended, or type a different one")
+        append = input("#")
+        if(append == ""):
+            append = "_lib265.mkv"
+        url = url_after.split(".", 1)
+        url_append = url[0]+append
+        for numb in range(numb, numb_last+1):
+            if(zero == "y"):
+                if(numb_last > 10):
+                    if(numb < 10):
+                        numb_final = "0"+numb
+                    else:
+                        numb_final = numb
+                else:
+                    numb_final = numb
+            else:
+                numb_final = numb
+            #os.system(f"ffmpeg -hwaccel auto -i \"{url_pre}{numb}{url_after}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{url_pre}{numb}{url}\"")
+            print(f"{url_pre}{numb_final}{url_after}\n{url_pre}{numb_final}{url_append}")
+    else:
+        clear()
+        name()
 
 #==========DEBUG CONSOLE==========#
 def debug():

@@ -19,14 +19,13 @@ new debug feature
 
 Osana is still not finished, lol.
 
-To do:
-        [    ] help people export their path, copy ffmpeg to dir
-        [    ] add colors
-        [    ] detect if mobile if not detect if powershell
-        [done] update pip
-        [    ] to HEVC
-        [    ] custom ffmpeg
-        [    ] custom youtube-dl
+To do by severity:
+        [    ] (extreme) fix updating
+        [part] (high)    update pip
+        [part] (high)    to HEVC
+        [    ] (normal)  add colors
+        [    ] (normal)  detect if mobile if not detect if powershell
+        [    ] (low)     PATH export ffmpeg to the yt-dl dir.
 
 how to git:
 

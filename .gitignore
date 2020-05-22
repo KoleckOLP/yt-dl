@@ -1,5 +1,6 @@
 settings.json
 __pycache__
+.helpfiles
 .vscode
 env
 audio
