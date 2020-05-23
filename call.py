@@ -13,8 +13,8 @@ def is_venv():
 
 year = datetime.now().year
 curb = "testing"
-ver = f"2.1.5pre-{curb}" #lang(2python3) #featureset #patch/bugfix #testing(1start,2inwork,3releasecandidate) pre, RC
-lstupdt = "2020-04-22"
+ver = f"2.1.5RC1-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-05-24"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -66,41 +66,53 @@ def firstrun():
     print()
     savepath("chp",py,pip,ydpip,aup)
     loadpath()
-    print("Do you want a Launch script? [Y/n]")
+    print("Do you want a Launch script? [Y/n] or p=Powershell")
     cmd = readchar("#")
     if (cmd == "y"):
         launchs()
+    elif(cmd== "p"):
+        launchs(True)
     else:
         pass
     loadpath("hid")
     about()
 
 #==========MAKE LAUNCH SCRIPT==========#
-def launchs():
+def launchs(p=""):
     print(f"Do you have venv set up if yes type name of the venv")
     cmd = input("#")
-    if(cmd != ""):
-        if(os.name == 'nt'):
-            f=open("yt-dl.bat","w")
-            f.write(f"@echo off\n\ncmd /c \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {py} main.py\"")
-            f.close()
-        elif(os.name == 'posix'):
-            f=open("yt-dl.sh","w")
-            f.write(f"#!/bin/bash\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+    if(p==True):
+        if(cmd != ""):
+            f=open("yt-dl.ps1","w")
+            f.write(f"Set-Location {spath}{cmd}{os.path.sep}Scripts\n.{os.path.sep}Activate.ps1\nSet-Location {spath}\n{py} main.py")
             f.close()
         else:
-            print('####If you see this please contact the dev. 0x1015####')
+            f=open("yt-dl.bat","w")
+            f.write(f"Set-Location {spath}\n{py} main.py")
+            f.close()
     else:
-        if(os.name == 'nt'):
-            f=open("yt-dl.bat","w")
-            f.write(f"@echo off\n\ncmd /c \"cd /d {spath} & {py} main.py\"")
-            f.close()
-        elif(os.name == 'posix'):
-            f=open("yt-dl.sh","w")
-            f.write(f"#!/bin/bash\n\ncd {spath} && {py} main.py")
-            f.close()
+        if(cmd != ""):
+            if(os.name == 'nt'):
+                f=open("yt-dl.bat","w")
+                f.write(f"@echo off\n\ncmd /c \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {py} main.py\"")
+                f.close()
+            elif(os.name == 'posix'):
+                f=open("yt-dl","w")
+                f.write(f"#!/bin/bash\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+                f.close()
+            else:
+                print('####If you see this please contact the dev. 0x1015####')
         else:
-            print('####If you see this please contact the dev. 0x1005####')
+            if(os.name == 'nt'):
+                f=open("yt-dl.bat","w")
+                f.write(f"@echo off\n\ncmd /c \"cd /d {spath} & {py} main.py\"")
+                f.close()
+            elif(os.name == 'posix'):
+                f=open("yt-dl","w")
+                f.write(f"#!/bin/bash\n\ncd {spath} && {py} main.py")
+                f.close()
+            else:
+                print('####If you see this please contact the dev. 0x1005####')
 
 #==========ABOUT==========#
 def about():
@@ -153,7 +165,7 @@ def savepath(a="chp", x="", y="", z="", q=""):
                     json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
                     fh.close()
     if (a != "chp"):
-        loadpath()
+        loadpath("hid")
         fh = open(settings, "w")
         json.dump({"audio": audio,"videos": videos,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
         fh.close()
@@ -196,8 +208,7 @@ def loadpath(s="show"):
 #==========SAVE MENU==========#
 def slpath():
     loadpath()
-    global aup
-    print(f"1. change download path\n2. delete settings\n3. change autoupdate={aup}\n4. generate Launch script\n0. GoBack")
+    print("1. change download path\n2. delete settings\n3. generate Launch script\n0. GoBack")
     cmd = readchar("#")
     if (cmd == "1"):
         savepath()
@@ -207,10 +218,14 @@ def slpath():
         os.remove(settings)
         firstrun()
     elif (cmd == "3"):
-        aup = not aup
-        savepath("",py,pip,ydpip,aup)
-    elif (cmd == "4"):
-        launchs()
+        print("press p=Powershell or <Enter>")
+        cmd=input("#")
+        if(cmd=="p"):
+            launchs(True)
+        else:
+            launchs()
+        clear()
+        name()
     else:
         clear()
         name()
@@ -229,18 +244,15 @@ def upytdl():
 def upyd():
     print("updating pip...")
     os.system(f"{py} -m {pip} install --upgrade {pip}")
-    print("Updating youtube-dl...")
-    os.system(f"{pip} install --upgrade --force-reinstall youtube-dl")
-    print("Do you want to update rest of the dependencies? [Y/n]")
-    cmd = readchar("#")
-    if (cmd == "y"): 
-        os.system(f"{pip} install --upgrade --force-reinstall -r requirements.txt")
+    print("Updating dependencies...")
+    os.system(f"{pip} install -U -r requirements.txt")
 
 #==========UPDATE MENU==========#
 def update():
     clear()
+    global aup
     if(ydpip == True):
-        print("What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n4. change branch\n0. GoBack")
+        print(f"What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate={aup}\n5. change branch\n0. GoBack")
         cmd = readchar("#")
         if(cmd == "1"): #All
             clear()
@@ -255,7 +267,13 @@ def update():
             clear()
             upyd()
             print("")
-        elif(cmd == '4'):
+        elif (cmd == "4"):
+            aup = not aup
+            savepath("",py,pip,ydpip,aup)
+            loadpath("hid")
+            clear()
+            print(f"autoupdate={aup}\n")
+        elif(cmd == '5'):
             clear()
             print(f"What branch do you wat to change to? You are in a {curb}")
             if (curb == "master"):
@@ -395,37 +413,45 @@ def vidhevc():
         os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
-        print("Write path to the file until the number (don't write any number)")
-        url_pre = input("#")
-        print("Write the part after the number with extencion")
-        url_after = input("#")
+        print("write path to the folder with videos don't forget to add \*.extencion")
+        url = input("#")
         print("Write the highest number of the video")
         numb_last = input("#")
-        numb_last = int(numb_last)
+        try:
+            numb_last = int(numb_last)
+        except ValueError:
+            clear()
+            print("That's not a number")
+            name()
         print("Write the number you want to start from")
         numb = input("#")
-        numb = int(numb)
+        try:
+            numb = int(numb)
+        except ValueError:
+            clear()
+            print("That's not a number")
+            name()
         print("does the numbers use zero padding [Y/n]")
         zero = readchar("#")
-        print("\nreenceded file will get \"_lib265.mkv\" appended, or type a different one")
+        print("\nreenceded file will get \"_lib265\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_lib265.mkv"
-        url = url_after.split(".", 1)
-        url_append = url[0]+append
+            append = "_lib265"
+        episodes = glob.glob(url)
         for numb in range(numb, numb_last+1):
             if(zero == "y"):
-                if(numb_last > 10):
-                    if(numb < 10):
-                        numb_final = "0"+numb
-                    else:
-                        numb_final = numb
+                if(numb < 10):
+                        numb_final = "0"+str(numb)
                 else:
                     numb_final = numb
-            else:
-                numb_final = numb
-            #os.system(f"ffmpeg -hwaccel auto -i \"{url_pre}{numb}{url_after}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{url_pre}{numb}{url}\"")
-            print(f"{url_pre}{numb_final}{url_after}\n{url_pre}{numb_final}{url_append}")
+            for i in episodes:
+                if str(numb_final) in i:
+                    filename = os.path.basename(i)
+                    file_split = filename.split(".", 1)
+                    path = os.path.dirname(i)
+                    finali = path+os.path.sep+file_split[0]+append+".mkv"
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{finali}\"")
+
     else:
         clear()
         name()

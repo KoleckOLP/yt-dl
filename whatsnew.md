@@ -20,11 +20,11 @@ new debug feature
 Osana is still not finished, lol.
 
 To do by severity:
-        [    ] (extreme) fix updating
-        [part] (high)    update pip
-        [part] (high)    to HEVC
+        [done] (extreme) fix updating
+        [done] (high)    update pip
+        [done] (high)    to HEVC
         [    ] (normal)  add colors
-        [    ] (normal)  detect if mobile if not detect if powershell
+        [done] (normal)  generate powershell launch script
         [    ] (low)     PATH export ffmpeg to the yt-dl dir.
 
 how to git:
