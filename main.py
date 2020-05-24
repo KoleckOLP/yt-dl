@@ -1,4 +1,4 @@
-from call import *
+from call import os, clear, settings, name, loadpath, autoupdt, firstrun, readchar, audiod, videod, subd, vidhevc, update, slpath, about, debug
 
 clear()
 

@@ -1,5 +1,10 @@
 New in 2.1.5
 Updating pip before updating dependencies
+autoupdate, upgrading dependencies
+convert any video to HEVC
+generate powershell launch script
+got rid of wildcard import
+got rid of unused imports
 
 New in 2.1.4
 I switched to venv you should too,
@@ -41,3 +46,6 @@ Do all changes you need in master
 git add .
 git commit -m "message"
 git push
+
+yt-dl in PowerShell in Windows Terminal
+"wt pwsh D:\Programs\1.NoInstall\yt-dl\yt-dl.ps1"

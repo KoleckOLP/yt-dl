@@ -1,7 +1,6 @@
 from getch import getch #py-getch
 from datetime import datetime
 from time import sleep
-import subprocess
 import tempfile
 import sys, os
 import glob
@@ -413,8 +412,10 @@ def vidhevc():
         os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
-        print("write path to the folder with videos don't forget to add \*.extencion")
+        print("write path to the folder with videos don't forget to add \\*.extencion")
         url = input("#")
+        print("type a short path of the episode name just before the number")
+        common_name = input("#")
         print("Write the highest number of the video")
         numb_last = input("#")
         try:
@@ -423,14 +424,17 @@ def vidhevc():
             clear()
             print("That's not a number")
             name()
-        print("Write the number you want to start from")
+        print("Write the number you want to start from <Enter> for 1")
         numb = input("#")
-        try:
-            numb = int(numb)
-        except ValueError:
-            clear()
-            print("That's not a number")
-            name()
+        if(numb == ""):
+            numb = 1
+        else:
+            try:
+                numb = int(numb)
+            except ValueError:
+                clear()
+                print("That's not a number")
+                name()
         print("does the numbers use zero padding [Y/n]")
         zero = readchar("#")
         print("\nreenceded file will get \"_lib265\" appended, or type a different one")
@@ -442,8 +446,10 @@ def vidhevc():
             if(zero == "y"):
                 if(numb < 10):
                         numb_final = "0"+str(numb)
+                        numb_final = common_name+str(numb_final)
                 else:
                     numb_final = numb
+                    numb_final = common_name+str(numb_final)
             for i in episodes:
                 if str(numb_final) in i:
                     filename = os.path.basename(i)
@@ -451,7 +457,6 @@ def vidhevc():
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
                     os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{finali}\"")
-
     else:
         clear()
         name()

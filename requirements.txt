@@ -1,5 +1,4 @@
-py-getch
-youtube-dl
-wheel
 colorama
-psutil
+py-getch
+wheel
+youtube-dl
