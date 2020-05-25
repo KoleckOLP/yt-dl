@@ -5,6 +5,7 @@ convert any video to HEVC
 generate powershell launch script
 got rid of wildcard import
 got rid of unused imports
+if you are missing dependencies we will help you get them
 
 New in 2.1.4
 I switched to venv you should too,
@@ -28,10 +29,11 @@ To do by severity:
         [done] (extreme) fix updating
         [done] (high)    update pip
         [done] (high)    to HEVC
-        [part] (normal)  add colors
+        [done] (normal)  add colors
         [done] (normal)  generate powershell launch script
-        [    ] (normal)  test youtube-dl updating if non from pip
-        [    ] (low)     PATH export ffmpeg to the yt-dl dir.
+        [done] (normal)  test youtube-dl updating if not from pip
+I'wont  [    ] (low)     PATH export ffmpeg to the yt-dl dir.
+I'wont  [    ] (low)     Ctrl+D to quit
 
 how to git:
 

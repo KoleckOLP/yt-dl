@@ -1,11 +1,22 @@
-from getch import getch #py-getch
-from colorama import init, Fore, Back, Style
 from datetime import datetime
 from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
+try:
+    from getch import getch #py-getch
+    from colorama import init, Fore, Back, Style
+except ModuleNotFoundError:
+    print("You are missing dependencies do you want to install them with pip? [Y/n]")
+    cmd = input("#")
+    if(cmd == "y" or cmd == "Y"):
+        os.system("pip install -r requirements.txt")
+        print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"\nYou should also install ffmpeg and add it to PATH")
+        input("press any key to quit")
+    else:
+        print("install them before you can use yt-dl\nYou should also install ffmpeg and add it to PATH")
+        input("press any key to quit")
 
 init()
 
@@ -45,6 +56,8 @@ def readchar(o): #multiplatform readchar
 #==========FIRST RUN MENU==========#
 def firstrun():
     clear()
+    print("This program requires one more dependenci that we can't install trough pip, ffmpeg you need to get this one your self and add it to path")
+    input("Press any key if you are aware.")
     print("What's the name of your python executable.\n<enter> for python")
     py = input("#")
     if (py == ""):
@@ -64,7 +77,7 @@ def firstrun():
     if (cmd == "y"):
         aup = True
     else:
-        pass
+        aup = False
     print()
     savepath("chp",py,pip,ydpip,aup)
     loadpath()
