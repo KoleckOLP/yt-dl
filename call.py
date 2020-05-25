@@ -21,8 +21,8 @@ spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
 #==========NAME==========#
-def name():
-    print(f"yt-dl {ver} by KoleckOLP (C){year}\n")
+def name(newline=True):
+    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline)
 
 #==========MUSTYPLAT CLEAR==========#
 def clear():
@@ -68,7 +68,7 @@ def firstrun():
     print()
     savepath("chp",py,pip,ydpip,aup)
     loadpath()
-    print("Do you want a Launch script? [Y/n] or p=Powershell")
+    print("Do you want a Launch script? [Y/n] or p=" + Fore.BLUE + "Powershell" + Style.RESET_ALL)
     cmd = readchar("#")
     if (cmd == "y"):
         launchs()
@@ -119,15 +119,15 @@ def launchs(p=""):
 #==========ABOUT==========#
 def about():
     clear()
-    print(f"yt-dl version: {ver} by KoleckOLP,\n"
-         +f"HorseArmored inc (C){year}\n"
+    name(False)
+    print(f"HorseArmored inc (C){year}\n"
          +f"Last updated on: {lstupdt}\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
          +f"           (C)2011-{year} youtube-dl developers\n"
          +f"ffmpeg (C)2000-{year} FFmpeg team")
-    print("Do you want to see whats new? [Y/n]")
+    print(Style.BRIGHT + "Do you want to see whats new? [Y/n]" + Style.RESET_ALL)
     cmd = readchar("#")
     if (cmd == "y"): 
         clear()
@@ -205,7 +205,10 @@ def loadpath(s="show"):
         ydpip = path["ydpip"]
         aup = path["aup"]
     if(s == "show"):
-        print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\n")
+        print(Style.BRIGHT + "audio is saved to: " + Style.RESET_ALL, end="")
+        print(audio)
+        print(Style.BRIGHT + "video is saved to: " + Style.RESET_ALL, end="")
+        print(videos + "\n")
 
 #==========SAVE MENU==========#
 def slpath():
@@ -220,7 +223,7 @@ def slpath():
         os.remove(settings)
         firstrun()
     elif (cmd == "3"):
-        print("press p=Powershell or <Enter>")
+        print("press p=" + Fore.BLUE + "PowerShell" + Style.RESET_ALL + " or <Enter>")
         cmd=input("#")
         if(cmd=="p"):
             launchs(True)
@@ -254,9 +257,11 @@ def update():
     clear()
     global aup
     if(ydpip == True):
-        print(f"What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=", end="")
+        print(Style.BRIGHT + f"What do you want to update?" + Style.RESET_ALL + "\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=", end="")
         TF(aup, False)
-        print(f"\n5. change branch={curb}\n0. GoBack")
+        print(f"\n5. change branch=", end="")
+        BC(curb)
+        print("\n0. GoBack")
         cmd = readchar("#")
         if(cmd == "1"): #All
             clear()
@@ -284,13 +289,16 @@ def update():
                 otherb = "testing"
             else:
                 otherb = "master"
-            print(f"do you want to switch to {otherb} [Y/n]")
+            print(f"do you want to switch to ")
+            BC(otherb, False, True)
+            print(" [Y/n]")
             cmd = readchar("#")
             if (cmd == "y"):
                 os.system(f"git checkout {otherb}")
                 print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
             else:
-                pass
+                clear()
+                name()
         else:
             clear()
             name()
@@ -406,7 +414,7 @@ def subd():
 #==========VID TO HEVC==========#
 def vidhevc():
     clear()
-    print("<Enter> single video 1. numbered series")
+    print("<Enter> single video 1. numbered series or 0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
@@ -477,12 +485,14 @@ def debug():
         if(cmd == "all"):
             print("Paths:")
             for p in sys.path: print(p)
-            print("Saves:")
+            print("\nSaves:")
             if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
                 git = True
             else:
                 git = False
-            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}")
+            loadpath()
+            print("Variables:")
+            print(f"python executable name: {py}\npip executable name: {pip}")
             print("youtube-dl from pip: ", end="")
             TF(ydpip, False)
             print("\nyt-dl from git: ", end="")
@@ -512,6 +522,7 @@ def debug():
             name()
             break
 
+#==========COLOR FUNCTIONS==========#
 def TF(var="", newline=True):
     if newline == True:
         end = "\n"
@@ -519,8 +530,27 @@ def TF(var="", newline=True):
         end = ""
   
     if (var == True):
-        print(Fore.GREEN + str(var), Style.RESET_ALL, end=end)
+        print(Fore.GREEN + str(var) + Style.RESET_ALL, end=end)
     elif (var == False):
-        print(Fore.RED + str(var), Style.RESET_ALL, end=end)
+        print(Fore.RED + str(var) + Style.RESET_ALL, end=end)
     else:
         print("Not a boolean", end=end)
+
+def BC(stri="no input", newline=True, reverse=False):
+    if newline == True:
+        end = "\n"
+    else:
+        end = ""
+
+    if(reverse == True):
+        if(curb == "master"):
+            branch = "testing"
+        elif(curb == "testing"):
+            branch = "master"
+    else:
+        branch = curb  
+
+    if(branch == "master"):
+        print(Fore.CYAN + eval(f'f"""{stri}"""') + Style.RESET_ALL, end=end)
+    else:
+        print(Fore.MAGENTA + eval(f'f"""{stri}"""') + Style.RESET_ALL, end=end)
