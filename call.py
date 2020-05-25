@@ -1,10 +1,13 @@
 from getch import getch #py-getch
+from colorama import init, Fore, Back, Style
 from datetime import datetime
 from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
+
+init()
 
 def is_venv():
     return (hasattr(sys, 'real_prefix') or
@@ -13,7 +16,7 @@ def is_venv():
 year = datetime.now().year
 curb = "testing"
 ver = f"2.1.5RC1-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-05-24"
+lstupdt = "2020-05-25"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -251,17 +254,19 @@ def update():
     clear()
     global aup
     if(ydpip == True):
-        print(f"What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate={aup}\n5. change branch\n0. GoBack")
+        print(f"What do you want to update?\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=", end="")
+        TF(aup, False)
+        print(f"\n5. change branch={curb}\n0. GoBack")
         cmd = readchar("#")
         if(cmd == "1"): #All
             clear()
             upytdl()
             upyd()
-            print("\n!!!restart for chanes to take effect!!!\n")
+            print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
         elif(cmd == "2"): #yt-dl
             clear()
             upytdl()
-            print("\n!!!restart for chanes to take effect!!!\n")
+            print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
         elif(cmd == "3"): #youtube-dl
             clear()
             upyd()
@@ -283,7 +288,7 @@ def update():
             cmd = readchar("#")
             if (cmd == "y"):
                 os.system(f"git checkout {otherb}")
-                print("\n!!!restart for chanes to take effect!!!\n")
+                print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
             else:
                 pass
         else:
@@ -294,7 +299,8 @@ def update():
 
 #==========AUTO UPDATE==========#
 def autoupdt():
-    print(f"autoupdate={aup}")
+    print(f"autoupdate=", end="")
+    TF(aup)
     if (aup == True):
         upytdl()
         upyd()
@@ -457,26 +463,18 @@ def vidhevc():
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
                     os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{finali}\"")
+                clear()
+                name()
     else:
         clear()
         name()
 
 #==========DEBUG CONSOLE==========#
 def debug():
-    print("Welcome to debug menu:")
+    print(Fore.MAGENTA + "Welcome to debug menu:", Style.RESET_ALL)
     while(True):
         cmd = input(">")
-        if (cmd == "paths"):
-            print("Paths:")
-            for p in sys.path: print(p)
-        elif(cmd == "saves"):
-            print("Saves:")
-            if(os.path.exists(os.path.realpath(os.path.dirname(sys.argv[0]))+os.path.sep+".git")):
-                git = True
-            else:
-                git = False
-            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}\nautoupdate: {aup}")
-        elif(cmd == "all"):
+        if(cmd == "all"):
             print("Paths:")
             for p in sys.path: print(p)
             print("Saves:")
@@ -484,12 +482,19 @@ def debug():
                 git = True
             else:
                 git = False
-            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}\nyoutube-dl from pip: {ydpip}\nyt-dl from git: {git}\nautoupdate: {aup}")
+            print(f"audio is saved to: {audio}\nvideo is saved to: {videos}\npython executable name: {py}\npip executable name: {pip}")
+            print("youtube-dl from pip: ", end="")
+            TF(ydpip, False)
+            print("\nyt-dl from git: ", end="")
+            TF(git, False)
+            print("\nautoupdate: ", end="")
+            TF(aup)
             if is_venv():
                 venv = True
             else:
                 venv = False
-            print(f"in venv: {venv}")
+            print("in venv: ", end="")
+            TF(venv)
         elif(cmd == "deldown"):
             print("Are you sure you want to delete all audio and videos [Y/n]")
             cmd = readchar("")
@@ -505,4 +510,17 @@ def debug():
         else:
             clear()
             name()
-            break    
+            break
+
+def TF(var="", newline=True):
+    if newline == True:
+        end = "\n"
+    else:
+        end = ""
+  
+    if (var == True):
+        print(Fore.GREEN + str(var), Style.RESET_ALL, end=end)
+    elif (var == False):
+        print(Fore.RED + str(var), Style.RESET_ALL, end=end)
+    else:
+        print("Not a boolean", end=end)

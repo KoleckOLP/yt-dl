@@ -28,8 +28,9 @@ To do by severity:
         [done] (extreme) fix updating
         [done] (high)    update pip
         [done] (high)    to HEVC
-        [    ] (normal)  add colors
+        [part] (normal)  add colors
         [done] (normal)  generate powershell launch script
+        [    ] (normal)  test youtube-dl updating if non from pip
         [    ] (low)     PATH export ffmpeg to the yt-dl dir.
 
 how to git:
