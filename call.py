@@ -26,8 +26,8 @@ def is_venv():
 
 year = datetime.now().year
 curb = "testing"
-ver = f"2.1.5RC1-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-05-25"
+ver = f"2.1.5RC2-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-05-28"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
