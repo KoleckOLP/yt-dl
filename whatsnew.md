@@ -40,12 +40,12 @@ how to git:
 testing:
 git add . (stage changes)
 git commit -m "message" (commit)
-git push
+git push (push)
 
 master:
-git checkout master
-git merge --squash testing
-Do all changes you need in master
+git checkout master (chage to master)
+git merge --squash testing (squash testing branch)
+Do all changes you need in master 
 git add .
 git commit -m "message"
 git push
