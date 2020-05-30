@@ -427,6 +427,7 @@ def subd():
 #==========VID TO HEVC==========#
 def vidhevc():
     clear()
+    print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
     print("<Enter> single video 1. numbered series or 0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
@@ -451,7 +452,7 @@ def vidhevc():
             clear()
             print("That's not a number")
             name()
-        print("Write the number you want to start from <Enter> for 1")
+        print("Write the number you want to start from <Enter> for 1 or 0. GoBack")
         numb = input("#")
         if(numb == ""):
             numb = 1
@@ -468,7 +469,9 @@ def vidhevc():
         append = input("#")
         if(append == ""):
             append = "_lib265"
+        url = url.replace('[', '[[]')
         episodes = glob.glob(url)
+        print(episodes)
         for numb in range(numb, numb_last+1):
             if(zero == "y"):
                 if(numb < 10):
@@ -484,8 +487,7 @@ def vidhevc():
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
                     os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{finali}\"")
-                clear()
-                name()
+            print("\a")
     else:
         clear()
         name()
