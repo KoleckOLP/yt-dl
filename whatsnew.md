@@ -25,18 +25,12 @@ new debug feature
 
 Osana is still not finished, lol.
 
-To do by severity 2.1.5:
-        [done] (extreme) fix updating
-        [done] (high)    update pip
-        [done] (high)    to HEVC
-        [done] (normal)  add colors
-        [done] (normal)  generate powershell launch script
-        [done] (normal)  test youtube-dl updating if not from pip
+To do by severity 2.1.6:
+        [    ] (high)    Remake firstrun and integrate 
 I'wont  [    ] (low)     PATH export ffmpeg to the yt-dl dir.
 I'wont  [    ] (low)     Ctrl+D to quit
 
-To do by severity 2.1.6:
-        [    ] (high)    Remake firstrun and integrate 
+
 
 how to git:
 
