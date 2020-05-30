@@ -1,3 +1,10 @@
+New in 2.1.5
+Updating pip before updating dependencies
+autoupdate, upgrading dependencies
+convert any video to HEVC
+generate powershell launch script
+if you are missing dependencies we will help you get them
+
 New in 2.1.4
 I switched to venv you should too,
 dependecie are now in requirements.txt

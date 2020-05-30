@@ -1,7 +1,9 @@
 settings.json
 __pycache__
+.helpfiles
+.vscode
 env
 audio
 videos
 *.bat
-!.vscode/settings.json
+*.ps1
