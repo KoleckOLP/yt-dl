@@ -26,7 +26,8 @@ new debug feature
 Osana is still not finished, lol.
 
 To do by severity 2.1.6:
-        [    ] (high)    Remake firstrun and integrate 
+        [    ] (high)    Remake firstrun and integrate dependenci install
+        [    ] (high)    split some part of call.py into kolreq.py  
 I'wont  [    ] (low)     PATH export ffmpeg to the yt-dl dir.
 I'wont  [    ] (low)     Ctrl+D to quit
 

@@ -433,6 +433,10 @@ def vidhevc():
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
         url = input("#")
+        if(url[0:3] == "& \'"): #powershell (& ' ')
+            url = url[3:-1]
+        elif(url[0:1] == '\"'): #cmd (" ")
+            url = url[1:-1]
         print("reenceded file will get \"_lib265.mkv\" appended, or type a different one")
         append = input("#")
         if(append == ""):
@@ -471,7 +475,6 @@ def vidhevc():
             append = "_lib265"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
-        print(episodes)
         for numb in range(numb, numb_last+1):
             if(zero == "y"):
                 if(numb < 10):
