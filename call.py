@@ -307,6 +307,7 @@ def update():
             print(" [Y/n]")
             cmd = readchar("#")
             if (cmd == "y"):
+                os.system("git pull")
                 os.system(f"git checkout {otherb}")
                 print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
             else:
@@ -482,7 +483,10 @@ def vidhevc():
                         numb_final = common_name+str(numb_final)
                 else:
                     numb_final = numb
-                    numb_final = common_name+str(numb_final)
+                    numb_final = common_name+str(numb_final)      
+            else:
+                numb_final = numb
+                numb_final = common_name+str(numb_final)
             for i in episodes:
                 if str(numb_final) in i:
                     filename = os.path.basename(i)
