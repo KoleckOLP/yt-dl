@@ -366,8 +366,8 @@ def videod():
         numb = input("#")
         print("starting youtube-dl please wait...")
         if(numb == ""): #no playlist
-            print("<Enter> for best quality 1080p + if availeble,\n"
-                 +"1 for 720 or lower\n"
+            print("<Enter> for best quality 1080p + if availeble (\"bestvideo+bestaudio\"),\n"
+                 +"1 for 720 or lower (\"best\")\n"
                  +"2 to choose yourself")
             qual = input("#")
             if (qual == "1"):
@@ -442,7 +442,7 @@ def vidhevc():
         append = input("#")
         if(append == ""):
             append = "_lib265.mkv"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a libopus -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -493,7 +493,7 @@ def vidhevc():
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{finali}\"")
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a libopus -b:a 190k -c:s copy \"{finali}\"")
             print("\a")
     else:
         clear()
