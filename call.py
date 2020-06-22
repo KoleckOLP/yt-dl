@@ -438,10 +438,10 @@ def vidhevc():
             url = url[3:-1]
         elif(url[0:1] == '\"'): #cmd (" ")
             url = url[1:-1]
-        print("reenceded file will get \"_lib265.mkv\" appended, or type a different one")
+        print("reenceded file will get \"_hevcopus.mkv\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_lib265.mkv"
+            append = "_hevcopus.mkv"
         os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a libopus -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
@@ -470,10 +470,10 @@ def vidhevc():
                 name()
         print("does the numbers use zero padding [Y/n]")
         zero = readchar("#")
-        print("\nreenceded file will get \"_lib265\" appended, or type a different one")
+        print("\nreenceded file will get \"_hevcopus\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_lib265"
+            append = "_hevcopus"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
         for numb in range(numb, numb_last+1):
