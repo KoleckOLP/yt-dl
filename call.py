@@ -442,7 +442,7 @@ def vidhevc():
         append = input("#")
         if(append == ""):
             append = "_hevcopus.mkv"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -c:a opus -strict -2 -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -493,7 +493,7 @@ def vidhevc():
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 rc constqp -qp 24 -b:v 0K -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
             print("\a")
     elif(cmd == "2"):
         print("write path to the file you want to reencode")
@@ -506,7 +506,7 @@ def vidhevc():
         append = input("#")
         if(append == ""):
             append = "_nvenc.mkv"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -c:a copy -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a copy -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     else:
         clear()
