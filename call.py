@@ -27,7 +27,7 @@ def is_venv():
 year = datetime.now().year
 curb = "testing"
 ver = f"2.1.6pre-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-05-30"
+lstupdt = "2020-08-20"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -429,7 +429,7 @@ def subd():
 def vidhevc():
     clear()
     print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
-    print("<Enter> single video 1. numbered series or 0. GoBack")
+    print("<Enter> single video (libx265, q24)\n1. numbered series(libx2652 q24)\n2. sigle video (h264_nvenc, q24)\n0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
@@ -493,8 +493,21 @@ def vidhevc():
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 rc constqp -qp 24 -b:v 0K -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
             print("\a")
+    elif(cmd == "2"):
+        print("write path to the file you want to reencode")
+        url = input("#")
+        if(url[0:3] == "& \'"): #powershell (& ' ')
+            url = url[3:-1]
+        elif(url[0:1] == '\"'): #cmd (" ")
+            url = url[1:-1]
+        print("reenceded file will get \"_nvenc.mkv\" appended, or type a different one")
+        append = input("#")
+        if(append == ""):
+            append = "_nvenc.mkv"
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -c:a copy -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        print("\a")
     else:
         clear()
         name()
