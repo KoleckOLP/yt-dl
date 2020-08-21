@@ -477,10 +477,10 @@ def vidhevc():
             url = url[3:-1]
         elif(url[0:1] == '\"'): #cmd (" ")
             url = url[1:-1]
-        print("reenceded file will get \"_nvenc.mkv\" appended, or type a different one")
+        print("reenceded file will get \"_nvenc.mov\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_nvenc.mkv"
+            append = "_nvenc.mov"
         os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a copy -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     else:
