@@ -481,7 +481,7 @@ def vidhevc():
         append = input("#")
         if(append == ""):
             append = "_nvenc.mov"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a copy -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a aac -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     else:
         clear()
