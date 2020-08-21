@@ -1,22 +1,12 @@
+from kolreq import clear, readchar
 from datetime import datetime
 from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
-try:
-    from getch import getch #py-getch
-    from colorama import init, Fore, Back, Style
-except ModuleNotFoundError:
-    print("You are missing dependencies do you want to install them with pip? [Y/n]")
-    cmd = input("#")
-    if(cmd == "y" or cmd == "Y"):
-        os.system("pip install -r requirements.txt")
-        print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"\nYou should also install ffmpeg and add it to PATH")
-        input("press any key to quit")
-    else:
-        print("install them before you can use yt-dl\nYou should also install ffmpeg and add it to PATH")
-        input("press any key to quit")
+from getch import getch #py-getch
+from colorama import init, Fore, Back, Style
 
 init()
 
@@ -26,32 +16,14 @@ def is_venv():
 
 year = datetime.now().year
 curb = "testing"
-ver = f"2.1.6pre-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-08-20"
+ver = f"2.1.6-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-08-21"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
 #==========NAME==========#
 def name(newline=True):
-    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline)
-
-#==========MUSTYPLAT CLEAR==========#
-def clear():
-    if(os.name == 'nt'):
-        os.system('cls')
-    elif(os.name == 'posix'):
-        os.system('clear')
-    else:
-        print('####If you see this please contact the dev. 0x2020####')
-
-#==========MULTYPLAT READKEY==========#
-def readchar(o): #multiplatform readchar
-    print(o, end="", flush=True) #writes text before the getch, no new line, flush output
-    x = getch()
-    if isinstance(x, bytes): #fix if returned in bytes, need to fix when input is arrowkeys
-         x = x.decode("UTF-8")
-    x = x.lower()
-    return x  
+    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
 
 #==========FIRST RUN MENU==========#
 def firstrun():
@@ -429,7 +401,10 @@ def subd():
 def vidhevc():
     clear()
     print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
-    print("<Enter> single video (libx265, q24)\n1. numbered series(libx2652 q24)\n2. sigle video (h264_nvenc, q24)\n0. GoBack")
+    print("<Enter> single video (libx265, q24)\n" +
+          "1. numbered series (libx2652 q24)\n" +
+          "2. sigle video (h264_nvenc, q24)\n" +
+          "0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
