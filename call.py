@@ -1,22 +1,12 @@
+from kolreq import clear, readchar
 from datetime import datetime
 from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
-try:
-    from getch import getch #py-getch
-    from colorama import init, Fore, Back, Style
-except ModuleNotFoundError:
-    print("You are missing dependencies do you want to install them with pip? [Y/n]")
-    cmd = input("#")
-    if(cmd == "y" or cmd == "Y"):
-        os.system("pip install -r requirements.txt")
-        print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"\nYou should also install ffmpeg and add it to PATH")
-        input("press any key to quit")
-    else:
-        print("install them before you can use yt-dl\nYou should also install ffmpeg and add it to PATH")
-        input("press any key to quit")
+from getch import getch #py-getch
+from colorama import init, Fore, Back, Style
 
 init()
 
@@ -26,38 +16,19 @@ def is_venv():
 
 year = datetime.now().year
 curb = "master"
-ver = f"2.1.5-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-05-30"
+ver = f"2.1.6-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-08-28"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
 #==========NAME==========#
 def name(newline=True):
-    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline)
-
-#==========MUSTYPLAT CLEAR==========#
-def clear():
-    if(os.name == 'nt'):
-        os.system('cls')
-    elif(os.name == 'posix'):
-        os.system('clear')
-    else:
-        print('####If you see this please contact the dev. 0x2020####')
-
-#==========MULTYPLAT READKEY==========#
-def readchar(o): #multiplatform readchar
-    print(o, end="", flush=True) #writes text before the getch, no new line, flush output
-    x = getch()
-    if isinstance(x, bytes): #fix if returned in bytes, need to fix when input is arrowkeys
-         x = x.decode("UTF-8")
-    x = x.lower()
-    return x  
+    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
 
 #==========FIRST RUN MENU==========#
-def firstrun():
+def firstrun(py=""):
     clear()
-    print("This program requires one more dependenci that we can't install trough pip, ffmpeg you need to get this one your self and add it to path")
-    input("Press any key if you are aware.")
+    print("If you got here you have all the dependecies from pip, make sure to get ffmpeg and add it to PATH\n if you are cacing issues ask here https://discord.gg/W88375j")
     print("What's the name of your python executable.\n<enter> for python")
     py = input("#")
     if (py == ""):
@@ -137,6 +108,7 @@ def about():
          +f"Last updated on: {lstupdt}\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
+         +f"need help? ask here: https://discord.gg/W88375j\n"
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
          +f"           (C)2011-{year} youtube-dl developers\n"
          +f"ffmpeg (C)2000-{year} FFmpeg team")
@@ -307,6 +279,7 @@ def update():
             print(" [Y/n]")
             cmd = readchar("#")
             if (cmd == "y"):
+                os.system("git pull")
                 os.system(f"git checkout {otherb}")
                 print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
             else:
@@ -365,8 +338,8 @@ def videod():
         numb = input("#")
         print("starting youtube-dl please wait...")
         if(numb == ""): #no playlist
-            print("<Enter> for best quality 1080p + if availeble,\n"
-                 +"1 for 720 or lower\n"
+            print("<Enter> for best quality 1080p + if availeble (\"bestvideo+bestaudio\"),\n"
+                 +"1 for 720 or lower (\"best\")\n"
                  +"2 to choose yourself")
             qual = input("#")
             if (qual == "1"):
@@ -428,16 +401,23 @@ def subd():
 def vidhevc():
     clear()
     print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
-    print("<Enter> single video 1. numbered series or 0. GoBack")
+    print("<Enter> single video (libx265, q24)\n" +
+          "1. numbered series (libx2652 q24)\n" +
+          "2. sigle video (h264_nvenc, q24)\n" +
+          "0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
         url = input("#")
-        print("reenceded file will get \"_lib265.mkv\" appended, or type a different one")
+        if(url[0:3] == "& \'"): #powershell (& ' ')
+            url = url[3:-1]
+        elif(url[0:1] == '\"'): #cmd (" ")
+            url = url[1:-1]
+        print("reenceded file will get \"_hevcopus.mkv\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_lib265.mkv"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+            append = "_hevcopus.mkv"
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -465,13 +445,12 @@ def vidhevc():
                 name()
         print("does the numbers use zero padding [Y/n]")
         zero = readchar("#")
-        print("\nreenceded file will get \"_lib265\" appended, or type a different one")
+        print("\nreenceded file will get \"_hevcopus\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_lib265"
+            append = "_hevcopus"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
-        print(episodes)
         for numb in range(numb, numb_last+1):
             if(zero == "y"):
                 if(numb < 10):
@@ -479,15 +458,31 @@ def vidhevc():
                         numb_final = common_name+str(numb_final)
                 else:
                     numb_final = numb
-                    numb_final = common_name+str(numb_final)
+                    numb_final = common_name+str(numb_final)      
+            else:
+                numb_final = numb
+                numb_final = common_name+str(numb_final)
             for i in episodes:
                 if str(numb_final) in i:
                     filename = os.path.basename(i)
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append+".mkv"
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -rc constqp -qp 24 -b:v 0K -c:a aac -b:a 384k -c:s copy \"{finali}\"")
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
             print("\a")
+    elif(cmd == "2"):
+        print("write path to the file you want to reencode")
+        url = input("#")
+        if(url[0:3] == "& \'"): #powershell (& ' ')
+            url = url[3:-1]
+        elif(url[0:1] == '\"'): #cmd (" ")
+            url = url[1:-1]
+        print("reenceded file will get \"_nvenc.mov\" appended, or type a different one")
+        append = input("#")
+        if(append == ""):
+            append = "_nvenc.mov"
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a aac -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        print("\a")
     else:
         clear()
         name()

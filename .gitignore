@@ -1,9 +1,10 @@
 settings.json
 __pycache__
 .helpfiles
-.vscode
 env
+tenv
 audio
 videos
 *.bat
 *.ps1
+.vscode
