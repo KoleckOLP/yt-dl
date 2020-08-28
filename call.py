@@ -17,7 +17,7 @@ def is_venv():
 year = datetime.now().year
 curb = "testing"
 ver = f"2.1.6-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-08-21"
+lstupdt = "2020-08-28"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -26,10 +26,9 @@ def name(newline=True):
     BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
 
 #==========FIRST RUN MENU==========#
-def firstrun():
+def firstrun(py=""):
     clear()
-    print("This program requires one more dependenci that we can't install trough pip, ffmpeg you need to get this one your self and add it to path")
-    input("Press any key if you are aware.")
+    print("If you got here you have all the dependecies from pip, make sure to get ffmpeg and add it to PATH\n if you are cacing issues ask here https://discord.gg/W88375j")
     print("What's the name of your python executable.\n<enter> for python")
     py = input("#")
     if (py == ""):
@@ -109,6 +108,7 @@ def about():
          +f"Last updated on: {lstupdt}\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
+         +f"need help? ask here: https://discord.gg/W88375j\n"
          +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n"
          +f"           (C)2011-{year} youtube-dl developers\n"
          +f"ffmpeg (C)2000-{year} FFmpeg team")

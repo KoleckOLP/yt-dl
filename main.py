@@ -6,6 +6,13 @@ except ModuleNotFoundError:
     print("You are missing dependencies do you want to install them with pip? [Y/n]")
     cmd = input("#")
     if(cmd == "y" or cmd == "Y"):
+        print("Do you with to update pip first? If yes type the name of you python exectable.")
+        cmd = input("#")
+        if (cmd != ""):
+            py = cmd
+            print("updating pip...")
+            os.system(f"{py} -m pip install -U pip")
+        print("installing dependecies...")
         os.system("pip install -r requirements.txt")
         print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"\nYou should also install ffmpeg and add it to PATH")
         input("press any key to quit")

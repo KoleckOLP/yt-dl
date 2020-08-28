@@ -2,6 +2,7 @@ settings.json
 __pycache__
 .helpfiles
 env
+tenv
 audio
 videos
 *.bat
