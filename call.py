@@ -16,8 +16,8 @@ def is_venv():
 
 year = datetime.now().year
 curb = "testing"
-ver = f"2.1.6-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-08-28"
+ver = f"2.1.7-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-09-05"
 spath = sys.path[0]+os.path.sep
 settings = spath+"settings.json"
 
@@ -50,7 +50,11 @@ def firstrun(py=""):
     else:
         aup = False
     print()
-    savepath("chp",py,pip,ydpip,aup)
+    Vcodec = "libx265" #libx265, h264_nvenc
+    Acodec = "opus" #opus, acc
+    Vqual = "24" #24 
+    Abit = "190k" #190
+    savepath("chp",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
     loadpath()
     print("Do you want a Launch script? [Y/n] or p=" + Fore.BLUE + "Powershell" + Style.RESET_ALL)
     cmd = readchar("#")
@@ -124,7 +128,7 @@ def about():
         name()
 
 #==========SAVE PATH==========#
-def savepath(a="chp", x="", y="", z="", q=""):
+def savepath(a="chp", x="", y="", z="", q="",vc="",ac="",vq="",ab=""):
     if (a == "chp"):
         print("Type path were you want to store audio,"
                   +"\n<Enter> a default subdir 0. GoBack")
@@ -145,16 +149,16 @@ def savepath(a="chp", x="", y="", z="", q=""):
                 if (vid == ""):
                     vid = spath+"videos"
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": vc,"Acodec": ac,"Vqual": vq,"Abit": ab}, fh)
                     fh.close()
                 else:
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
                     fh.close()
     if (a != "chp"):
-        loadpath("hid")
+        #loadpath("hid")
         fh = open(settings, "w")
-        json.dump({"audio": audio,"videos": videos,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+        json.dump({"audio": audio,"videos": videos,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
         fh.close()
     
         
@@ -166,6 +170,10 @@ def loadpath(s="show"):
     global pip
     global ydpip
     global aup
+    global Vcodec
+    global Acodec
+    global Vqual
+    global Abit
     fh = open(settings, "r")
     try:
         path = json.loads(fh.read())
@@ -180,6 +188,10 @@ def loadpath(s="show"):
         path["pip"]
         path["ydpip"]
         path["aup"]
+        path["Vcodec"]
+        path["Acodec"]
+        path["Vqual"]
+        path["Abit"]
     except KeyError:
         firstrun()
     else:
@@ -189,6 +201,10 @@ def loadpath(s="show"):
         pip = path["pip"]
         ydpip = path["ydpip"]
         aup = path["aup"]
+        Vcodec = path["Vcodec"]
+        Acodec = path["Acodec"]
+        Vqual = path["Vqual"]
+        Abit = path["Abit"]
     if(s == "show"):
         print(Style.BRIGHT + "audio is saved to: " + Style.RESET_ALL, end="")
         print(audio)
@@ -263,7 +279,7 @@ def update():
             print("")
         elif (cmd == "4"):
             aup = not aup
-            savepath("",py,pip,ydpip,aup)
+            savepath("",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
             loadpath("hid")
             clear()
             print(f"autoupdate={aup}\n")
@@ -398,13 +414,17 @@ def subd():
         print("\a")
 
 #==========VID TO HEVC==========#
-def vidhevc():
+def reencode():
     clear()
     print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
-    print("<Enter> single video (libx265, q24)\n" +
-          "1. numbered series (libx2652 q24)\n" +
-          "2. sigle video (h264_nvenc, q24)\n" +
-          "0. GoBack")
+    global Vcodec
+    global Acodec
+    global Vqual
+    global Abit
+    print(f"<Enter> single video ({Vcodec},{Acodec},{Vqual},{Abit})\n" +
+          f"1. numbered series ({Vcodec},{Acodec},{Vqual},{Abit})\n" +
+          f"2. change settings\n" +
+          f"0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
@@ -413,11 +433,15 @@ def vidhevc():
             url = url[3:-1]
         elif(url[0:1] == '\"'): #cmd (" ")
             url = url[1:-1]
-        print("reenceded file will get \"_hevcopus.mkv\" appended, or type a different one")
+        print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
         append = input("#")
         if(append == ""):
             append = "_hevcopus.mkv"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        if(Vcodec == "libx256"):
+            quality = f"-rc constqp -qp {Vqual}"
+        else:
+            quality = f"-cq {Vqual}"
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -445,10 +469,10 @@ def vidhevc():
                 name()
         print("does the numbers use zero padding [Y/n]")
         zero = readchar("#")
-        print("\nreenceded file will get \"_hevcopus\" appended, or type a different one")
+        print("\nreenceded file will get \"_hevcopus.mkv\" appended, or type a different one")
         append = input("#")
         if(append == ""):
-            append = "_hevcopus"
+            append = "_hevcopus.mkv"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
         for numb in range(numb, numb_last+1):
@@ -467,22 +491,48 @@ def vidhevc():
                     filename = os.path.basename(i)
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
-                    finali = path+os.path.sep+file_split[0]+append+".mkv"
+                    finali = path+os.path.sep+file_split[0]+append
                     os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
             print("\a")
-    elif(cmd == "2"):
-        print("write path to the file you want to reencode")
-        url = input("#")
-        if(url[0:3] == "& \'"): #powershell (& ' ')
-            url = url[3:-1]
-        elif(url[0:1] == '\"'): #cmd (" ")
-            url = url[1:-1]
-        print("reenceded file will get \"_nvenc.mov\" appended, or type a different one")
-        append = input("#")
-        if(append == ""):
-            append = "_nvenc.mov"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a aac -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
-        print("\a")
+    elif(cmd == '2'):
+        print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, or write your own")
+        cmd = input("#")
+        if (cmd == ""):
+            pass
+        elif(cmd == "1"):
+            Vcodec = "libx265"
+        elif(cmd == "2"):
+            Vcodec = "h264_nvenc"
+        else:
+            Vcodec = cmd
+        print(f"AudioCodec = {Acodec}, <Enter> keep, 1. Opus, 2. AAC, or write your own")
+        cmd = input("#")
+        if (cmd == ""):
+            pass
+        elif(cmd == "1"):
+            Acodec = "opus"
+        elif(cmd == "2"):
+            Acodec = "aac"
+        else:
+            Acodec = cmd
+        print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24, or write your own")
+        cmd = input("#")
+        if (cmd == ""):
+            pass
+        elif(cmd == "1"):
+            Vqual = "24"
+        else:
+            Vqual = cmd
+        print(f"AudioBitrate = {Abit}, <Enter> keep, 1. 190k, or write your own")
+        cmd = input("#")
+        if (cmd == ""):
+            pass
+        elif(cmd == "1"):
+            Abit = "190k"
+        else:
+            Abit = cmd
+        savepath("",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
+        loadpath("hid")
     else:
         clear()
         name()
@@ -509,6 +559,7 @@ def debug():
             TF(git, False)
             print("\nautoupdate: ", end="")
             TF(aup)
+            print(f"Vcodec: {Vcodec}\nAcodec: {Acodec}\nVqual: {Vqual}\nAbit: {Abit}")
             if is_venv():
                 venv = True
             else:

@@ -23,7 +23,7 @@ except ModuleNotFoundError:
         exit()
 
 from kolreq import clear, readchar
-from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, vidhevc, update, slpath, about, debug
+from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
 clear()
 
@@ -47,8 +47,8 @@ while(True):
         break
     elif(cmd == "4"): #subtitles
         subd()
-    elif(cmd == "5"): #vid to hevc
-        vidhevc()
+    elif(cmd == "5"): #reencode
+        reencode()
     elif(cmd == "6"): #update
         update()
     elif(cmd == "7"): #save load path

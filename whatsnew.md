@@ -23,7 +23,8 @@ Python & pip executable name is now saved in settings
 fixed very stupid bugs. I mean 0. Goback now works on Videos & subs.
 new debug feature
 
-Osana is still not finished, lol.
+Due to some miracles on this planet OSANA got relesed on 2020-08-31, so this joke is nolonger relevant.
+But at-least I'm not pushing bugfixes everyday since than :D
 
 To do by severity 2.1.6:
         [done] (high)    Remake firstrun and integrate dependenci install
