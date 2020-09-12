@@ -437,7 +437,7 @@ def reencode():
         append = input("#")
         if(append == ""):
             append = "_hevcopus.mkv"
-        elif(append == "1")
+        elif(append == "1"):
             append = "_nvenc.mov"
         if(Vcodec == "libx256"):
             quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
@@ -475,7 +475,7 @@ def reencode():
         append = input("#")
         if(append == ""):
             append = "_hevcopus.mkv"
-        elif(append == "1")
+        elif(append == "1"):
             append = "_nvenc.mov"
         if(Vcodec == "libx256"):
             quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
