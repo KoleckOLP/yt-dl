@@ -437,10 +437,12 @@ def reencode():
         append = input("#")
         if(append == ""):
             append = "_hevcopus.mkv"
+        elif(append == "1")
+            append = "_nvenc.mov"
         if(Vcodec == "libx256"):
-            quality = f"-rc constqp -qp {Vqual}"
+            quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
         else:
-            quality = f"-cq {Vqual}"
+            quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
         os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
@@ -469,10 +471,16 @@ def reencode():
                 name()
         print("does the numbers use zero padding [Y/n]")
         zero = readchar("#")
-        print("\nreenceded file will get \"_hevcopus.mkv\" appended, or type a different one")
+        print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
         append = input("#")
         if(append == ""):
             append = "_hevcopus.mkv"
+        elif(append == "1")
+            append = "_nvenc.mov"
+        if(Vcodec == "libx256"):
+            quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+        else:
+            quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
         for numb in range(numb, numb_last+1):
