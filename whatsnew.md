@@ -26,9 +26,8 @@ new debug feature
 Due to some miracles on this planet OSANA got relesed on 2020-08-31, so this joke is nolonger relevant.
 But at-least I'm not pushing bugfixes everyday since than :D
 
-To do by severity 2.1.6:
-        [done] (high)    Remake firstrun and integrate dependenci install
-        [done] (high)    split some part of call.py into kolreq.py  
+To do by severity 2.1.7:
+        [done] (high)    Convert everything in a folder
 I'wont  [    ] (low)     PATH export ffmpeg to the yt-dl dir. is ffmpeg in yt-dl dir
 I'wont  [    ] (low)     Ctrl+D to quit
 

@@ -444,7 +444,7 @@ def reencode():
             quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
         else:
             quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -501,7 +501,7 @@ def reencode():
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{finali}\"")
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{finali}\"")
             print("\a")
     elif(cmd == '2'):
         print("write path to the folder with videos")
@@ -519,7 +519,7 @@ def reencode():
         url = url.replace('[', '[[]')
         videos = glob.glob(url+os.path.sep+"*.*")
         for video in videos:
-            os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{video[:-4]+append}\"")
+            os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{video[:-4]+append}\"")
 
 
     elif(cmd == '3'):
