@@ -421,8 +421,9 @@ def reencode():
     global Acodec
     global Vqual
     global Abit
-    print(f"<Enter> single video ({Vcodec},{Acodec},{Vqual},{Abit})\n" +
-          f"1. numbered series ({Vcodec},{Acodec},{Vqual},{Abit})\n" +
+    print(Fore.CYAN + f"(video codec=\"{Vcodec}\", audio codec=\"{Acodec}\", video quality=\"{Vqual}\", audio bitrate=\"{Abit}\")\n" + Style.RESET_ALL +
+          f"<Enter> single video\n" +
+          f"1. numbered series (Deprecated)\n" +
           f"2. whole folder\n" +
           f"3. change settings\n" +
           f"0. GoBack")
@@ -434,17 +435,24 @@ def reencode():
             url = url[3:-1]
         elif(url[0:1] == '\"'): #cmd (" ")
             url = url[1:-1]
-        print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
-        append = input("#")
-        if(append == ""):
-            append = "_hevcopus.mkv"
-        elif(append == "1"):
-            append = "_nvenc.mov"
-        if(Vcodec == "libx256"):
-            quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+        if(Vcodec == "none"):
+            print("reenceded file will get \".mp3\" appended or type a different one")
+            append = input("#")
+            if(append == ""):
+                append = ".mp3"
+            os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -c:a {Acodec} -strict -2 -b:a {Abit} \"{os.path.splitext(url)[0]+append}\"")
         else:
-            quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+            print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
+            append = input("#")
+            if(append == ""):
+                append = "_hevcopus.mkv"
+            elif(append == "1"):
+                append = "_nvenc.mov"
+            if(Vcodec == "libx256"):
+                quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            else:
+                quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -502,28 +510,37 @@ def reencode():
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append
                     os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{finali}\"")
-            print("\a")
+        print("\a")
     elif(cmd == '2'):
         print("write path to the folder with videos")
         url = input("#")
-        print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
-        append = input("#")
-        if(append == ""):
-            append = "_hevcopus.mkv"
-        elif(append == "1"):
-            append = "_nvenc.mov"
-        if(Vcodec == "libx256"):
-            quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+        if(Vcodec == "none"):
+            print("reenceded file will get \".mp3\" appended or type a different one")
+            append = input("#")
+            if(append == ""):
+                append = ".mp3"
+            url = url.replace('[', '[[]')
+            videos = glob.glob(url+os.path.sep+"*.*")
+            for video in videos:
+                os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:a? -c:a {Acodec} -strict -2 -b:a {Abit} \"{video[:-4]+append}\"")
         else:
-            quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
-        url = url.replace('[', '[[]')
-        videos = glob.glob(url+os.path.sep+"*.*")
-        for video in videos:
-            os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{video[:-4]+append}\"")
-
-
+            print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
+            append = input("#")
+            if(append == ""):
+                append = "_hevcopus.mkv"
+            elif(append == "1"):
+                append = "_nvenc.mov"
+            if(Vcodec == "libx256"):
+                quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            else:
+                quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            url = url.replace('[', '[[]')
+            videos = glob.glob(url+os.path.sep+"*.*")
+            for video in videos:
+                os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{video[:-4]+append}\"")
+        print("\a")
     elif(cmd == '3'):
-        print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, or write your own")
+        print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, 3. none(vid->audio) or write your own")
         cmd = input("#")
         if (cmd == ""):
             pass
@@ -531,6 +548,8 @@ def reencode():
             Vcodec = "libx265"
         elif(cmd == "2"):
             Vcodec = "h264_nvenc"
+        elif(cmd == "3"):
+            Vcodec = "none"
         else:
             Vcodec = cmd
         print(f"AudioCodec = {Acodec}, <Enter> keep, 1. Opus, 2. AAC, or write your own")
@@ -543,14 +562,17 @@ def reencode():
             Acodec = "aac"
         else:
             Acodec = cmd
-        print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24, or write your own")
-        cmd = input("#")
-        if (cmd == ""):
-            pass
-        elif(cmd == "1"):
-            Vqual = "24"
+        if (Vcodec != "none"):
+            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24, or write your own")
+            cmd = input("#")
+            if (cmd == ""):
+                pass
+            elif(cmd == "1"):
+                Vqual = "24"
+            else:
+                Vqual = cmd
         else:
-            Vqual = cmd
+            Vqual = "none"
         print(f"AudioBitrate = {Abit}, <Enter> keep, 1. 190k, or write your own")
         cmd = input("#")
         if (cmd == ""):
