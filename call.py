@@ -423,7 +423,8 @@ def reencode():
     global Abit
     print(f"<Enter> single video ({Vcodec},{Acodec},{Vqual},{Abit})\n" +
           f"1. numbered series ({Vcodec},{Acodec},{Vqual},{Abit})\n" +
-          f"2. change settings\n" +
+          f"2. whole folder\n" +
+          f"3. change settings\n" +
           f"0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
@@ -500,9 +501,28 @@ def reencode():
                     file_split = filename.split(".", 1)
                     path = os.path.dirname(i)
                     finali = path+os.path.sep+file_split[0]+append
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
+                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{finali}\"")
             print("\a")
     elif(cmd == '2'):
+        print("write path to the folder with videos")
+        url = input("#")
+        print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
+        append = input("#")
+        if(append == ""):
+            append = "_hevcopus.mkv"
+        elif(append == "1"):
+            append = "_nvenc.mov"
+        if(Vcodec == "libx256"):
+            quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+        else:
+            quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
+        url = url.replace('[', '[[]')
+        videos = glob.glob(url+os.path.sep+"*.*")
+        for video in videos:
+            os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:v -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{video[:-4]+append}\"")
+
+
+    elif(cmd == '3'):
         print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, or write your own")
         cmd = input("#")
         if (cmd == ""):
