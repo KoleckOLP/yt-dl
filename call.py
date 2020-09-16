@@ -421,12 +421,22 @@ def reencode():
     global Acodec
     global Vqual
     global Abit
-    print(Fore.CYAN + f"(video codec=\"{Vcodec}\", audio codec=\"{Acodec}\", video quality=\"{Vqual}\", audio bitrate=\"{Abit}\")\n" + Style.RESET_ALL +
-          f"<Enter> single video\n" +
-          f"1. numbered series (Deprecated)\n" +
-          f"2. whole folder\n" +
-          f"3. change settings\n" +
-          f"0. GoBack")
+    print("(video codec=\"",end="") 
+    if (Vcodec == "none"):
+        print(Fore.RED + Vcodec + Style.RESET_ALL,end="")
+    else:
+        print(Fore.YELLOW + Vcodec + Style.RESET_ALL,end="")
+    print("\", audio codec=\"" + Fore.CYAN + Acodec + Style.RESET_ALL + "\", video q,qmin,qmax=\"",end="")
+    if (Vcodec == "none"):
+        print(Fore.RED + Vqual + Style.RESET_ALL,end="")
+    else:
+        print(Fore.YELLOW + Vqual + Style.RESET_ALL,end="")
+    print("\", audio bitrate=\"" + Fore.CYAN + Abit + Style.RESET_ALL +"\")\n" +
+          "<Enter> single video\n" +
+          "1. numbered series (Deprecated)\n" +
+          "2. whole folder\n" +
+          "3. change settings\n" +
+          "0. GoBack")
     cmd = input("#")
     if(cmd == ""): #single
         print("write path to the file you want to reencode")
@@ -448,11 +458,16 @@ def reencode():
                 append = "_hevcopus.mkv"
             elif(append == "1"):
                 append = "_nvenc.mov"
-            if(Vcodec == "libx256"):
-                quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            if "," in Vqual:
+                Vqual = Vqual.split(",")
             else:
-                quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
-            os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+                Vqual = [Vqual,Vqual,Vqual]
+            if(Vcodec == "libx256"):
+                quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+            else:
+                quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+            #os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+            print(Vqual)
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
@@ -486,10 +501,14 @@ def reencode():
             append = "_hevcopus.mkv"
         elif(append == "1"):
             append = "_nvenc.mov"
-        if(Vcodec == "libx256"):
-            quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+        if "," in Vqual:
+            Vqual = Vqual.split(",")
         else:
-            quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            Vqual = [Vqual,Vqual,Vqual]
+        if(Vcodec == "libx256"):
+            quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+        else:
+            quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
         for numb in range(numb, numb_last+1):
@@ -530,10 +549,14 @@ def reencode():
                 append = "_hevcopus.mkv"
             elif(append == "1"):
                 append = "_nvenc.mov"
-            if(Vcodec == "libx256"):
-                quality = f"-rc constqp -qp {Vqual} -qmin {Vqual} -qmax {Vqual}"
+            if "," in Vqual:
+                Vqual = Vqual.split(",")
             else:
-                quality = f"-cq {Vqual} -qmin {Vqual} -qmax {Vqual}"
+                Vqual = [Vqual,Vqual,Vqual]
+            if(Vcodec == "libx256"):
+                quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+            else:
+                quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
             url = url.replace('[', '[[]')
             videos = glob.glob(url+os.path.sep+"*.*")
             for video in videos:
@@ -563,12 +586,12 @@ def reencode():
         else:
             Acodec = cmd
         if (Vcodec != "none"):
-            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24, or write your own")
+            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24,15,30; or write your own q,qmin,qmax, or just q")
             cmd = input("#")
             if (cmd == ""):
                 pass
             elif(cmd == "1"):
-                Vqual = "24"
+                Vqual = "24,15,30"
             else:
                 Vqual = cmd
         else:
