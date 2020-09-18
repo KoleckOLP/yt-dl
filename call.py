@@ -466,8 +466,7 @@ def reencode():
                 quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
             else:
                 quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
-            #os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
-            print(Vqual)
+            os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
         print("write path to the folder with videos don't forget to add \\*.extencion")
