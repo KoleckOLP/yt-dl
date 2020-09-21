@@ -459,13 +459,13 @@ def reencode():
             elif(append == "1"):
                 append = "_nvenc.mov"
             if "," in Vqual:
-                Vqual = Vqual.split(",")
+                VQsplit = Vqual.split(",")
             else:
-                Vqual = [Vqual,Vqual,Vqual]
+                VQsplit = [Vqual,Vqual,Vqual]
             if(Vcodec == "libx256"):
-                quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+                quality = f"-rc constqp -qp {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
             else:
-                quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+                quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
             os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? -c:v {Vcodec} -max_muxing_queue_size 9999 {quality} -b:v 0K -vf format=yuv420p -c:a {Acodec} -strict -2 -b:a {Abit} -c:s copy \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == "1"): #numbered
@@ -501,13 +501,13 @@ def reencode():
         elif(append == "1"):
             append = "_nvenc.mov"
         if "," in Vqual:
-            Vqual = Vqual.split(",")
+            VQsplit = Vqual.split(",")
         else:
-            Vqual = [Vqual,Vqual,Vqual]
+            VQsplit = [Vqual,Vqual,Vqual]
         if(Vcodec == "libx256"):
-            quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+            quality = f"-rc constqp -qp {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
         else:
-            quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+            quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
         url = url.replace('[', '[[]')
         episodes = glob.glob(url)
         for numb in range(numb, numb_last+1):
@@ -549,13 +549,13 @@ def reencode():
             elif(append == "1"):
                 append = "_nvenc.mov"
             if "," in Vqual:
-                Vqual = Vqual.split(",")
+                VQsplit = Vqual.split(",")
             else:
-                Vqual = [Vqual,Vqual,Vqual]
+                VQsplit = [Vqual,Vqual,Vqual]
             if(Vcodec == "libx256"):
-                quality = f"-rc constqp -qp {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+                quality = f"-rc constqp -qp {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
             else:
-                quality = f"-cq {Vqual[0]} -qmin {Vqual[1]} -qmax {Vqual[2]}"
+                quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
             url = url.replace('[', '[[]')
             videos = glob.glob(url+os.path.sep+"*.*")
             for video in videos:
