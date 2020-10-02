@@ -442,8 +442,8 @@ def reencode():
           "0. GoBack")
     cmd = input("#")
     if(cmd == ""): #====================SINGLE====================#
-        if(Vcodec == "romeve" and Acodec == "remove"):
-            print("You are literary asking us to do nothing")
+        if(Vcodec == "remove" and Acodec == "remove"):
+            print("I mean you can delete the file yourself. :)")
         else:
             print("write path to the file you want to reencode")
             url = input("#")
@@ -500,7 +500,7 @@ def reencode():
         print("\a")
     elif(cmd == '1'): #====================WHOLE FOLDER====================#
         if(Vcodec == "remove" and Acodec == "remove"):
-            print("You are literary asking us to do nothing")
+            print("I'm not gonna delete the folder for you. hmpf")
         else:
             print("write path to the folder with videos")
             url = input("#")
