@@ -584,12 +584,12 @@ def reencode():
         else:
             Acodec = cmd
         if (Vcodec not in ("copy","remove")):
-            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24,15,30; or write your own q,qmin,qmax, or just q")
+            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24,24,24; or write your own q,qmin,qmax, or just q")
             cmd = input("#")
             if (cmd == ""):
                 pass
             elif(cmd == "1"):
-                Vqual = "24,15,30"
+                Vqual = "24,24,24"
             else:
                 Vqual = cmd
         else:
