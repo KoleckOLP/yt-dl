@@ -1,4 +1,4 @@
-from kolreq import clear, readchar
+from kolreq.kolreq import clear, readchar
 from datetime import datetime
 from time import sleep
 import tempfile
@@ -241,7 +241,7 @@ def upytdl():
     print("Updating yt-dl...")
     if(os.path.exists(spath+".git")):
         os.system("cd "+spath)
-        os.system("git pull")
+        os.system("git pull --recurse-submodules")
     else:
         print("yt-dl wasn't installed trought git.\n"
         +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")    
@@ -295,7 +295,7 @@ def update():
             print(" [Y/n]")
             cmd = readchar("#")
             if (cmd == "y"):
-                os.system("git pull")
+                os.system("git pull --recurse-submodules")
                 os.system(f"git checkout {otherb}")
                 print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
             else:

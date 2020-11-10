@@ -21,8 +21,12 @@ except ModuleNotFoundError:
         print("install them before you can use yt-dl\nYou should also install ffmpeg and add it to PATH")
         input("press any key to quit")
         exit()
-
-from kolreq.kolreq import clear, readchar
+try:
+    from kolreq.kolreq import clear, readchar
+except ModuleNotFoundError:
+    print("this program requires a submodule that will downlosad now.")
+    os.system("git submodule init")
+    os.system("git pull --recurse-submodules")
 from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
 clear()
