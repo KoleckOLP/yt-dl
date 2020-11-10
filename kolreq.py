@@ -15,7 +15,10 @@ def readchar(o=""): #multiplatform readchar
     print(o, end="", flush=True) #writes text before the getch, no new line, flush output
     x = getch()
     if isinstance(x, bytes): #fix if returned in bytes, need to fix when input is arrowkeys
-         x = x.decode("UTF-8")
+        try: #fixes bug where one key sending multiple characters caused decode error
+            x = x.decode("UTF-8")
+        except UnicodeDecodeError:
+            x = ' '
     x = x.lower()
     return x  
 

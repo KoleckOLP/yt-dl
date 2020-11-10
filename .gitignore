@@ -7,3 +7,6 @@ audio
 videos
 *.bat
 *.ps1
+ffmpeg.exe
+ffprobe.exe
+ffplay.exe
