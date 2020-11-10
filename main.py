@@ -22,7 +22,7 @@ except ModuleNotFoundError:
         input("press any key to quit")
         exit()
 
-from kolreq import clear, readchar
+from kolreq.kolreq import clear, readchar
 from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
 clear()
