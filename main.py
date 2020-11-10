@@ -60,7 +60,7 @@ while(True):
         slpath()
     elif(cmd == "8"): #about
         about()
-    elif(cmd == "`"): #debug
+    elif(cmd == ";"): #debug ( usually '`' but I down't have that key on my czech wok laptop keyboard)
         debug()
     else:
         clear()

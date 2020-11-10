@@ -28,7 +28,6 @@ def name(newline=True):
 #==========FIRST RUN MENU==========#
 def firstrun(py=""):
     clear()
-    print("If you got here you have all the dependecies from pip, make sure to get ffmpeg and add it to PATH\n if you are cacing issues ask here https://discord.gg/W88375j")
     print("What's the name of your python executable.\n<enter> for python")
     py = input("#")
     if (py == ""):
@@ -174,6 +173,7 @@ def loadpath(s="show"):
     global Acodec
     global Vqual
     global Abit
+    global fdir
     fh = open(settings, "r")
     try:
         path = json.loads(fh.read())
@@ -205,6 +205,14 @@ def loadpath(s="show"):
         Acodec = path["Acodec"]
         Vqual = path["Vqual"]
         Abit = path["Abit"]
+
+    pffmpeg = glob.glob(f"{spath}/ffmpeg*")
+    pffprobe = glob.glob(f"{spath}/ffprobe*")
+    if (not pffmpeg and not pffprobe):
+        fdir = False
+    else:
+        fdir = True
+
     if(s == "show"):
         print(Style.BRIGHT + "audio is saved to: " + Style.RESET_ALL, end="")
         print(audio)
@@ -320,6 +328,12 @@ def autoupdt():
 
 #==========AUDIO DOWNLOAD==========#
 def audiod():
+    global fdir
+    if (fdir == True):
+        floc = f"--ffmpeg-location {spath}"
+    else:
+        floc = ""
+
     clear()
     print("link to audio, playlist, 0. GoBack")
     url = input("#")
@@ -331,17 +345,23 @@ def audiod():
              +"1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
         if(numb == ""):
-            lnk = f"-o \"{audio}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{audio}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         elif(numb == "1"):
-            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         else:
-            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i --playlist-items {numb} -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i --playlist-items {numb} -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         print("\a")
 
 #==========VIDEO DOWNLOAD==========#
 def videod():
+    global fdir
+    if (fdir == True):
+        floc = f"--ffmpeg-location {spath}"
+    else:
+        floc = ""
+
     clear()
     print("link to video, playlist, 0. GoBack")
     url = input("#")
@@ -358,35 +378,41 @@ def videod():
                  +"2 to choose yourself")
             qual = input("#")
             if (qual == "1"):
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg \"{url}\""
+                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg {floc} \"{url}\""
             elif(qual == "2"):
                 print("starting youtube-dl please wait...")
                 os.system(f"youtube-dl -F --no-playlist {url}")
                 print("choose video and audio quality by typing numb+numb")
                 numb = input("#")
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg \"{url}\""
+                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg {floc} \"{url}\""
             else:
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg \"{url}\""
+                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg {floc} \"{url}\""
         else: #playlist
             print("<Enter> for the best quality 1080p + if available, \n"
                  +"1 for 720p or lower")
             qual = input("#")
             if(qual == "1"): 
                 if(numb == "1"):
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
                 else:
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
             else:
                 if(numb == "1"):
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
                 else:
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
         print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         print("\a")
 
 #==========SUBTITILE DOWNLOAD==========#
 def subd():
+    global fdir
+    if (fdir == True):
+        floc = f"--ffmpeg-location {spath}"
+    else:
+        floc = ""
+
     clear()
     temp = tempfile.mkdtemp()+os.path.sep
     print("link to video with subs or 0. GoBack")
@@ -399,13 +425,13 @@ def subd():
              +"1 to choose language")
         numb = input("#")
         if(numb == ""):
-            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-format vtt --skip-download --prefer-ffmpeg \"{url}\""
+            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-format vtt --skip-download --prefer-ffmpeg {floc} \"{url}\""
         else:
             print("starting youtube-dl please wait...")
             os.system(f"youtube-dl --list-subs --noplaylist {url}")
             print("choose sub language")
             numb = input("#")
-            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-lang \"{numb}\" --sub-format vtt --skip-download --prefer-ffmpeg \"{url}\""
+            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-lang \"{numb}\" --sub-format vtt --skip-download --prefer-ffmpeg {floc} \"{url}\""
         print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         pie = glob.glob(f"{temp}*.vtt")
@@ -419,6 +445,12 @@ def subd():
 
 #==========VID TO HEVC==========#
 def reencode():
+    global fdir
+    if (fdir == True):
+        floc = f"{spath}"
+    else:
+        floc = ""
+
     clear()
     print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
     global Vcodec
@@ -496,7 +528,7 @@ def reencode():
                 SubsC = ""
             else:
                 SubsC = "-c:s copy"
-            os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
+            os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == '1'): #====================WHOLE FOLDER====================#
         if(Vcodec == "remove" and Acodec == "remove"):
@@ -552,7 +584,7 @@ def reencode():
             url = url.replace('[', '[[]')
             videos = glob.glob(url+os.path.sep+"*.*")
             for video in videos:
-                os.system(f"ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{video[:-4]+append}\"")
+                os.system(f"{floc}ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{video[:-4]+append}\"")
         print("\a")
     elif(cmd == '2'):
         print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, 3. copy, 4. remove or write your own")
@@ -628,10 +660,12 @@ def debug():
             print("Variables:")
             print(f"python executable name: {py}\npip executable name: {pip}")
             print("youtube-dl from pip: ", end="")
-            TF(ydpip, False)
-            print("\nyt-dl from git: ", end="")
-            TF(git, False)
-            print("\nautoupdate: ", end="")
+            TF(ydpip)
+            print("ffmpeg in yt-dl dir: ", end="")
+            TF(fdir)
+            print("yt-dl from git: ", end="")
+            TF(git)
+            print("autoupdate: ", end="")
             TF(aup)
             print(f"Vcodec: {Vcodec}\nAcodec: {Acodec}\nVqual: {Vqual}\nAbit: {Abit}")
             if is_venv():
