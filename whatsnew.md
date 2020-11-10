@@ -28,8 +28,11 @@ But at-least I'm not pushing bugfixes everyday since than :D
 
 To do by severity 2.1.7:
         [done] (high)    Convert everything in a folder
-I'wont  [    ] (low)     PATH export ffmpeg to the yt-dl dir. is ffmpeg in yt-dl dir
-I'wont  [    ] (low)     Ctrl+D to quit
+        [    ] (medium)  posix sh files only support bash, and don't work on BSD at all.
+        [    ] (medium)  BSD single quotes on video drag don't work
+        [    ] (high)    BSD reencoding quality is -0.0 with "24,24,24" on BSD ???visual bug???
+I'wont  [done] (low)     PATH export ffmpeg to the yt-dl dir. is ffmpeg in yt-dl dir
+I'wont  [    ] (low)     Ctrl+D to quit (I have no idea how to make that work sorry)
 
 
 

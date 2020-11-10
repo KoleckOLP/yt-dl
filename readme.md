@@ -11,7 +11,12 @@ Requrements:
 + ffmpeg, ffprobe
 
 I've tried:
-Windows 10 x64, Linux x64, MacOS 10.7 x64, HaikuOS x64, Android(Temux) x64
+Windows 10 x64
+Linux x64
+Mac OS 10.7 x64
+HaikuOS x64
+Android(Temux) x64
+freeBSD x64
 
 How to set yt-dl up:
 1. clone yt-dl (if you don't have install git)
