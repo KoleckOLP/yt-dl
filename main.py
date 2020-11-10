@@ -14,11 +14,11 @@ except ModuleNotFoundError:
             os.system(f"{py} -m pip install -U pip")
         print("installing dependecies...")
         os.system("pip install -r requirements.txt")
-        print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"\nYou should also install ffmpeg and add it to PATH")
+        print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"")
         input("press any key to quit")
         exit()
     else:
-        print("install them before you can use yt-dl\nYou should also install ffmpeg and add it to PATH")
+        print("install them before you can use yt-dl")
         input("press any key to quit")
         exit()
 try:

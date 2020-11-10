@@ -28,6 +28,7 @@ def name(newline=True):
 #==========FIRST RUN MENU==========#
 def firstrun(py=""):
     clear()
+    print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
     print("What's the name of your python executable.\n<enter> for python")
     py = input("#")
     if (py == ""):
