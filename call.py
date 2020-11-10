@@ -503,9 +503,9 @@ def reencode():
             else:
                 VQsplit = [Vqual,Vqual,Vqual]
             #//Videeo Codec\\#
-            if(Vcodec == "libx256"):
+            if(Vcodec == "libx265"):
                 VideoCodec = f"-c:v {Vcodec}"
-                quality = f"-rc constqp -qp {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
+                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[0])-1} -qmax {int(VQsplit[2])-1}"
                 Vformat = "-vf format=yuv420p"
             elif(Vcodec == "copy"):
                 VideoCodec = f"-c:v {Vcodec}"
@@ -529,7 +529,7 @@ def reencode():
                 SubsC = ""
             else:
                 SubsC = "-c:s copy"
-            os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
+            os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == '1'): #====================WHOLE FOLDER====================#
         if(Vcodec == "remove" and Acodec == "remove"):
@@ -556,9 +556,9 @@ def reencode():
             else:
                 VQsplit = [Vqual,Vqual,Vqual]
             #//Videeo Codec\\#
-            if(Vcodec == "libx256"):
+            if(Vcodec == "libx265"):
                 VideoCodec = f"-c:v {Vcodec}"
-                quality = f"-rc constqp -qp {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
+                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[0])-1} -qmax {int(VQsplit[2])-1}"
                 Vformat = "-vf format=yuv420p"
             elif(Vcodec == "copy"):
                 VideoCodec = f"-c:v {Vcodec}"
