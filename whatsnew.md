@@ -1,12 +1,12 @@
 New in 2.1.7:
 New install method, no more fiddling, intall python, git, clone repo run main.py
 FFmpeg and FFprobe can be read from the yt-dl dir (just place them to yt-dl dir)
-Re-encoding all videos in a folder
+Re-encoding all videos in a folder, and buch more re-encode features
 some parts moved to a second repo (submodule)
 is_venv used to no ask users if they are in vevn or not.
+tons of bug fixes and overall QoL changes
 
-
-New in 2.1.5
+New in 2.1.5:
 Updating pip before updating dependencies
 autoupdate, upgrading dependencies
 convert any video to HEVC
@@ -15,7 +15,7 @@ got rid of wildcard import
 got rid of unused imports
 if you are missing dependencies we will help you get them
 
-New in 2.1.4
+New in 2.1.4:
 I switched to venv you should too,
 dependecie are now in requirements.txt
 update now uses requirements.txt to update all dependencies
