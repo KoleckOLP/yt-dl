@@ -1,7 +1,7 @@
 import os
 try:
-    from getch import getch #py-getch
-    from colorama import init, Fore, Back, Style
+    import getch
+    import colorama
 except ModuleNotFoundError:
     print("You are missing dependencies do you want to install them with pip? [Y/n]")
     cmd = input("#")

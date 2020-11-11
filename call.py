@@ -1,11 +1,9 @@
 from kolreq.kolreq import clear, readchar
 from datetime import datetime
-from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
-from getch import getch #py-getch
 from colorama import init, Fore, Back, Style
 
 init()
@@ -52,7 +50,7 @@ def firstrun(py=""):
     print()
     Vcodec = "libx265" #libx265, h264_nvenc
     Acodec = "opus" #opus, acc
-    Vqual = "24" #24 
+    Vqual = "24,24,24" #24 
     Abit = "190k" #190
     savepath("chp",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
     loadpath()
@@ -88,7 +86,7 @@ def launchs(p=""):
                 f.close()
             elif(os.name == 'posix'):
                 f=open("yt-dl","w")
-                f.write(f"#!/bin/bash\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
                 f.close()
             else:
                 print('####If you see this please contact the dev. 0x1015####')
@@ -99,7 +97,7 @@ def launchs(p=""):
                 f.close()
             elif(os.name == 'posix'):
                 f=open("yt-dl","w")
-                f.write(f"#!/bin/bash\n\ncd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath} && {py} main.py")
                 f.close()
             else:
                 print('####If you see this please contact the dev. 0x1005####')
@@ -505,7 +503,7 @@ def reencode():
             #//Videeo Codec\\#
             if(Vcodec == "libx265"):
                 VideoCodec = f"-c:v {Vcodec}"
-                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[0])-1} -qmax {int(VQsplit[2])-1}"
+                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[1])-1} -qmax {int(VQsplit[2])-1}"
                 Vformat = "-vf format=yuv420p"
             elif(Vcodec == "copy"):
                 VideoCodec = f"-c:v {Vcodec}"
@@ -558,7 +556,7 @@ def reencode():
             #//Videeo Codec\\#
             if(Vcodec == "libx265"):
                 VideoCodec = f"-c:v {Vcodec}"
-                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[0])-1} -qmax {int(VQsplit[2])-1}"
+                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[1])-1} -qmax {int(VQsplit[2])-1}"
                 Vformat = "-vf format=yuv420p"
             elif(Vcodec == "copy"):
                 VideoCodec = f"-c:v {Vcodec}"
