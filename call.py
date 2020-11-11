@@ -1,10 +1,10 @@
 from kolreq.kolreq import clear, readchar
-from datetime import datetime
+from datetime import datetime #from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style #Back
 
 init()
 
@@ -480,7 +480,7 @@ def reencode():
             url = input("#")
             if(url[0:3] == "& \'"): #powershell (& ' ')
                 url = url[3:-1]
-            elif(url[0:1] == '\"'): #cmd (" ")
+            elif(url[0:1] == '\"' or url[0:1] == "\'"): #cmd (" "), or posix (' ')
                 url = url[1:-1]
             #//append\\#
             if(Vcodec == "remove"):

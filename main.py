@@ -1,32 +1,27 @@
-import os
+import os #importing os so I can os.system to install dependecies
 try:
-    import getch
-    import colorama
+    import getch #testing if dependecies are installed, not used in main.py
+    import colorama #point sf this is preventing crashes on missing dependencies in kolreq submodule and call.py
 except ModuleNotFoundError:
-    print("You are missing dependencies do you want to install them with pip? [Y/n]")
+    print("You are missing dependencies, we'll try to install them with pip.")
+    input("press any key to continue")
+    print("Do you with to update pip first? If yes type the name of you python exectable.")
     cmd = input("#")
-    if(cmd == "y" or cmd == "Y"):
-        print("Do you with to update pip first? If yes type the name of you python exectable.")
-        cmd = input("#")
-        if (cmd != ""):
-            py = cmd
-            print("updating pip...")
-            os.system(f"{py} -m pip install -U pip")
-        print("installing dependecies...")
-        os.system("pip install -r requirements.txt")
-        print("\n\nif all went well, restart yt-dl and it will work\nIf not run \"pip install -r requirements.txt\"")
-        input("press any key to quit")
-        exit()
-    else:
-        print("install them before you can use yt-dl")
-        input("press any key to quit")
-        exit()
+    if (cmd != ""):
+        py = cmd
+        print("updating pip...")
+        os.system(f"{py} -m pip install -U pip")
+    print("installing dependecies...")
+    os.system("pip install -r requirements.txt")
+
 try:
-    from kolreq.kolreq import clear, readchar
+    from kolreq.kolreq import clear, readchar #testing if submodule is installed and importing it
 except ModuleNotFoundError:
     print("this program requires a submodule that will downlosad now.")
+    input("press any key to continue")
     os.system("git submodule init")
     os.system("git pull --recurse-submodules")
+
 from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
 clear()

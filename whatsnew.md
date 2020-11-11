@@ -1,3 +1,9 @@
+New in 2.1.7:
+some parts oved to a second repo (submodule)
+FFmpeg and FFprobe can be read from the yt-dl dir
+Re-encoding all videos in a folder
+
+
 New in 2.1.5
 Updating pip before updating dependencies
 autoupdate, upgrading dependencies
@@ -28,12 +34,11 @@ But at-least I'm not pushing bugfixes everyday since than :D
 
 To do by severity 2.1.7:
         [done] (high)    Convert everything in a folder
-        [    ] (medium)  posix sh files only support bash, and don't work on BSD at all.
-        [    ] (medium)  BSD single quotes on video drag don't work
-        [    ] (high)    BSD reencoding quality is -0.0 with "24,24,24" on BSD ???visual bug???
+        [    ] (medium)  posix sh files only support bash, and don't work on BSD at all.        *written, will test on BSD sson*
+        [    ] (medium)  BSD single quotes on video drag don't work                             *written, will test on BSD sson*
+        [    ] (high)    BSD reencoding quality is -0.0 with "24,24,24" on BSD ???visual bug??? *will test on BSD soon*
 I'wont  [done] (low)     PATH export ffmpeg to the yt-dl dir. is ffmpeg in yt-dl dir
-I'wont  [    ] (low)     Ctrl+D to quit (I have no idea how to make that work sorry)
-
+I'wont  [    ] (low)     Ctrl+D to quit (I have no clue how to implement it, and it's not a priority)
 
 
 how to git:
@@ -50,6 +55,8 @@ Do all changes you need in master
 git add .
 git commit -m "message"
 git push
+
+updating submodule cd submodule, write update add, commit(update to submodule), push, cd.., add, commit(updated submodule), push, git pull --recurse-submodules(git pullall *alias*)
 
 yt-dl in PowerShell in Windows Terminal
 "wt pwsh D:\Programs\1.NoInstall\yt-dl\yt-dl.ps1"
