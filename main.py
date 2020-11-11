@@ -21,6 +21,7 @@ except ModuleNotFoundError:
     input("press any key to continue")
     os.system("git submodule init")
     os.system("git pull --recurse-submodules")
+    from kolreq.kolreq import clear, readchar
 
 from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
