@@ -1,7 +1,9 @@
 New in 2.1.7:
-some parts oved to a second repo (submodule)
-FFmpeg and FFprobe can be read from the yt-dl dir
+New install method, no more fiddling, intall python, git, clone repo run main.py
+FFmpeg and FFprobe can be read from the yt-dl dir (just place them to yt-dl dir)
 Re-encoding all videos in a folder
+some parts moved to a second repo (submodule)
+is_venv used to no ask users if they are in vevn or not.
 
 
 New in 2.1.5

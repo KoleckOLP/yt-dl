@@ -21,7 +21,7 @@ except ModuleNotFoundError:
     input("press any key to continue")
     os.system("git submodule init")
     os.system("git pull --recurse-submodules")
-    from kolreq.kolreq import clear, readchar
+    from kolreq.kolreq import clear, readchar #this will will crash if submodule fails to install
 
 from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
@@ -47,7 +47,7 @@ while(True):
         break
     elif(cmd == "4"): #subtitles
         subd()
-    elif(cmd == "5"): #reencode
+    elif(cmd == "5"): #re-encode
         reencode()
     elif(cmd == "6"): #update
         update()
@@ -56,7 +56,7 @@ while(True):
         slpath()
     elif(cmd == "8"): #about
         about()
-    elif(cmd == ";"): #debug ( usually '`' but I down't have that key on my czech wok laptop keyboard)
+    elif(cmd == ";"): #debug (usually '`' but I don't have that key on my czech work laptop keyboard)
         debug()
     else:
         clear()

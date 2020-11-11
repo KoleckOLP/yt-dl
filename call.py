@@ -6,28 +6,28 @@ import glob
 import json
 from colorama import init, Fore, Style #Back
 
-init()
+init() #initialises colorama
 
-def is_venv():
+def is_venv(): #reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
 year = datetime.now().year
 curb = "testing"
-ver = f"2.1.7-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-09-05"
-spath = sys.path[0]+os.path.sep
+ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-11-11" #I keep forgetting to update this, in C# there was build date.
+spath = sys.path[0]+os.path.sep #path of the yt-dl dir
 settings = spath+"settings.json"
 
 #==========NAME==========#
 def name(newline=True):
     BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
 
-#==========FIRST RUN MENU==========#
+#==========FIRST TIME SETUP MENU==========#
 def firstrun(py=""):
     clear()
     print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
-    print("What's the name of your python executable.\n<enter> for python")
+    print("What's the name of your python executable.\n<enter> for python (apologise fo inconvinience)")
     py = input("#")
     if (py == ""):
         py = "python"
@@ -35,7 +35,7 @@ def firstrun(py=""):
     pip = input("#")
     if (pip == ""):
         pip = "pip"
-    print("Have you installed youtube-dl with pip? [Y/n]")
+    print("Have you installed youtube-dl with pip? (yes if you insatlled requrements) [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"):
         ydpip = True
@@ -67,8 +67,12 @@ def firstrun(py=""):
 
 #==========MAKE LAUNCH SCRIPT==========#
 def launchs(p=""):
-    print(f"Do you have venv set up if yes type name of the venv")
-    cmd = input("#")
+    if (is_venv == True):
+        print("type name of your venv")
+        cmd = input("#")
+    else:
+        cmd = ""
+
     if(p==True):
         if(cmd != ""):
             f=open("yt-dl.ps1","w")
@@ -177,7 +181,7 @@ def loadpath(s="show"):
     try:
         path = json.loads(fh.read())
     except ValueError:
-        firstrun()
+        firstrun() 
         path = json.loads(fh.read())
     fh.close()
     try:
