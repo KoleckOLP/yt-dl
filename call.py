@@ -15,6 +15,11 @@ def is_venv(): #reports if user is in Virtual Environment or not
 global year
 global lstupdt
 global spath
+global audio
+global fdir
+
+audio = ""
+fdir = ""
 
 year = datetime.now().year
 curb = "testing"
