@@ -12,6 +12,10 @@ def is_venv(): #reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
+global year
+global lstupdt
+global spath
+
 year = datetime.now().year
 curb = "testing"
 ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
