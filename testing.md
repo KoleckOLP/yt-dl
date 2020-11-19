@@ -6,6 +6,7 @@ To do by severity 2.1.7:
         [done] (medium)  posix sh files only support bash, and don't work on BSD at all.        *written, will test on BSD sson*
         [done] (medium)  BSD single quotes on video drag don't work                             *written, will test on BSD sson*
         [done] (high)    BSD reencoding quality is -0.0 with "24,24,24" on BSD ???visual bug??? *will test on BSD soon*
+        [    ] (low)     posix drag and drop support                                            *test on a VM*
 I'wont  [done] (low)     PATH export ffmpeg to the yt-dl dir. is ffmpeg in yt-dl dir
 I'wont  [    ] (low)     Ctrl+D to quit (I have no clue how to implement it, and it's not a priority)
 
