@@ -28,6 +28,13 @@
   <property name="windowTitle">
    <string>yt-dl_gui</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>y.ico</normaloff>y.ico</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #A9A9A9;</string>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
@@ -40,21 +47,15 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>600</width>
-      <height>400</height>
+      <width>611</width>
+      <height>391</height>
      </rect>
     </property>
-    <property name="minimumSize">
-     <size>
-      <width>600</width>
-      <height>400</height>
-     </size>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
-    <property name="maximumSize">
-     <size>
-      <width>600</width>
-      <height>400</height>
-     </size>
+    <property name="styleSheet">
+     <string notr="true">background-color: #636363;  border-color: #000000;</string>
     </property>
     <property name="tabPosition">
      <enum>QTabWidget::North</enum>
@@ -86,9 +87,12 @@
        <rect>
         <x>40</x>
         <y>10</y>
-        <width>541</width>
+        <width>551</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #909090;</string>
       </property>
      </widget>
      <widget class="QLabel" name="url_label">
@@ -100,6 +104,9 @@
         <height>20</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">color: #FFFFFF;</string>
+      </property>
       <property name="text">
        <string>URL:</string>
       </property>
@@ -109,8 +116,8 @@
        <rect>
         <x>10</x>
         <y>70</y>
-        <width>571</width>
-        <height>271</height>
+        <width>581</width>
+        <height>281</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -119,15 +126,26 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+      </property>
      </widget>
      <widget class="QPushButton" name="download_button">
       <property name="geometry">
        <rect>
-        <x>500</x>
+        <x>510</x>
         <y>40</y>
         <width>75</width>
         <height>23</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #909090;</string>
       </property>
       <property name="text">
        <string>Download</string>
@@ -142,6 +160,9 @@
         <height>17</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">color: #FFFFFF;</string>
+      </property>
       <property name="text">
        <string>playlist</string>
       </property>
@@ -154,9 +175,12 @@
        <rect>
         <x>70</x>
         <y>40</y>
-        <width>361</width>
+        <width>381</width>
         <height>20</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #707070;</string>
       </property>
      </widget>
      <widget class="QLabel" name="playlist_label">
@@ -165,11 +189,14 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>440</x>
+        <x>460</x>
         <y>40</y>
         <width>47</width>
         <height>13</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #FFFFFF;</string>
       </property>
       <property name="text">
        <string>1,3,7-9</string>
@@ -222,9 +249,15 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>571</width>
+        <width>581</width>
         <height>331</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+      </property>
+      <property name="openExternalLinks">
+       <bool>true</bool>
       </property>
      </widget>
     </widget>

@@ -5,7 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run yt-dl",
+            "name": "Run yt-dl-gui",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/gui.py",
+            "console": "integratedTerminal"
+        }
+        {
+            "name": "Run yt-dl-cli",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",

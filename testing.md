@@ -1,13 +1,12 @@
 ========================================
 ### To Do List
 
-To do by severity 2.1.7:
-        [done] (high)    Convert everything in a folder
-        [done] (medium)  posix sh files only support bash, and don't work on BSD at all.        *written, will test on BSD sson*
-        [done] (medium)  BSD single quotes on video drag don't work                             *written, will test on BSD sson*
-        [done] (high)    BSD reencoding quality is -0.0 with "24,24,24" on BSD ???visual bug??? *will test on BSD soon*
-        [    ] (low)     posix drag and drop support                                            *test on a VM*
-I'wont  [done] (low)     PATH export ffmpeg to the yt-dl dir. is ffmpeg in yt-dl dir
+To do by severity 2.1.8-gui:
+        [done] (highest) youtube-dl output to a TextBox (realtime, or in dire situation a summary)
+        [    ] (high)    Audio download (needs testing)
+        [done] (medium)  clicking link on TextBox open in external app not the same TextBox (fixed by enabling open external links)
+        [done] (medium)  get over the initial hurdles of QTdesigner and QT overall.
+        [done] (low)     change colors of the UI
 I'wont  [    ] (low)     Ctrl+D to quit (I have no clue how to implement it, and it's not a priority)
 
 ========================================
