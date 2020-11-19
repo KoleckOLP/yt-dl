@@ -19,7 +19,7 @@ global spath
 year = datetime.now().year
 curb = "qt-gui"
 ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-11-18" #I keep forgetting to update this, in C# there was build date.
+lstupdt = "2020-11-19" #I keep forgetting to update this, in C# there was build date.
 spath = sys.path[0]+os.path.sep #path of the yt-dl dir
 settings = spath+"settings.json"
 
@@ -488,8 +488,10 @@ def reencode():
             url = input("#")
             if(url[0:3] == "& \'"): #powershell (& ' ')
                 url = url[3:-1]
-            elif(url[0:1] == '\"' or url[0:1] == "\'"): #cmd (" "), or posix (' ')
+            elif(url[0:1] == '\"'): #cmd (" ")
                 url = url[1:-1]
+            elif(url[0:1] == "'"): #posix (' ' )
+                url = url[1:-2]
             #//append\\#
             if(Vcodec == "remove"):
                 print("reenceded file will get \".mp3\" appended, or type a different one")
@@ -693,6 +695,8 @@ def debug():
                     os.system('rm '+videos+os.pathsep)
             else:
                 print("no than lol.")
+        elif(cmd == "help"):
+            print("You are not supposed to be here, this place is for debugging.\nall - shows program variables\ndeldown - deletes your specific video and audio download foders\n<Enter> - return back to main menu")
         else:
             clear()
             name()
