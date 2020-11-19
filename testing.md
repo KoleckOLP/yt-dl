@@ -4,8 +4,10 @@
 To do by severity 2.1.8-gui:
         [done] (highest) youtube-dl output to a TextBox (realtime, or in dire situation a summary)
         [    ] (high)    Audio download (needs testing)
+        [    ] (medium)  Remeber saving downlosad path with a separator at the end (double)
         [done] (medium)  clicking link on TextBox open in external app not the same TextBox (fixed by enabling open external links)
         [done] (medium)  get over the initial hurdles of QTdesigner and QT overall.
+        [    ] (medium)  make sure subprocess dies mhen the main script dies
         [done] (low)     change colors of the UI
 I'wont  [    ] (low)     Ctrl+D to quit (I have no clue how to implement it, and it's not a priority)
 

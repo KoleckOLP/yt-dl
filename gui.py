@@ -1,13 +1,9 @@
-import os, sys
+import sys
 import glob, json
 import subprocess
-import shlex
 import itertools
-from PyQt5 import QtWidgets, uic, QtGui
-from time import sleep
+from PyQt5 import QtWidgets, uic
 
-from PyQt5.QtGui import QTextCursor
-from PyQt5.QtWidgets import QWidget
 from call import year, lstupdt, spath, settings
 
 #==========LOAD PATH==========#
@@ -65,9 +61,13 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         uic.loadUi("gui.ui", self)
+        loadpath()
+        print(audio)
 
         def Audio():
+            self.output_console.setHtml("") #clearing the output_console
             loadpath()
+
             floc = []
             if (fdir == True):
                 floc = [f"--ffmpeg-location", f"{spath}"]
@@ -78,56 +78,17 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.playlist_checkbox.isChecked():
                 numb = self.playlist_bar.text()
             else:
-                numb = ""
+                numb = None
 
-            if(numb == ""):
-                cmd = ["youtube-dl", "-o", f"\"{audio}%(title)s.%(ext)s\"", "--no-playlist", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
+            if(numb == None):
+                cmd = ["youtube-dl", "-o", f"{audio}\%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
                 print("0")
-            elif(numb == "1"):
-                cmd = ["youtube-dl", "-o", f"\"{audio}%(title)s.%(ext)s\"", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
+            elif(numb == ""):
+                cmd = ["youtube-dl", "-o", f"{audio}\%(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
                 print("1")
             else:
-                cmd = ["youtube-dl", "-o", f"\"{audio}%(title)s.%(ext)s\"", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
+                cmd = ["youtube-dl", "-o", f"{audio}\%(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
                 print("2")
-
-            #### outputs everything not line by line
-            '''
-            process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            for c in iter(lambda: process.stdout.read(1), b''): #Sucess
-                c = str(c)
-                #sys.stdout.write(c)
-                c = c[2:-1]
-                
-                if (c == "\\r"):
-                    pass
-                elif (c == "\\n"):
-                    c = "\n"
-                    self.output_console.insertPlainText(c)
-                elif (c == "\\\\"):
-                    c = "\\"
-                    self.output_console.insertPlainText(c)
-                else:
-                    self.output_console.insertPlainText(c)
-                
-                self.scrollbar = self.output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
-
-            for c in iter(lambda: process.stderr.read(1), b''): #Error
-                c = str(c)
-                #sys.stderr.write(c)
-                c = c[2:-1]
-                
-                if (c == "\\r"):
-                    pass
-                elif (c == "\\n"):
-                    c = "\n"
-                    self.output_console.insertPlainText(c)
-                elif (c == "\\\\"):
-                    c = "\\"
-                    self.output_console.insertPlainText(c)
-                else:
-                    self.output_console.insertPlainText(c)
-            '''
 
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             for line in itertools.chain(process.stdout, process.stderr): 
@@ -137,13 +98,18 @@ class MainWindow(QtWidgets.QMainWindow):
                     line = line.replace("\\n", "\n")
                 if "\\r" in line:
                     line = line.replace("\\r", "\n")
+                if "\\\\" in line:
+                    line = line.replace("\\\\","\\")
+                if "\\'" in line:
+                    line = line.replace("\\'","'")
                 self.output_console.insertPlainText(line)
                 QtWidgets.QApplication.processEvents()
                 self.scrollbar = self.output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
                 QtWidgets.QApplication.processEvents()
-
-            self.output_console.insertPlainText("Comman Execution ended.")
+            
+            print("\a")
+            self.output_console.insertPlainText("Command Execution ended.")
             QtWidgets.QApplication.processEvents()
             self.scrollbar = self.output_console.verticalScrollBar()
             self.scrollbar.setValue(self.scrollbar.maximum())
