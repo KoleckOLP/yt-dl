@@ -10,3 +10,4 @@ videos
 ffmpeg.exe
 ffprobe.exe
 ffplay.exe
+ffdir
