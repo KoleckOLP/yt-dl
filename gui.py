@@ -81,13 +81,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 numb = None
 
             if(numb == None):
-                cmd = ["youtube-dl", "-o", f"{audio}\%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
-                print("0")
+                cmd = ["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg", "--audio-format", "mp3", f"{url}"] #f"{floc[0]}", f"{floc[1]}",
+                print(f"0 {cmd}")
             elif(numb == ""):
-                cmd = ["youtube-dl", "-o", f"{audio}\%(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
+                cmd = ["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
                 print("1")
             else:
-                cmd = ["youtube-dl", "-o", f"{audio}\%(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
+                cmd = ["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
                 print("2")
 
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
