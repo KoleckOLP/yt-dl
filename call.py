@@ -1,35 +1,33 @@
-from kolreq import clear, readchar
-from datetime import datetime
-from time import sleep
+from kolreq.kolreq import clear, readchar
+from datetime import datetime #from time import sleep
 import tempfile
 import sys, os
 import glob
 import json
-from getch import getch #py-getch
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style #Back
 
-init()
+init() #initialises colorama
 
-def is_venv():
+def is_venv(): #reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
 year = datetime.now().year
-curb = "master"
-ver = f"2.1.6-{curb}" #lang(2python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-08-28"
-spath = sys.path[0]+os.path.sep
+curb = "testing"
+ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
+lstupdt = "2020-11-20" #I keep forgetting to update this, in C# there was build date.
+spath = sys.path[0]+os.path.sep #path of the yt-dl dir
 settings = spath+"settings.json"
 
 #==========NAME==========#
 def name(newline=True):
     BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
 
-#==========FIRST RUN MENU==========#
+#==========FIRST TIME SETUP MENU==========#
 def firstrun(py=""):
     clear()
-    print("If you got here you have all the dependecies from pip, make sure to get ffmpeg and add it to PATH\n if you are cacing issues ask here https://discord.gg/W88375j")
-    print("What's the name of your python executable.\n<enter> for python")
+    print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
+    print("What's the name of your python executable.\n<enter> for python (apologise fo inconvinience)")
     py = input("#")
     if (py == ""):
         py = "python"
@@ -37,7 +35,7 @@ def firstrun(py=""):
     pip = input("#")
     if (pip == ""):
         pip = "pip"
-    print("Have you installed youtube-dl with pip? [Y/n]")
+    print("Have you installed youtube-dl with pip? (yes if you insatlled requrements) [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"):
         ydpip = True
@@ -50,7 +48,11 @@ def firstrun(py=""):
     else:
         aup = False
     print()
-    savepath("chp",py,pip,ydpip,aup)
+    Vcodec = "libx265" #libx265, h264_nvenc
+    Acodec = "opus" #opus, acc
+    Vqual = "24,24,24" #24 
+    Abit = "190k" #190
+    savepath("chp",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
     loadpath()
     print("Do you want a Launch script? [Y/n] or p=" + Fore.BLUE + "Powershell" + Style.RESET_ALL)
     cmd = readchar("#")
@@ -65,8 +67,12 @@ def firstrun(py=""):
 
 #==========MAKE LAUNCH SCRIPT==========#
 def launchs(p=""):
-    print(f"Do you have venv set up if yes type name of the venv")
-    cmd = input("#")
+    if (is_venv == True):
+        print("type name of your venv")
+        cmd = input("#")
+    else:
+        cmd = ""
+
     if(p==True):
         if(cmd != ""):
             f=open("yt-dl.ps1","w")
@@ -84,7 +90,7 @@ def launchs(p=""):
                 f.close()
             elif(os.name == 'posix'):
                 f=open("yt-dl","w")
-                f.write(f"#!/bin/bash\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
                 f.close()
             else:
                 print('####If you see this please contact the dev. 0x1015####')
@@ -95,7 +101,7 @@ def launchs(p=""):
                 f.close()
             elif(os.name == 'posix'):
                 f=open("yt-dl","w")
-                f.write(f"#!/bin/bash\n\ncd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath} && {py} main.py")
                 f.close()
             else:
                 print('####If you see this please contact the dev. 0x1005####')
@@ -124,7 +130,7 @@ def about():
         name()
 
 #==========SAVE PATH==========#
-def savepath(a="chp", x="", y="", z="", q=""):
+def savepath(a="chp", x="", y="", z="", q="",vc="",ac="",vq="",ab=""):
     if (a == "chp"):
         print("Type path were you want to store audio,"
                   +"\n<Enter> a default subdir 0. GoBack")
@@ -145,16 +151,16 @@ def savepath(a="chp", x="", y="", z="", q=""):
                 if (vid == ""):
                     vid = spath+"videos"
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": vc,"Acodec": ac,"Vqual": vq,"Abit": ab}, fh)
                     fh.close()
                 else:
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
                     fh.close()
     if (a != "chp"):
-        loadpath("hid")
+        #loadpath("hid")
         fh = open(settings, "w")
-        json.dump({"audio": audio,"videos": videos,"py": x,"pip": y,"ydpip": z,"aup": q}, fh)
+        json.dump({"audio": audio,"videos": videos,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
         fh.close()
     
         
@@ -166,11 +172,16 @@ def loadpath(s="show"):
     global pip
     global ydpip
     global aup
+    global Vcodec
+    global Acodec
+    global Vqual
+    global Abit
+    global fdir
     fh = open(settings, "r")
     try:
         path = json.loads(fh.read())
     except ValueError:
-        firstrun()
+        firstrun() 
         path = json.loads(fh.read())
     fh.close()
     try:
@@ -180,6 +191,10 @@ def loadpath(s="show"):
         path["pip"]
         path["ydpip"]
         path["aup"]
+        path["Vcodec"]
+        path["Acodec"]
+        path["Vqual"]
+        path["Abit"]
     except KeyError:
         firstrun()
     else:
@@ -189,6 +204,18 @@ def loadpath(s="show"):
         pip = path["pip"]
         ydpip = path["ydpip"]
         aup = path["aup"]
+        Vcodec = path["Vcodec"]
+        Acodec = path["Acodec"]
+        Vqual = path["Vqual"]
+        Abit = path["Abit"]
+
+    pffmpeg = glob.glob(f"{spath}/ffmpeg*")
+    pffprobe = glob.glob(f"{spath}/ffprobe*")
+    if (not pffmpeg and not pffprobe):
+        fdir = False
+    else:
+        fdir = True
+
     if(s == "show"):
         print(Style.BRIGHT + "audio is saved to: " + Style.RESET_ALL, end="")
         print(audio)
@@ -225,7 +252,7 @@ def upytdl():
     print("Updating yt-dl...")
     if(os.path.exists(spath+".git")):
         os.system("cd "+spath)
-        os.system("git pull")
+        os.system("git pull --recurse-submodules")
     else:
         print("yt-dl wasn't installed trought git.\n"
         +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")    
@@ -263,7 +290,7 @@ def update():
             print("")
         elif (cmd == "4"):
             aup = not aup
-            savepath("",py,pip,ydpip,aup)
+            savepath("",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
             loadpath("hid")
             clear()
             print(f"autoupdate={aup}\n")
@@ -279,7 +306,7 @@ def update():
             print(" [Y/n]")
             cmd = readchar("#")
             if (cmd == "y"):
-                os.system("git pull")
+                os.system("git pull --recurse-submodules")
                 os.system(f"git checkout {otherb}")
                 print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
             else:
@@ -304,6 +331,12 @@ def autoupdt():
 
 #==========AUDIO DOWNLOAD==========#
 def audiod():
+    global fdir
+    if (fdir == True):
+        floc = f"--ffmpeg-location {spath}"
+    else:
+        floc = ""
+
     clear()
     print("link to audio, playlist, 0. GoBack")
     url = input("#")
@@ -314,18 +347,24 @@ def audiod():
         print("<Enter> a single audio, \n"
              +"1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
-        print("starting youtube-dl please wait...")
         if(numb == ""):
-            lnk = f"-o \"{audio}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{audio}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         elif(numb == "1"):
-            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         else:
-            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i --playlist-items {numb} -x --prefer-ffmpeg --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i --playlist-items {numb} -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
+        print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         print("\a")
 
 #==========VIDEO DOWNLOAD==========#
 def videod():
+    global fdir
+    if (fdir == True):
+        floc = f"--ffmpeg-location {spath}"
+    else:
+        floc = ""
+
     clear()
     print("link to video, playlist, 0. GoBack")
     url = input("#")
@@ -336,40 +375,47 @@ def videod():
         print("<Enter> a single video, \n"
              +"1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
-        print("starting youtube-dl please wait...")
         if(numb == ""): #no playlist
             print("<Enter> for best quality 1080p + if availeble (\"bestvideo+bestaudio\"),\n"
                  +"1 for 720 or lower (\"best\")\n"
                  +"2 to choose yourself")
             qual = input("#")
             if (qual == "1"):
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg \"{url}\""
+                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg {floc} \"{url}\""
             elif(qual == "2"):
+                print("starting youtube-dl please wait...")
                 os.system(f"youtube-dl -F --no-playlist {url}")
                 print("choose video and audio quality by typing numb+numb")
                 numb = input("#")
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg \"{url}\""
+                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg {floc} \"{url}\""
             else:
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg \"{url}\""
+                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg {floc} \"{url}\""
         else: #playlist
             print("<Enter> for the best quality 1080p + if available, \n"
                  +"1 for 720p or lower")
             qual = input("#")
             if(qual == "1"): 
                 if(numb == "1"):
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
                 else:
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
             else:
                 if(numb == "1"):
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
                 else:
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg \"{url}\""
+                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
+        print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         print("\a")
 
 #==========SUBTITILE DOWNLOAD==========#
 def subd():
+    global fdir
+    if (fdir == True):
+        floc = f"--ffmpeg-location {spath}"
+    else:
+        floc = ""
+
     clear()
     temp = tempfile.mkdtemp()+os.path.sep
     print("link to video with subs or 0. GoBack")
@@ -382,107 +428,222 @@ def subd():
              +"1 to choose language")
         numb = input("#")
         if(numb == ""):
-            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-format vtt --skip-download --prefer-ffmpeg \"{url}\""
+            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-format vtt --skip-download --prefer-ffmpeg {floc} \"{url}\""
         else:
+            print("starting youtube-dl please wait...")
             os.system(f"youtube-dl --list-subs --noplaylist {url}")
             print("choose sub language")
             numb = input("#")
-            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-lang \"{numb}\" --sub-format vtt --skip-download --prefer-ffmpeg \"{url}\""
+            lnk = f"-o \"{temp}%(title)s.%(ext)s\" --no-playlist --write-sub --write-auto-sub --sub-lang \"{numb}\" --sub-format vtt --skip-download --prefer-ffmpeg {floc} \"{url}\""
+        print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         pie = glob.glob(f"{temp}*.vtt")
         cream = os.path.basename(pie[0])
         cream = cream[:-3]
         lick = videos+cream+"srt"
         os.makedirs(videos, exist_ok=True)
+        print("starting youtube-dl please wait...")
         os.system(f"ffmpeg -i \"{pie[0]}\" \"{lick}\"")
         print("\a")
 
 #==========VID TO HEVC==========#
-def vidhevc():
+def reencode():
+    global fdir
+    if (fdir == True):
+        floc = f"{spath}"
+    else:
+        floc = ""
+
     clear()
     print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
-    print("<Enter> single video (libx265, q24)\n" +
-          "1. numbered series (libx2652 q24)\n" +
-          "2. sigle video (h264_nvenc, q24)\n" +
+    global Vcodec
+    global Acodec
+    global Vqual
+    global Abit
+    print("(video codec=\"",end="") 
+    if (Vcodec == "none"):
+        print(Fore.RED + Vcodec + Style.RESET_ALL,end="")
+    else:
+        print(Fore.YELLOW + Vcodec + Style.RESET_ALL,end="")
+    print("\", audio codec=\"" + Fore.CYAN + Acodec + Style.RESET_ALL + "\", video q,qmin,qmax=\"",end="")
+    if (Vcodec == "none"):
+        print(Fore.RED + Vqual + Style.RESET_ALL,end="")
+    else:
+        print(Fore.YELLOW + Vqual + Style.RESET_ALL,end="")
+    print("\", audio bitrate=\"" + Fore.CYAN + Abit + Style.RESET_ALL +"\")\n" +
+          "<Enter> single video\n" +
+          "1. whole folder\n" +
+          "2. change settings\n" +
           "0. GoBack")
     cmd = input("#")
-    if(cmd == ""): #single
-        print("write path to the file you want to reencode")
-        url = input("#")
-        if(url[0:3] == "& \'"): #powershell (& ' ')
-            url = url[3:-1]
-        elif(url[0:1] == '\"'): #cmd (" ")
-            url = url[1:-1]
-        print("reenceded file will get \"_hevcopus.mkv\" appended, or type a different one")
-        append = input("#")
-        if(append == ""):
-            append = "_hevcopus.mkv"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
-        print("\a")
-    elif(cmd == "1"): #numbered
-        print("write path to the folder with videos don't forget to add \\*.extencion")
-        url = input("#")
-        print("type a short path of the episode name just before the number")
-        common_name = input("#")
-        print("Write the highest number of the video")
-        numb_last = input("#")
-        try:
-            numb_last = int(numb_last)
-        except ValueError:
-            clear()
-            print("That's not a number")
-            name()
-        print("Write the number you want to start from <Enter> for 1 or 0. GoBack")
-        numb = input("#")
-        if(numb == ""):
-            numb = 1
+    if(cmd == ""): #====================SINGLE====================#
+        if(Vcodec == "remove" and Acodec == "remove"):
+            print("I mean you can delete the file yourself. :)")
         else:
-            try:
-                numb = int(numb)
-            except ValueError:
-                clear()
-                print("That's not a number")
-                name()
-        print("does the numbers use zero padding [Y/n]")
-        zero = readchar("#")
-        print("\nreenceded file will get \"_hevcopus\" appended, or type a different one")
-        append = input("#")
-        if(append == ""):
-            append = "_hevcopus"
-        url = url.replace('[', '[[]')
-        episodes = glob.glob(url)
-        for numb in range(numb, numb_last+1):
-            if(zero == "y"):
-                if(numb < 10):
-                        numb_final = "0"+str(numb)
-                        numb_final = common_name+str(numb_final)
-                else:
-                    numb_final = numb
-                    numb_final = common_name+str(numb_final)      
+            print("write path to the file you want to reencode")
+            url = input("#")
+            if(url[0:3] == "& \'"): #powershell (& ' ')
+                url = url[3:-1]
+            elif(url[0:1] == '\"'): #cmd (" ")
+                url = url[1:-1]
+            elif(url[0:1] == "'"): #posix (' ' )
+                url = url[1:-2]
+            #//append\\#
+            if(Vcodec == "remove"):
+                print("reenceded file will get \".mp3\" appended, or type a different one")
+                append = input("#")
+                if(append == ""):
+                    append = ".mp3"
             else:
-                numb_final = numb
-                numb_final = common_name+str(numb_final)
-            for i in episodes:
-                if str(numb_final) in i:
-                    filename = os.path.basename(i)
-                    file_split = filename.split(".", 1)
-                    path = os.path.dirname(i)
-                    finali = path+os.path.sep+file_split[0]+append+".mkv"
-                    os.system(f"ffmpeg -hwaccel auto -i \"{i}\" -map 0:v -map 0:a? -map 0:s? -c:v libx265 -max_muxing_queue_size 9999 -rc constqp -qp 24 -b:v 0K -vf format=yuv420p -c:a opus -strict -2 -b:a 190k -c:s copy \"{finali}\"")
-            print("\a")
-    elif(cmd == "2"):
-        print("write path to the file you want to reencode")
-        url = input("#")
-        if(url[0:3] == "& \'"): #powershell (& ' ')
-            url = url[3:-1]
-        elif(url[0:1] == '\"'): #cmd (" ")
-            url = url[1:-1]
-        print("reenceded file will get \"_nvenc.mov\" appended, or type a different one")
-        append = input("#")
-        if(append == ""):
-            append = "_nvenc.mov"
-        os.system(f"ffmpeg -hwaccel auto -i \"{url}\" -map 0:v -map 0:a? -map 0:s? -c:v h264_nvenc -max_muxing_queue_size 9999 -cq 24 -b:v 0K -vf format=yuv420p -c:a aac -b:a 190k -c:s copy \"{os.path.splitext(url)[0]+append}\"")
+                print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
+                append = input("#")
+                if(append == ""):
+                    append = "_hevcopus.mkv"
+                elif(append == "1"):
+                    append = "_nvenc.mov"
+            #//Video Quality\\#
+            if "," in Vqual:
+                VQsplit = Vqual.split(",")
+            else:
+                VQsplit = [Vqual,Vqual,Vqual]
+            #//Videeo Codec\\#
+            if(Vcodec == "libx265"):
+                VideoCodec = f"-c:v {Vcodec}"
+                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[1])-1} -qmax {int(VQsplit[2])-1}"
+                Vformat = "-vf format=yuv420p"
+            elif(Vcodec == "copy"):
+                VideoCodec = f"-c:v {Vcodec}"
+                quality = ""
+                Vformat = ""
+            elif(Vcodec == "remove"):
+                VideoCodec = "-vn"
+                quality = ""
+                Vformat = ""
+            else:
+                VideoCodec = f"-c:v {Vcodec}"
+                quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
+                Vformat = "-vf format=yuv420p"
+            #//Audio\\#
+            if(Acodec == "remove"):
+                AudioEverything = "-an"
+            else:
+                AudioEverything = f"-c:a {Acodec} -strict -2 -b:a {Abit}"
+            #//Subtitles\\#
+            if(Vcodec == "remove"):
+                SubsC = ""
+            else:
+                SubsC = "-c:s copy"
+            os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
+    elif(cmd == '1'): #====================WHOLE FOLDER====================#
+        if(Vcodec == "remove" and Acodec == "remove"):
+            print("I'm not gonna delete the folder for you. hmpf")
+        else:
+            print("write path to the folder with videos")
+            url = input("#")
+            #//append\\#
+            if(Vcodec == "remove"):
+                print("reenceded file will get \".mp3\" appended, or type a different one")
+                append = input("#")
+                if(append == ""):
+                    append = ".mp3"
+            else:
+                print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
+                append = input("#")
+                if(append == ""):
+                    append = "_hevcopus.mkv"
+                elif(append == "1"):
+                    append = "_nvenc.mov"
+            #//Video Quality\\#
+            if "," in Vqual:
+                VQsplit = Vqual.split(",")
+            else:
+                VQsplit = [Vqual,Vqual,Vqual]
+            #//Videeo Codec\\#
+            if(Vcodec == "libx265"):
+                VideoCodec = f"-c:v {Vcodec}"
+                quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[1])-1} -qmax {int(VQsplit[2])-1}"
+                Vformat = "-vf format=yuv420p"
+            elif(Vcodec == "copy"):
+                VideoCodec = f"-c:v {Vcodec}"
+                quality = ""
+                Vformat = ""
+            elif(Vcodec == "remove"):
+                VideoCodec = "-vn"
+                quality = ""
+                Vformat = ""
+            else:
+                VideoCodec = f"-c:v {Vcodec}"
+                quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
+                Vformat = "-vf format=yuv420p"
+            #//Audio\\#
+            if(Acodec == "remove"):
+                AudioEverything = "-an"
+            else:
+                AudioEverything = f"-c:a {Acodec} -strict -2 -b:a {Abit}"
+            #//Subtitles\\#
+            if(Vcodec == "remove"):
+                SubsC = ""
+            else:
+                SubsC = "-c:s copy"
+            url = url.replace('[', '[[]')
+            videos = glob.glob(url+os.path.sep+"*.*")
+            for video in videos:
+                os.system(f"{floc}ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{video[:-4]+append}\"")
+        print("\a")
+    elif(cmd == '2'):
+        print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, 3. copy, 4. remove or write your own")
+        cmd = input("#")
+        if (cmd == ""):
+            pass
+        elif(cmd == "1"):
+            Vcodec = "libx265"
+        elif(cmd == "2"):
+            Vcodec = "h264_nvenc"
+        elif(cmd == "3"):
+            Vcodec = "copy"
+        elif(cmd == "4"):
+            Vcodec = "remove"
+        else:
+            Vcodec = cmd
+        print(f"AudioCodec = {Acodec}, <Enter> keep, 1. Opus, 2. AAC, 3. copy, 4. remove or write your own")
+        cmd = input("#")
+        if (cmd == ""):
+            pass
+        elif(cmd == "1"):
+            Acodec = "opus"
+        elif(cmd == "2"):
+            Acodec = "aac"
+        elif(cmd == "3"):
+            Acodec = "copy"
+        elif(cmd == "4"):
+            Acodec = "remove"
+        else:
+            Acodec = cmd
+        if (Vcodec not in ("copy","remove")):
+            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24,24,24; or write your own q,qmin,qmax, or just q")
+            cmd = input("#")
+            if (cmd == ""):
+                pass
+            elif(cmd == "1"):
+                Vqual = "24,24,24"
+            else:
+                Vqual = cmd
+        else:
+            Vqual = "none"
+        if(Acodec not in ("copy","remove")):
+            print(f"AudioBitrate = {Abit}, <Enter> keep, 1. 190k, or write your own")
+            cmd = input("#")
+            if (cmd == ""):
+                pass
+            elif(cmd == "1"):
+                Abit = "190k"
+            else:
+                Abit = cmd
+        else:
+            Abit = "none"
+        savepath("",py,pip,ydpip,aup,Vcodec,Acodec,Vqual,Abit)
+        loadpath("hid")
     else:
         clear()
         name()
@@ -504,11 +665,14 @@ def debug():
             print("Variables:")
             print(f"python executable name: {py}\npip executable name: {pip}")
             print("youtube-dl from pip: ", end="")
-            TF(ydpip, False)
-            print("\nyt-dl from git: ", end="")
-            TF(git, False)
-            print("\nautoupdate: ", end="")
+            TF(ydpip)
+            print("ffmpeg in yt-dl dir: ", end="")
+            TF(fdir)
+            print("yt-dl from git: ", end="")
+            TF(git)
+            print("autoupdate: ", end="")
             TF(aup)
+            print(f"Vcodec: {Vcodec}\nAcodec: {Acodec}\nVqual: {Vqual}\nAbit: {Abit}")
             if is_venv():
                 venv = True
             else:
@@ -527,6 +691,8 @@ def debug():
                     os.system('rm '+videos+os.pathsep)
             else:
                 print("no than lol.")
+        elif(cmd == "help"):
+            print("You are not supposed to be here, this place is for debugging.\nall - shows program variables\ndeldown - deletes your specific video and audio download foders\n<Enter> - return back to main menu")
         else:
             clear()
             name()

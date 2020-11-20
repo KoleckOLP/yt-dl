@@ -1,0 +1,3 @@
+[submodule "kolreq"]
+	path = kolreq
+	url = https://github.com/KoleckOLP/kolreq

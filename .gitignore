@@ -8,3 +8,8 @@ videos
 *.bat
 *.ps1
 .vscode
+ffmpeg.exe
+ffprobe.exe
+ffplay.exe
+ffdir
+testing.md
