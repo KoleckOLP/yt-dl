@@ -6,27 +6,136 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
+    <width>640</width>
     <height>400</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
+    <width>640</width>
     <height>400</height>
    </size>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>600</width>
-    <height>400</height>
-   </size>
-  </property>
-  <property name="tabletTracking">
-   <bool>false</bool>
+  <property name="palette">
+   <palette>
+    <active>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </active>
+    <inactive>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </inactive>
+    <disabled>
+     <colorrole role="Button">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Base">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="Window">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>169</red>
+        <green>169</green>
+        <blue>169</blue>
+       </color>
+      </brush>
+     </colorrole>
+     <colorrole role="AlternateBase">
+      <brush brushstyle="SolidPattern">
+       <color alpha="255">
+        <red>0</red>
+        <green>0</green>
+        <blue>0</blue>
+       </color>
+      </brush>
+     </colorrole>
+    </disabled>
+   </palette>
   </property>
   <property name="windowTitle">
-   <string>yt-dl_gui</string>
+   <string>MainWindow</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -35,233 +144,146 @@
   <property name="styleSheet">
    <string notr="true">background-color: #A9A9A9;</string>
   </property>
-  <property name="locale">
-   <locale language="English" country="UnitedStates"/>
-  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>611</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: #636363;  border-color: #000000;</string>
-    </property>
-    <property name="tabPosition">
-     <enum>QTabWidget::North</enum>
-    </property>
-    <property name="tabShape">
-     <enum>QTabWidget::Rounded</enum>
-    </property>
-    <property name="currentIndex">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="audio_tab">
-     <property name="minimumSize">
-      <size>
-       <width>600</width>
-       <height>400</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>600</width>
-       <height>400</height>
-      </size>
-     </property>
-     <attribute name="title">
-      <string>Audio</string>
-     </attribute>
-     <widget class="QLineEdit" name="url_box">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>10</y>
-        <width>551</width>
-        <height>20</height>
-       </rect>
-      </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
       <property name="styleSheet">
-       <string notr="true">background-color: #909090;</string>
+       <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="audio_tab">
+       <attribute name="title">
+        <string>Audio</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="playlist_checkbox">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>playlist</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="playlist_label">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>1-3,7,9</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="3">
+         <widget class="QLineEdit" name="url_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="playlist_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #707070;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="url_label">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Url:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3">
+         <widget class="QPushButton" name="download_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Download</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="4">
+         <widget class="QTextBrowser" name="output_console">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+          <property name="openExternalLinks">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="video_tab">
+       <attribute name="title">
+        <string>Video</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="subs_tab">
+       <attribute name="title">
+        <string>Subs</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="reencode_tab">
+       <attribute name="title">
+        <string>Re-encode</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="update_tab">
+       <attribute name="title">
+        <string>Update</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="settings_tab">
+       <attribute name="title">
+        <string>Settings</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="about_tab">
+       <attribute name="title">
+        <string>About</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QTextBrowser" name="about_box">
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="QLabel" name="url_label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>21</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #FFFFFF;</string>
-      </property>
-      <property name="text">
-       <string>URL:</string>
-      </property>
-     </widget>
-     <widget class="QTextBrowser" name="output_console">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>581</width>
-        <height>281</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>10</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #000000; color: #FFFFFF;</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="download_button">
-      <property name="geometry">
-       <rect>
-        <x>510</x>
-        <y>40</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #909090;</string>
-      </property>
-      <property name="text">
-       <string>Download</string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="playlist_checkbox">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>70</width>
-        <height>17</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #FFFFFF;</string>
-      </property>
-      <property name="text">
-       <string>playlist</string>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="playlist_bar">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>40</y>
-        <width>381</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #707070;</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="playlist_label">
-      <property name="enabled">
-       <bool>false</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>460</x>
-        <y>40</y>
-        <width>47</width>
-        <height>13</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #FFFFFF;</string>
-      </property>
-      <property name="text">
-       <string>1,3,7-9</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="video_tab">
-     <attribute name="title">
-      <string>Video</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="subs_tab">
-     <property name="minimumSize">
-      <size>
-       <width>600</width>
-       <height>400</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>600</width>
-       <height>400</height>
-      </size>
-     </property>
-     <attribute name="title">
-      <string>Subs</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="ree_tab">
-     <attribute name="title">
-      <string>Re-encode</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="upd_tab">
-     <attribute name="title">
-      <string>Update</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="stn_tab">
-     <attribute name="title">
-      <string>Settings</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="abd_tab">
-     <attribute name="title">
-      <string>About</string>
-     </attribute>
-     <widget class="QTextBrowser" name="about_box">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>581</width>
-        <height>331</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: #000000; color: #FFFFFF;</string>
-      </property>
-      <property name="openExternalLinks">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </widget>
-   </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

@@ -37,7 +37,7 @@ def loadpath(s="show"):
         path["Vqual"]
         path["Abit"]
     except KeyError:
-        print("issues")
+        print("Oopsie please launch cli to fix") #if a key is not loaded from the current settings there is nothing we can do in the gui for now, lauch cli to fix
     else:
         audio = path["audio"]
         videos = path["videos"]
@@ -62,62 +62,60 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
         uic.loadUi("gui.ui", self)
         loadpath()
-        print(audio)
 
         def Audio():
+            global process
             self.output_console.setHtml("") #clearing the output_console
-            loadpath()
 
-            floc = []
-            if (fdir == True):
-                floc = [f"--ffmpeg-location", f"{spath}"]
-            else:
-                floc = ["", ""]
-
-            url = self.url_box.text()
+            url = self.url_bar.text()
             if self.playlist_checkbox.isChecked():
                 numb = self.playlist_bar.text()
             else:
                 numb = None
 
             if(numb == None):
-                cmd = ["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg", "--audio-format", "mp3", f"{url}"] #f"{floc[0]}", f"{floc[1]}",
-                print(f"0 {cmd}")
+                cmd = [["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
             elif(numb == ""):
-                cmd = ["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
-                print("1")
+                cmd = [["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
             else:
-                cmd = ["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg", f"{floc[0]}", f"{floc[1]}", "--audio-format", "mp3", f"{url}"]
-                print("2")
+                cmd = [["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
 
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            floc = [f"--ffmpeg-location", f"{spath}"]
+            if (fdir == True):
+                cmd = cmd[0]+floc+cmd[1]
+            else:
+                cmd = cmd[0]+cmd[1]
+
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000)
             for line in itertools.chain(process.stdout, process.stderr): 
-                line = str(line)
-                line = line[2:-1]
-                if "\\n" in line:
-                    line = line.replace("\\n", "\n")
-                if "\\r" in line:
-                    line = line.replace("\\r", "\n")
-                if "\\\\" in line:
-                    line = line.replace("\\\\","\\")
-                if "\\'" in line:
-                    line = line.replace("\\'","'")
-                self.output_console.insertPlainText(line)
-                QtWidgets.QApplication.processEvents()
-                self.scrollbar = self.output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
-                QtWidgets.QApplication.processEvents()
+                lol = window.isVisible()
+                if lol == False: #if window of the app was closed kill the subrocess.
+                    process.terminate()
+                else:
+                    line = str(line)
+                    line = line[2:-1]
+                    if "\\n" in line:
+                        line = line.replace("\\n", "\n")
+                    if "\\r" in line:
+                        line = line.replace("\\r", "\n")
+                    if "\\\\" in line:
+                        line = line.replace("\\\\","\\")
+                    if "\\'" in line:
+                        line = line.replace("\\'","'")
+                    self.output_console.insertPlainText(line)
+                    QtWidgets.QApplication.processEvents()
+                    self.scrollbar = self.output_console.verticalScrollBar()
+                    self.scrollbar.setValue(self.scrollbar.maximum())
+                    QtWidgets.QApplication.processEvents()
             
             print("\a")
+            process = None
             self.output_console.insertPlainText("Command Execution ended.")
             QtWidgets.QApplication.processEvents()
             self.scrollbar = self.output_console.verticalScrollBar()
             self.scrollbar.setValue(self.scrollbar.maximum())
             QtWidgets.QApplication.processEvents()
                 
-                    
-
-
         def playlist_bar_enable():
             self.playlist_bar.setEnabled(self.playlist_checkbox.isChecked())
             if(self.playlist_checkbox.isChecked()):
@@ -128,7 +126,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #=====AUDIO=====#
         self.download_button.clicked.connect(Audio)
         self.playlist_checkbox.clicked.connect(playlist_bar_enable)
-        #self.output_console.setHtml("Welcome to yt-dl-gui paste a link and hit download.")
+        self.output_console.setHtml("Welcome to yt-dl-gui paste a link and hit download.")
 
         #=====ABOUT=====#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
@@ -140,16 +138,8 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
-
+        
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()
 app.exec_()
-
-'''
-app = QtWidgets.QApplication(sys.argv)
-
-window = uic.loadUi("gui.ui")
-window.show()
-app.exec()
-'''

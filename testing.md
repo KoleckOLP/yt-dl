@@ -1,14 +1,18 @@
 ========================================
 ### To Do List
 
-To do by severity 2.1.8-gui:
+To do by severity 2.1.8-gui (rewrite this into a CSV or formatt better) :
+        [    ] (highest)  make sure subprocess dies mhen the main script dies                   (probably was a debug bug, it was not a test bug oof.)
+                * Only solution is to check if the window of the app is running anf if it's not terminte the sub process *
         [done] (highest) youtube-dl output to a TextBox                                         (realtime, or in dire situation a summary)
-        [    ] (high)    Audio download                                                         (needs testing)
+        [done] (high)    Audio download                                                         (needs testing)
+        [    ] (high)    You can press the download button many times anf it starts the donload many times
+                * Solution would be to have a running/downloading bool variable and check if it's not true *
         [    ] (medium)  Remeber saving downlosad path with a separator at the end              (double) *fix by just saving the path preperly
+        [    ] (medium)  the UI runs really slow, can be dragged can be closed but takes two tries
         [done] (medium)  clicking link on TextBox open in external app not the same TextBox     (fixed by enabling open external links)
         [done] (medium)  get over the initial hurdles of QTdesigner and QT overall.
-        [    ] (medium)  make sure subprocess dies mhen the main script dies                    (probably was a debug bug)
-        [    ] (medium)  ffmpeg in dir and in PATH implementation.
+        [done] (medium)  ffmpeg in dir and in PATH implementation.                              (working)
         [done] (low)     change colors of the UI
 I'wont  [    ] (low)     Ctrl+D to quit                                                         (I have no clue how to implement it, and it's not a priority)
 
