@@ -1,20 +1,18 @@
 ========================================
-### To Do List
+### Issue Tracking / To Do List
 
-To do by severity 2.1.8-gui (rewrite this into a CSV or formatt better) :
-        [    ] (highest)  make sure subprocess dies mhen the main script dies                   (probably was a debug bug, it was not a test bug oof.)
-                * Only solution is to check if the window of the app is running anf if it's not terminte the sub process *
-        [done] (highest) youtube-dl output to a TextBox                                         (realtime, or in dire situation a summary)
-        [done] (high)    Audio download                                                         (needs testing)
-        [    ] (high)    You can press the download button many times anf it starts the donload many times
-                * Solution would be to have a running/downloading bool variable and check if it's not true *
-        [    ] (medium)  Remeber saving downlosad path with a separator at the end              (double) *fix by just saving the path preperly
-        [    ] (medium)  the UI runs really slow, can be dragged can be closed but takes two tries
-        [done] (medium)  clicking link on TextBox open in external app not the same TextBox     (fixed by enabling open external links)
-        [done] (medium)  get over the initial hurdles of QTdesigner and QT overall.
-        [done] (medium)  ffmpeg in dir and in PATH implementation.                              (working)
-        [done] (low)     change colors of the UI
-I'wont  [    ] (low)     Ctrl+D to quit                                                         (I have no clue how to implement it, and it's not a priority)
+#       status severity         the issue description                                                   possible solution                                               affected OS
+.#1     [done] (highest)        Make sure subprocess is killed when gui dies                            Loop is cheking if gui lives if not kills subprocess            all
+.#2     [done] (highest)        Subprocess output to a TextBox                                          Process events after every single line, see .#6                 all
+.#3     [done] (high)           Audio download                                                          Somewhat works                                                  all
+.#4     [    ] (high)           You can start subpocess more than once download button                  Bool variable that says if subprocess is running already        all
+.#5     [    ] (medium)         Remember to save download path with double separator at the end         * Check path saving more carefully                              Windows
+.#6     [    ] (medium)         UI runs really slowly while subprocess writing to TextBox               * ProcessingEvents twice a line may be a bad idea               all
+.#7     [done] (medium)         Link on a TextBox was opening in TextBox instead of external app        Allowing openExternalLinks                                      all
+.#8     [done] (medium)         Get over initial hurdles of QtDesigner, Qt & window resizing            Reading testing                                                 all
+.#9     [done] (medium)         ffapps in directory gui support subprocess                              List magics                                                     all
+.#10    [done] (low)            Change UI colors                                                        More QtDesigner learning                                        all
+.#999   [    ] (low)            Kali: Ctrl+D to quit                                                    * Might actually work in Qt                                     Linux
 
 ========================================
 ### GitHub

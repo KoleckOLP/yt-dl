@@ -725,7 +725,7 @@ def BC(stri="no input", newline=True, reverse=False):
     if(reverse == True):
         if(curb == "master"):
             branch = "testing"
-        elif(curb == "testing"):
+        else:
             branch = "master"
     else:
         branch = curb  
