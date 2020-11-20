@@ -13,7 +13,7 @@ def is_venv(): #reports if user is in Virtual Environment or not
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
 year = datetime.now().year
-curb = "testing"
+curb = "master"
 ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
 lstupdt = "2020-11-20" #I keep forgetting to update this, in C# there was build date.
 spath = sys.path[0]+os.path.sep #path of the yt-dl dir
