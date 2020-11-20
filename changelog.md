@@ -28,7 +28,10 @@ got rid of unused imports
 if you are missing dependencies we will help you get them
 
 New in 2.1.6:
-??? Changelog was lost, go back in commits to find it.
+First run, dependecy update fix
+added support link to my discord https://discord.gg/W88375j
+added NVENC h264 encoding 
+quality of life improvements
 
 New in 2.1.7:
 New install method, no more fiddling, intall python, git, clone repo run main.py
