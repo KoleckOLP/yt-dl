@@ -21,7 +21,9 @@ except ModuleNotFoundError:
     input("press any key to continue")
     os.system("git submodule init")
     os.system("git pull --recurse-submodules")
-    from kolreq.kolreq import clear, readchar #this will will crash if submodule fails to install
+    print("If the submodule installed correctly restart to get first time setup.")
+    input("press any key to continue")
+    exit()
 
 from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
