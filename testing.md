@@ -13,6 +13,7 @@
 .#9     [done] (medium)         ffapps in directory gui support subprocess                              List magics                                                     all
 .#10    [done] (low)            Change UI colors                                                        More QtDesigner learning                                        all
 .#11    [    ] (low)            Download in a specific tab could be shown by * or color of tab          Starting audio download would change tab name                   all
+.#12    [    ] (low)            Colors changeble in config                                              use settings.json                                               all
 .#999   [    ] (low)            Kali: Ctrl+D to quit                                                    * Might actually work in Qt                                     Linux
 
 2.1.9-gui_v2:
