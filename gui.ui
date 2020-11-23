@@ -172,17 +172,17 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="2" column="0">
-         <widget class="QCheckBox" name="playlist_checkbox">
+         <widget class="QCheckBox" name="aud_playlist_checkbox">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>playlist</string>
+           <string>playlist:</string>
           </property>
          </widget>
         </item>
         <item row="2" column="2">
-         <widget class="QLabel" name="playlist_label">
+         <widget class="QLabel" name="aud_playlist_label">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -192,21 +192,21 @@
          </widget>
         </item>
         <item row="0" column="1" colspan="3">
-         <widget class="QLineEdit" name="url_bar">
+         <widget class="QLineEdit" name="aud_url_bar">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1">
-         <widget class="QLineEdit" name="playlist_bar">
+         <widget class="QLineEdit" name="aud_playlist_bar">
           <property name="styleSheet">
            <string notr="true">background-color: #707070;</string>
           </property>
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="url_label">
+         <widget class="QLabel" name="aud_url_label">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -216,7 +216,7 @@
          </widget>
         </item>
         <item row="2" column="3">
-         <widget class="QPushButton" name="download_button">
+         <widget class="QPushButton" name="aud_download_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
@@ -226,7 +226,7 @@
          </widget>
         </item>
         <item row="3" column="0" colspan="4">
-         <widget class="QTextBrowser" name="output_console">
+         <widget class="QTextBrowser" name="aud_output_console">
           <property name="font">
            <font>
             <pointsize>10</pointsize>
@@ -246,6 +246,126 @@
        <attribute name="title">
         <string>Video</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="4" column="3">
+         <widget class="QRadioButton" name="radioButton_3">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>custom:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="7">
+         <widget class="QLineEdit" name="vid_url_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="checkBox">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>playlist:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="vid_url_label">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Url:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QRadioButton" name="radioButton_2">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Normal</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="7">
+         <widget class="QPushButton" name="vid_download_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>List quality</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4" colspan="3">
+         <widget class="QLineEdit" name="lineEdit">
+          <property name="styleSheet">
+           <string notr="true">background-color: #707070;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0" colspan="8">
+         <widget class="QTextBrowser" name="textBrowser">
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="5">
+         <widget class="QLineEdit" name="lineEdit_2">
+          <property name="styleSheet">
+           <string notr="true">background-color: #707070;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Quality:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QRadioButton" name="radioButton">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Best</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="6">
+         <widget class="QLabel" name="label">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>1-3,7,9</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="7">
+         <widget class="QPushButton" name="pushButton">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Download</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="subs_tab">
        <attribute name="title">
