@@ -106,6 +106,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+cmd[1]
 
+                line = ""
+
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
                 for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
@@ -114,6 +116,21 @@ class MainWindow(QtWidgets.QMainWindow):
                     else:
                         c = str(c)
                         c = c[2:-1]
+                        '''# I want to try and get the /r to be retun to start of the line
+                        line = line + c
+                        if "\\n" in line:
+                            line = line.replace("\\n", "")
+                            self.aud_output_console.moveCursor(QTextCursor.MoveOperation.NextRow)
+                            self.aud_output_console.insertPlainText(line)
+                            #print("(\\n)"+line)
+                            line = ""
+                        elif "\\r" in line:
+                            line = line.replace("\\r", "")
+                            self.aud_output_console.moveCursor(QTextCursor.MoveOperation.StartOfLine)
+                            self.aud_output_console.setText(line)
+                            print("(\\r)"+line)
+                            line = "" 
+                        '''
                         if "\\n" in c:
                             c = c.replace("\\n", "\n")
                         if "\\r" in c:
