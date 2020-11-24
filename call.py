@@ -155,11 +155,11 @@ def savepath(a="chp", x="", y="", z="", q="",vc="",ac="",vq="",ab=""):
                 if (vid == ""):
                     vid = spath+"videos"
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": vc,"Acodec": ac,"Vqual": vq,"Abit": ab}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": vc,"Acodec": ac,"Vqual": vq,"Abit": ab}, fh, indent=2)
                     fh.close()
                 else:
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh, indent=2)
                     fh.close()
     if (a != "chp"):
         #loadpath("hid")

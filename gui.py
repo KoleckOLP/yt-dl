@@ -4,69 +4,65 @@ import subprocess
 import itertools
 from PyQt5 import QtWidgets, uic
 
-from call import year, lstupdt, spath, settings
-
-#==========LOAD PATH==========#
-def loadpath(s="show"): # Taken directly from call.py, only used to load path, fail miserably if config missing or corrupted.
-    global audio
-    global videos
-    global py
-    global pip
-    global ydpip
-    global aup
-    global Vcodec
-    global Acodec
-    global Vqual
-    global Abit
-    global fdir
-    fh = open(settings, "r")
-    try:
-        path = json.loads(fh.read())
-    except ValueError:
-        path = json.loads(fh.read())
-    fh.close()
-    try:
-        path["audio"]
-        path["videos"]
-        path["py"]
-        path["pip"]
-        path["ydpip"]
-        path["aup"]
-        path["Vcodec"]
-        path["Acodec"]
-        path["Vqual"]
-        path["Abit"]
-    except KeyError:
-        print("Oopsie please launch cli to fix") #if a key is not loaded from the current settings there is nothing we can do in the gui for now, lauch cli to fix
-        msg = QtWidgets.QMessageBox()
-        msg.setWindowTitle("Settings error")
-        msg.setIcon(QtWidgets.QMessageBox.Critical)
-        msg.setText("Your setting files is not correct, please run CLI version to fix")
-        msg.exec_()
-    else:
-        audio = path["audio"]
-        videos = path["videos"]
-        py = path["py"]
-        pip = path["pip"]
-        ydpip = path["ydpip"]
-        aup = path["aup"]
-        Vcodec = path["Vcodec"]
-        Acodec = path["Acodec"]
-        Vqual = path["Vqual"]
-        Abit = path["Abit"]
-
-    pffmpeg = glob.glob(f"{spath}/ffmpeg*")
-    pffprobe = glob.glob(f"{spath}/ffprobe*")
-    if (not pffmpeg and not pffprobe):
-        fdir = False
-    else:
-        fdir = True
+from call import year, lstupdt, spath, settings  
 
 class MainWindow(QtWidgets.QMainWindow):    
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         uic.loadUi("gui.ui", self)
+
+        def MessagePopup(title, icon, text):
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle(title)
+            msg.setIcon(icon)
+            msg.setText(text)
+            msg.exec_()
+
+        #==========LOAD PATH==========#
+        def loadpath(s="show"): # Fixed version from call.py display's mesage boxes
+            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, fdir #exposing all settings to the rest of the program.
+            try:
+                fh = open(settings, "r") #opens file if there is any
+                try:
+                    path = json.loads(fh.read()) #loads json values if it's a valid json
+                    try:
+                        path["audio"]
+                        path["videos"]
+                        path["py"]
+                        path["pip"]
+                        path["ydpip"]
+                        path["aup"]
+                        path["Vcodec"]
+                        path["Acodec"]
+                        path["Vqual"]
+                        path["Abit"]
+                    except KeyError: #if keys are missing
+                        MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is not compatible with this version.\n(run cli to fix)")
+                        exit(0)
+                    else:
+                        audio = path["audio"]
+                        videos = path["videos"]
+                        py = path["py"]
+                        pip = path["pip"]
+                        ydpip = path["ydpip"]
+                        aup = path["aup"]
+                        Vcodec = path["Vcodec"]
+                        Acodec = path["Acodec"]
+                        Vqual = path["Vqual"]
+                        Abit = path["Abit"]
+
+                    pffmpeg = glob.glob(f"{spath}/ffmpeg*")
+                    pffprobe = glob.glob(f"{spath}/ffprobe*")
+                    if (not pffmpeg and not pffprobe):
+                        fdir = False
+                    else:
+                        fdir = True
+                except ValueError: #if json not valid
+                    MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is corrupted.\n(run cli to fix)")
+                fh.close()
+            except FileNotFoundError: #if file does not exist
+                MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "You are missing a config file,\n(run cli to fix)")
+                exit(0)
 
         def status( s=""): #shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
@@ -83,6 +79,7 @@ class MainWindow(QtWidgets.QMainWindow):
         running = False
         status("Ready.")
 
+        #==========🎶AUDIO🎶==========#
         def Audio():
             global running
             if running == False:
@@ -139,25 +136,24 @@ class MainWindow(QtWidgets.QMainWindow):
                 running = False
                 status("Ready.")
             else:
-                msg = QtWidgets.QMessageBox()
-                msg.setWindowTitle("Process warning")
-                msg.setIcon(QtWidgets.QMessageBox.Warning)
-                msg.setText("One process already running!")
-                msg.exec_()
+                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
                 
-        def playlist_bar_enable():
+        def aud_playlist_bar_enable():
             self.aud_playlist_bar.setEnabled(self.aud_playlist_checkbox.isChecked())
             if(self.aud_playlist_checkbox.isChecked()):
                 self.aud_playlist_bar.setStyleSheet("background-color: #909090;")
             else:
                 self.aud_playlist_bar.setStyleSheet("background-color: #707070;")
 
-        #=====AUDIO=====#
+        #=====Audio_controlls=====#
         self.aud_download_button.clicked.connect(Audio)
-        self.aud_playlist_checkbox.clicked.connect(playlist_bar_enable)
+        self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_enable)
         self.aud_output_console.setHtml("Welcome to yt-dl-gui paste a link and hit download.")
 
-        #=====ABOUT=====#
+        #=====📼VIDEO📼=====#
+
+
+        #=====🎓ABOUT🎓=====#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
                               +f"Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"
