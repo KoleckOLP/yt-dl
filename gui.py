@@ -1,7 +1,6 @@
 import sys
 import glob, json
 import subprocess
-import itertools
 from PyQt5 import QtWidgets, uic
 
 from call import year, lstupdt, spath, settings  

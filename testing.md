@@ -13,6 +13,7 @@ GUI:
 .#8     [done] (medium)         Get over initial hurdles of QtDesigner, Qt & window resizing            Reading testing                                                 all
 .#9     [done] (medium)         ffapps in directory gui support subprocess                              List magics                                                     all
 .#14    [done] (medium)         all the downloading lines are taken as a single line                    posible fix switch back to the character by character rendering all
+.#15    [    ] (medium)         Learn how to move cursor to begining of current line QTextBrowser       will make the download look nicer                               all
 .#10    [done] (low)            Change UI colors                                                        More QtDesigner learning                                        all
 .#11    [    ] (low)            Download in a specific tab could be shown by * or color of tab          Starting audio download would change tab name                   all
 .#12    [    ] (low)            Colors changeble in config                                              use settings.json                                               all
