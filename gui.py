@@ -97,9 +97,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 if(numb == None):
                     cmd = [["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
                 elif(numb == ""):
-                    cmd = [["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
+                    cmd = [["youtube-dl", "-o", f"{audio}%(playlist_index)s. %(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
                 else:
-                    cmd = [["youtube-dl", "-o", f"{audio}%(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
+                    cmd = [["youtube-dl", "-o", f"{audio}%(playlist_index)s. %(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg"],["--audio-format", "mp3", f"{url}"]]
 
                 floc = [f"--ffmpeg-location", f"{spath}"]
                 if (fdir == True):
@@ -127,6 +127,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         QtWidgets.QApplication.processEvents()
                         self.scrollbar = self.aud_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
+                        QtWidgets.QApplication.processEvents()
                 
                 print("\a")
                 self.aud_output_console.insertPlainText("Process has finished.")
@@ -151,6 +152,115 @@ class MainWindow(QtWidgets.QMainWindow):
         self.aud_output_console.setHtml("Welcome to yt-dl-gui (Audio) paste a link and hit download.")
 
         #==========📼VIDEO📼==========#
+        def Video():
+            global running
+            if running == False:
+                running = True
+                status("Busy.")
+
+                self.vid_output_console.setHtml("") #clearing the output_console.
+
+                url = self.vid_url_bar.text()
+                if self.vid_playlist_checkbox.isChecked():
+                    numb = self.vid_playlist_bar.text()
+                else:
+                    numb = None
+
+                if(numb == None):
+                    cmd = [["youtube-dl", "-o", f"{videos}%(title)s.%(ext)s", "-f"],["--no-playlist", f"{url}"]]
+                elif(numb == ""):
+                    cmd = [["youtube-dl", "-o", f"{videos}%(playlist_index)s. %(title)s.%(ext)s", "-f"],["--yes-playlist", f"{url}"]]
+                else:
+                    cmd = [["youtube-dl", "-o", f"{videos}%(playlist_index)s. %(title)s.%(ext)s", "-f"],["--yes-playlist", "--playlist-items", f"{numb}", f"{url}"]]
+
+                if self.vid_best_radio.isChecked():
+                    qual = ["bestvideo+bestaudio"]
+                elif self.vid_custom_radio.isChecked():
+                    qual = [self.vid_quality_bar.text()]
+                else:
+                    qual = ["best"]
+
+                floc = [f"--ffmpeg-location", f"{spath}"]
+                if (fdir == True):
+                    cmd = cmd[0]+qual+floc+cmd[1]
+                else:
+                    cmd = cmd[0]+qual+cmd[1]
+
+                print(cmd)
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000)
+                for line in itertools.chain(process.stdout, process.stderr): 
+                    gui = window.isVisible()
+                    if gui == False: #if window of the app was closed kill the subrocess.
+                        process.terminate()
+                    else:
+                        line = str(line)
+                        line = line[2:-1]
+                        if "\\n" in line:
+                            line = line.replace("\\n", "\n")
+                        if "\\r" in line:
+                            line = line.replace("\\r", "\n")
+                        if "\\\\" in line:
+                            line = line.replace("\\\\","\\")
+                        if "\\'" in line:
+                            line = line.replace("\\'","'")
+                        self.vid_output_console.insertPlainText(line)
+                        QtWidgets.QApplication.processEvents()
+                        self.scrollbar = self.vid_output_console.verticalScrollBar()
+                        self.scrollbar.setValue(self.scrollbar.maximum())
+                        QtWidgets.QApplication.processEvents()
+                
+                print("\a")
+                self.vid_output_console.insertPlainText("Process has finished.")
+                QtWidgets.QApplication.processEvents()
+                self.scrollbar = self.vid_output_console.verticalScrollBar()
+                self.scrollbar.setValue(self.scrollbar.maximum())
+                running = False
+                status("Ready.")
+            else:
+                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+
+        def vid_quality():
+            global running
+            if running == False:
+                running = True
+                status("Busy.")
+
+                self.vid_output_console.setHtml("") #clearing the output_console
+
+                url = self.vid_url_bar.text()
+                cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
+
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000)
+                for line in itertools.chain(process.stdout, process.stderr): 
+                    gui = window.isVisible()
+                    if gui == False: #if window of the app was closed kill the subrocess.
+                        process.terminate()
+                    else:
+                        line = str(line)
+                        line = line[2:-1]
+                        if "\\n" in line:
+                            line = line.replace("\\n", "\n")
+                        if "\\r" in line:
+                            line = line.replace("\\r", "\n")
+                        if "\\\\" in line:
+                            line = line.replace("\\\\","\\")
+                        if "\\'" in line:
+                            line = line.replace("\\'","'")
+                        self.vid_output_console.insertPlainText(line)
+                        QtWidgets.QApplication.processEvents()
+                        self.scrollbar = self.vid_output_console.verticalScrollBar()
+                        self.scrollbar.setValue(self.scrollbar.maximum())
+                        QtWidgets.QApplication.processEvents()
+                
+                print("\a")
+                self.vid_output_console.insertPlainText("Process has finished.")
+                QtWidgets.QApplication.processEvents()
+                self.scrollbar = self.vid_output_console.verticalScrollBar()
+                self.scrollbar.setValue(self.scrollbar.maximum())
+                running = False
+                status("Ready.")
+            else:
+                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
 
         def vid_playlist_bar_toggle():
             self.vid_playlist_bar.setEnabled(self.vid_playlist_checkbox.isChecked())
@@ -167,8 +277,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.vid_quality_bar.setStyleSheet("background-color: #707070;")
 
         #=====vid_controlls=====#
-        #self.vid_quality_button.clicked.connect(vid_quality)
-        #self.vid_download_button.clicked.connect(Video)
+        self.vid_download_button.clicked.connect(Video)
+        self.vid_quality_button.clicked.connect(vid_quality)
         self.vid_playlist_checkbox.clicked.connect(vid_playlist_bar_toggle)
         self.vid_custom_radio.toggled.connect(vid_quality_bar_toggle)
         self.vid_output_console.setHtml("Welcome to yt-dl-gui (Video) paste a link and hit download.")

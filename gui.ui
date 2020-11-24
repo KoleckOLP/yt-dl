@@ -250,6 +250,28 @@
         <string>Video</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
+        <item row="4" column="8">
+         <widget class="QPushButton" name="vid_quality_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>List quality</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0" colspan="9">
+         <widget class="QTextBrowser" name="vid_output_console">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+         </widget>
+        </item>
         <item row="4" column="3">
          <widget class="QRadioButton" name="vid_custom_radio">
           <property name="styleSheet">
@@ -257,33 +279,6 @@
           </property>
           <property name="text">
            <string>custom:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="7">
-         <widget class="QLineEdit" name="vid_url_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QCheckBox" name="vid_playlist_checkbox">
-          <property name="styleSheet">
-           <string notr="true">color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>playlist:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="vid_url_label">
-          <property name="styleSheet">
-           <string notr="true">color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Url:</string>
           </property>
          </widget>
         </item>
@@ -297,35 +292,45 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="7">
-         <widget class="QPushButton" name="vid_quality_button">
+        <item row="2" column="8">
+         <widget class="QPushButton" name="vid_download_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
           <property name="text">
-           <string>List quality</string>
+           <string>Download</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QCheckBox" name="vid_playlist_checkbox">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>playlist:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="8">
+         <widget class="QLineEdit" name="vid_url_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="vid_url_label">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Url:</string>
           </property>
          </widget>
         </item>
         <item row="4" column="4" colspan="3">
          <widget class="QLineEdit" name="vid_quality_bar">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: #707070;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="0" colspan="8">
-         <widget class="QTextBrowser" name="vid_output_console">
-          <property name="styleSheet">
-           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="5">
-         <widget class="QLineEdit" name="vid_playlist_bar">
           <property name="enabled">
            <bool>false</bool>
           </property>
@@ -354,7 +359,17 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="6">
+        <item row="4" column="7">
+         <widget class="QLabel" name="label">
+          <property name="styleSheet">
+           <string notr="true">color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>vid+aud</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="7">
          <widget class="QLabel" name="vid_playlist_label">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
@@ -364,13 +379,13 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="7">
-         <widget class="QPushButton" name="vid_download_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+        <item row="2" column="1" colspan="6">
+         <widget class="QLineEdit" name="vid_playlist_bar">
+          <property name="enabled">
+           <bool>false</bool>
           </property>
-          <property name="text">
-           <string>Download</string>
+          <property name="styleSheet">
+           <string notr="true">background-color: #707070;</string>
           </property>
          </widget>
         </item>
