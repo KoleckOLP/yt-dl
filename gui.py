@@ -107,24 +107,23 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+cmd[1]
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000)
-                for line in itertools.chain(process.stdout, process.stderr): 
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
+                for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
                     if gui == False: #if window of the app was closed kill the subrocess.
                         process.terminate()
                     else:
-                        line = str(line)
-                        line = line[2:-1]
-                        if "\\n" in line:
-                            line = line.replace("\\n", "\n")
-                        if "\\r" in line:
-                            line = line.replace("\\r", "\n")
-                        if "\\\\" in line:
-                            line = line.replace("\\\\","\\")
-                        if "\\'" in line:
-                            line = line.replace("\\'","'")
-                        self.aud_output_console.insertPlainText(line)
-                        QtWidgets.QApplication.processEvents()
+                        c = str(c)
+                        c = c[2:-1]
+                        if "\\n" in c:
+                            c = c.replace("\\n", "\n")
+                        if "\\r" in c:
+                            c = c.replace("\\r", "\n")
+                        if "\\\\" in c:
+                            c = c.replace("\\\\","\\")
+                        if "\\'" in c:
+                            c = c.replace("\\'","'")
+                        self.aud_output_console.insertPlainText(c)
                         self.scrollbar = self.aud_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
                         QtWidgets.QApplication.processEvents()
@@ -186,25 +185,23 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+qual+cmd[1]
 
-                print(cmd)
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000)
-                for line in itertools.chain(process.stdout, process.stderr): 
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
+                for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
                     if gui == False: #if window of the app was closed kill the subrocess.
                         process.terminate()
                     else:
-                        line = str(line)
-                        line = line[2:-1]
-                        if "\\n" in line:
-                            line = line.replace("\\n", "\n")
-                        if "\\r" in line:
-                            line = line.replace("\\r", "\n")
-                        if "\\\\" in line:
-                            line = line.replace("\\\\","\\")
-                        if "\\'" in line:
-                            line = line.replace("\\'","'")
-                        self.vid_output_console.insertPlainText(line)
-                        QtWidgets.QApplication.processEvents()
+                        c = str(c)
+                        c = c[2:-1]
+                        if "\\n" in c:
+                            c = c.replace("\\n", "\n")
+                        if "\\r" in c:
+                            c = c.replace("\\r", "\n")
+                        if "\\\\" in c:
+                            c = c.replace("\\\\","\\")
+                        if "\\'" in c:
+                            c = c.replace("\\'","'")
+                        self.vid_output_console.insertPlainText(c)
                         self.scrollbar = self.vid_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
                         QtWidgets.QApplication.processEvents()
@@ -230,24 +227,23 @@ class MainWindow(QtWidgets.QMainWindow):
                 url = self.vid_url_bar.text()
                 cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000)
-                for line in itertools.chain(process.stdout, process.stderr): 
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
+                for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
                     if gui == False: #if window of the app was closed kill the subrocess.
                         process.terminate()
                     else:
-                        line = str(line)
-                        line = line[2:-1]
-                        if "\\n" in line:
-                            line = line.replace("\\n", "\n")
-                        if "\\r" in line:
-                            line = line.replace("\\r", "\n")
-                        if "\\\\" in line:
-                            line = line.replace("\\\\","\\")
-                        if "\\'" in line:
-                            line = line.replace("\\'","'")
-                        self.vid_output_console.insertPlainText(line)
-                        QtWidgets.QApplication.processEvents()
+                        c = str(c)
+                        c = c[2:-1]
+                        if "\\n" in c:
+                            c = c.replace("\\n", "\n")
+                        if "\\r" in c:
+                            c = c.replace("\\r", "\n")
+                        if "\\\\" in c:
+                            c = c.replace("\\\\","\\")
+                        if "\\'" in c:
+                            c = c.replace("\\'","'")
+                        self.vid_output_console.insertPlainText(c)
                         self.scrollbar = self.vid_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
                         QtWidgets.QApplication.processEvents()
