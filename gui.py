@@ -173,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_custom_radio.toggled.connect(vid_quality_bar_toggle)
         self.vid_output_console.setHtml("Welcome to yt-dl-gui (Video) paste a link and hit download.")
 
-        #=====🎓ABOUT🎓=====#
+        #==========🎓ABOUT🎓==========#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
                               +f"Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"

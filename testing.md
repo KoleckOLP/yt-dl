@@ -1,6 +1,7 @@
 ========================================
 ### Issue Tracking / To Do List
-2.1.8-gui:
+##2.1.8
+GUI:
 #       status severity         the issue description                                                   possible solution                                               affected OS
 .#1     [done] (highest)        Make sure subprocess is killed when gui dies                            Loop is cheking if gui lives if not kills subprocess            all
 .#2     [done] (highest)        Subprocess output to a TextBox                                          Process events after every single line, see .#6                 all
@@ -15,8 +16,11 @@
 .#11    [    ] (low)            Download in a specific tab could be shown by * or color of tab          Starting audio download would change tab name                   all
 .#12    [    ] (low)            Colors changeble in config                                              use settings.json                                               all
 .#999   [    ] (low)            Kali: Ctrl+D to quit                                                    * Might actually work in Qt                                     Linux
+CLI:
+.#13    [    ] (medium)         Bring Loadpath code up to date with changes in gui                      better order and error handling                                 all
 
-2.1.9-gui_v2:
+##2.1.9
+GUI:
 .#1     [   ] (medium)          Less Tabs design audio, vides, sub radio buttons                        Migth be averall better option.                                 all
 
 ========================================
