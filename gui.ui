@@ -200,6 +200,9 @@
         </item>
         <item row="2" column="1">
          <widget class="QLineEdit" name="aud_playlist_bar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">background-color: #707070;</string>
           </property>
@@ -248,7 +251,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="4" column="3">
-         <widget class="QRadioButton" name="radioButton_3">
+         <widget class="QRadioButton" name="vid_custom_radio">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -265,7 +268,7 @@
          </widget>
         </item>
         <item row="2" column="0">
-         <widget class="QCheckBox" name="checkBox">
+         <widget class="QCheckBox" name="vid_playlist_checkbox">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -285,7 +288,7 @@
          </widget>
         </item>
         <item row="4" column="2">
-         <widget class="QRadioButton" name="radioButton_2">
+         <widget class="QRadioButton" name="vid_normal_radio">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -295,7 +298,7 @@
          </widget>
         </item>
         <item row="4" column="7">
-         <widget class="QPushButton" name="vid_download_button">
+         <widget class="QPushButton" name="vid_quality_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
@@ -305,28 +308,34 @@
          </widget>
         </item>
         <item row="4" column="4" colspan="3">
-         <widget class="QLineEdit" name="lineEdit">
+         <widget class="QLineEdit" name="vid_quality_bar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">background-color: #707070;</string>
           </property>
          </widget>
         </item>
         <item row="7" column="0" colspan="8">
-         <widget class="QTextBrowser" name="textBrowser">
+         <widget class="QTextBrowser" name="vid_output_console">
           <property name="styleSheet">
            <string notr="true">background-color: #000000; color: #FFFFFF;</string>
           </property>
          </widget>
         </item>
         <item row="2" column="1" colspan="5">
-         <widget class="QLineEdit" name="lineEdit_2">
+         <widget class="QLineEdit" name="vid_playlist_bar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="styleSheet">
            <string notr="true">background-color: #707070;</string>
           </property>
          </widget>
         </item>
         <item row="4" column="0">
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="vid_quality_label">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -336,7 +345,7 @@
          </widget>
         </item>
         <item row="4" column="1">
-         <widget class="QRadioButton" name="radioButton">
+         <widget class="QRadioButton" name="vid_best_radio">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -346,7 +355,7 @@
          </widget>
         </item>
         <item row="2" column="6">
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="vid_playlist_label">
           <property name="styleSheet">
            <string notr="true">color: #FFFFFF;</string>
           </property>
@@ -356,7 +365,7 @@
          </widget>
         </item>
         <item row="2" column="7">
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="vid_download_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>

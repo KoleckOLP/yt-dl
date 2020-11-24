@@ -138,20 +138,40 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
                 
-        def aud_playlist_bar_enable():
+        def aud_playlist_bar_toggle():
             self.aud_playlist_bar.setEnabled(self.aud_playlist_checkbox.isChecked())
             if(self.aud_playlist_checkbox.isChecked()):
                 self.aud_playlist_bar.setStyleSheet("background-color: #909090;")
             else:
                 self.aud_playlist_bar.setStyleSheet("background-color: #707070;")
 
-        #=====Audio_controlls=====#
+        #=====aud_controlls=====#
         self.aud_download_button.clicked.connect(Audio)
-        self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_enable)
-        self.aud_output_console.setHtml("Welcome to yt-dl-gui paste a link and hit download.")
+        self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
+        self.aud_output_console.setHtml("Welcome to yt-dl-gui (Audio) paste a link and hit download.")
 
-        #=====📼VIDEO📼=====#
+        #==========📼VIDEO📼==========#
 
+        def vid_playlist_bar_toggle():
+            self.vid_playlist_bar.setEnabled(self.vid_playlist_checkbox.isChecked())
+            if(self.vid_playlist_checkbox.isChecked()):
+                self.vid_playlist_bar.setStyleSheet("background-color: #909090;")
+            else:
+                self.vid_playlist_bar.setStyleSheet("background-color: #707070;")
+
+        def vid_quality_bar_toggle():
+            self.vid_quality_bar.setEnabled(self.vid_custom_radio.isChecked())
+            if(self.vid_custom_radio.isChecked()):
+                self.vid_quality_bar.setStyleSheet("background-color: #909090;")
+            else:
+                self.vid_quality_bar.setStyleSheet("background-color: #707070;")
+
+        #=====vid_controlls=====#
+        #self.vid_quality_button.clicked.connect(vid_quality)
+        #self.vid_download_button.clicked.connect(Video)
+        self.vid_playlist_checkbox.clicked.connect(vid_playlist_bar_toggle)
+        self.vid_custom_radio.toggled.connect(vid_quality_bar_toggle)
+        self.vid_output_console.setHtml("Welcome to yt-dl-gui (Video) paste a link and hit download.")
 
         #=====🎓ABOUT🎓=====#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
