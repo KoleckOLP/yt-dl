@@ -370,7 +370,7 @@
          </widget>
         </item>
         <item row="4" column="7">
-         <widget class="QLabel" name="label">
+         <widget class="QLabel" name="vid_guality2_label">
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF</string>
           </property>
@@ -380,7 +380,7 @@
          </widget>
         </item>
         <item row="2" column="7">
-         <widget class="QLabel" name="label_2">
+         <widget class="QLabel" name="vid_playlist_label">
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF</string>
           </property>
