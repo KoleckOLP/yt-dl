@@ -106,7 +106,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+cmd[1]
 
-                line = ""
+                self.sub_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
                 for c in iter(lambda: process.stdout.read(1), b''):
@@ -116,21 +116,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     else:
                         c = str(c)
                         c = c[2:-1]
-                        '''# I want to try and get the /r to be retun to start of the line
-                        line = line + c
-                        if "\\n" in line:
-                            line = line.replace("\\n", "")
-                            self.aud_output_console.moveCursor(QTextCursor.MoveOperation.NextRow)
-                            self.aud_output_console.insertPlainText(line)
-                            #print("(\\n)"+line)
-                            line = ""
-                        elif "\\r" in line:
-                            line = line.replace("\\r", "")
-                            self.aud_output_console.moveCursor(QTextCursor.MoveOperation.StartOfLine)
-                            self.aud_output_console.setText(line)
-                            print("(\\r)"+line)
-                            line = "" 
-                        '''
+
                         if "\\n" in c:
                             c = c.replace("\\n", "\n")
                         if "\\r" in c:
@@ -139,13 +125,14 @@ class MainWindow(QtWidgets.QMainWindow):
                             c = c.replace("\\\\","\\")
                         if "\\'" in c:
                             c = c.replace("\\'","'")
+
                         self.aud_output_console.insertPlainText(c)
                         self.scrollbar = self.aud_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
                         QtWidgets.QApplication.processEvents()
                 
                 print("\a")
-                self.aud_output_console.insertPlainText("Process has finished.")
+                self.aud_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QtWidgets.QApplication.processEvents()
                 self.scrollbar = self.aud_output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
@@ -164,7 +151,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #=====aud_controlls=====#
         self.aud_download_button.clicked.connect(Audio)
         self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
-        self.aud_output_console.setHtml("Welcome to yt-dl-gui (Audio) paste a link and hit download.")
+        self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
 
         #==========📼VIDEO📼==========#
         def Video():
@@ -201,6 +188,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+qual+cmd[1]
 
+                self.sub_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
+
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
                 for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
@@ -223,7 +212,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         QtWidgets.QApplication.processEvents()
                 
                 print("\a")
-                self.vid_output_console.insertPlainText("Process has finished.")
+                self.vid_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QtWidgets.QApplication.processEvents()
                 self.scrollbar = self.vid_output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
@@ -243,6 +232,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 url = self.vid_url_bar.text()
                 cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
 
+                self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
+
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
                 for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
@@ -265,7 +256,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         QtWidgets.QApplication.processEvents()
                 
                 print("\a")
-                self.vid_output_console.insertPlainText("Process has finished.")
+                self.vid_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QtWidgets.QApplication.processEvents()
                 self.scrollbar = self.vid_output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
@@ -293,7 +284,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_quality_button.clicked.connect(vid_quality)
         self.vid_playlist_checkbox.clicked.connect(vid_playlist_bar_toggle)
         self.vid_custom_radio.toggled.connect(vid_quality_bar_toggle)
-        self.vid_output_console.setHtml("Welcome to yt-dl-gui (Video) paste a link and hit download.")
+        self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
 
         #==========📑SUBS📑==========#
         def Subs():
@@ -307,21 +298,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.sub_output_console.setHtml("") #clearing the output_console.
 
                 url = self.sub_url_bar.text()
-                '''
-                if self.sub_playlist_checkbox.isChecked():
-                    numb = self.sub_playlist_bar.text()
-                else:
-                    numb = None
-                '''
 
-                #if(numb == None):
                 cmd = [["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--no-playlist", "--write-sub", "--write-auto-sub"],["--sub-format", "vtt", "--skip-download", "--no-playlist", f"{url}"]]
-                '''
-                elif(numb == ""):
-                    cmd = [["youtube-dl", "-o", f"{temp}%(playlist_index)s. %(title)s.%(ext)s", "--no-playlist", "--write-sub", "--write-auto-sub"],["--sub-format", "vtt", "--skip-download", "--yes-playlist", f"{url}"]]
-                else:
-                    cmd = [["youtube-dl", "-o", f"{temp}%(playlist_index)s. %(title)s.%(ext)s", "--no-playlist", "--write-sub", "--write-auto-sub"],["--sub-format", "vtt", "--skip-download", "--yes-playlist", "--playlist-items", f"{numb}", f"{url}"]]
-                '''
 
                 lang = None
 
@@ -339,6 +317,8 @@ class MainWindow(QtWidgets.QMainWindow):
                         cmd = cmd[0]+lang+cmd[1]
                     else:
                         cmd = cmd[0]+cmd[1]
+
+                self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
                 for c in iter(lambda: process.stdout.read(1), b''):
@@ -366,7 +346,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 subname = subname[:-3]
                 newsubpath = videos+subname+"srt"
                 os.makedirs(videos, exist_ok=True)
-                self.sub_output_console.insertPlainText("starting ffmpeg please wait...\n")
+
+                self.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
                 
                 cmd = ["-i", f"{subpath[0]}", f"{newsubpath}"]
 
@@ -375,6 +356,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     cmd = floc+cmd
                 else:
                     cmd = ["ffmpeg", "-hide_banner"]+cmd
+
+                self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
                 for c in iter(lambda: process.stdout.read(1), b''):
@@ -398,7 +381,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         QtWidgets.QApplication.processEvents()                                    
 
                 print("\a")
-                self.sub_output_console.insertPlainText("Process has finished.")
+                self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QtWidgets.QApplication.processEvents()
                 self.scrollbar = self.sub_output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
@@ -440,7 +423,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         QtWidgets.QApplication.processEvents()
                 
                 print("\a")
-                self.sub_output_console.insertPlainText("Process has finished.")
+                self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QtWidgets.QApplication.processEvents()
                 self.scrollbar = self.sub_output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
@@ -448,13 +431,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
-
-        def sub_playlist_bar_toggle():
-            self.sub_playlist_bar.setEnabled(self.sub_playlist_checkbox.isChecked())
-            if(self.sub_playlist_checkbox.isChecked()):
-                self.sub_playlist_bar.setStyleSheet("background-color: #909090;")
-            else:
-                self.sub_playlist_bar.setStyleSheet("background-color: #707070;")
 
         def sub_lang_bar_toggle():
             self.sub_lang_bar.setEnabled(self.sub_lang_checkbox.isChecked())
@@ -466,9 +442,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #=====sub_controlls=====#
         self.sub_download_button.clicked.connect(Subs)
         self.sub_lang_button.clicked.connect(sub_lang)
-        self.sub_playlist_checkbox.clicked.connect(sub_playlist_bar_toggle)
         self.sub_lang_checkbox.toggled.connect(sub_lang_bar_toggle)
-        self.sub_output_console.setHtml("Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
+        self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
 
         #==========🎓ABOUT🎓==========#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"

@@ -406,17 +406,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
-         <widget class="QCheckBox" name="sub_playlist_checkbox">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>playlist:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3" colspan="4">
+        <item row="0" column="3" colspan="3">
          <widget class="QLineEdit" name="sub_url_bar">
           <property name="styleSheet">
            <string notr="true">background-color: #909090</string>
@@ -453,29 +443,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="6">
-         <widget class="QTextBrowser" name="sub_output_console">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3" colspan="3">
-         <widget class="QLineEdit" name="sub_playlist_bar">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">background-color: #707070;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="6">
+        <item row="0" column="6">
          <widget class="QPushButton" name="sub_download_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
@@ -492,6 +460,18 @@
           </property>
           <property name="text">
            <string>List lang</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1" colspan="6">
+         <widget class="QTextBrowser" name="sub_output_console">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
           </property>
          </widget>
         </item>

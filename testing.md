@@ -15,6 +15,7 @@ GUI:
 .#14    [done] (medium)         all the downloading lines are taken as a single line                    posible fix switch back to the character by character rendering all
 .#15    [    ] (medium)         Learn how to move cursor to begining of current line QTextBrowser       will make the download look nicer                               all
 .#10    [done] (low)            Change UI colors                                                        More QtDesigner learning                                        all
+.#18    [    ] (low)            Sub download dos not support playlist download                          if supported in yt-dl than with more loops possible             all
 .#11    [    ] (low)            Download in a specific tab could be shown by * or color of tab          Starting audio download would change tab name                   all
 .#12    [    ] (low)            Colors changeble in config                                              use settings.json                                               all
 .#17    [    ] (low)            ffmpeg now hides banner, maybe I could add some debug                   to see waht ffmpeg version I'm using                            all
