@@ -17,9 +17,12 @@ GUI:
 .#10    [done] (low)            Change UI colors                                                        More QtDesigner learning                                        all
 .#11    [    ] (low)            Download in a specific tab could be shown by * or color of tab          Starting audio download would change tab name                   all
 .#12    [    ] (low)            Colors changeble in config                                              use settings.json                                               all
-.#999   [    ] (low)            Kali: Ctrl+D to quit (I call this canceled)                             * Might actually work in Qt                                     Linux
+.#17    [    ] (low)            ffmpeg now hides banner, maybe I could add some debug                   to see waht ffmpeg version I'm using                            all
 CLI:
 .#13    [    ] (medium)         Bring Loadpath code up to date with changes in gui                      better order and error handling                                 all
+.#16    [    ] (medium)         Sub download (long untouched) does not suppot ffmpeg from dir           I wrote sub download and than let it be a black box             all
+
+(I am 100% aware that stuff could have been done better, but I will finifsh it in this way and improve upon it later)
 
 ##2.1.9
 GUI:
