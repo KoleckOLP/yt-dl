@@ -3,6 +3,7 @@ import glob, json
 import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
+from PyQt5.QtWidgets import QFileDialog
 
 from call import year, lstupdt, spath, settings  
 
@@ -73,6 +74,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
         loadpath()
+
+        self.ree_settings_combobox.addItem("hevc_opus")
+        self.ree_settings_combobox.addItem("h264_nvenc")
+        self.ree_settings_combobox.addItem("custom")
 
         global running
         running = False
@@ -148,7 +153,11 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.aud_playlist_bar.setStyleSheet("background-color: #707070;")
 
+        def aud_open():
+            os.startfile(audio)
+
         #=====aud_controlls=====#
+        self.aud_folder_button.clicked.connect(aud_open)
         self.aud_download_button.clicked.connect(Audio)
         self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
@@ -279,7 +288,11 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.vid_quality_bar.setStyleSheet("background-color: #707070;")
 
+        def vid_open():
+            os.startfile(videos)
+
         #=====vid_controlls=====#
+        self.vid_folder_button.clicked.connect(vid_open)
         self.vid_download_button.clicked.connect(Video)
         self.vid_quality_button.clicked.connect(vid_quality)
         self.vid_playlist_checkbox.clicked.connect(vid_playlist_bar_toggle)
@@ -440,10 +453,141 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.sub_lang_bar.setStyleSheet("background-color: #707070;")
 
         #=====sub_controlls=====#
+        self.sub_folder_button.clicked.connect(vid_open)
         self.sub_download_button.clicked.connect(Subs)
         self.sub_lang_button.clicked.connect(sub_lang)
         self.sub_lang_checkbox.toggled.connect(sub_lang_bar_toggle)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
+
+        #==========💿REENCODE💿==========#
+        def Reencode():
+            global running
+            if running == False:
+                running = True
+                status("Busy.")
+
+                self.ree_output_console.setHtml("") #clearing the output_console
+
+                location = self.ree_location_bar.text()
+                videoc = self.ree_videoc_bar.text()
+                videoq = self.ree_videoq_bar.text()
+                audioc = self.ree_audioc_bar.text()
+                audiob = self.ree_audiob_bar.text()
+                append = self.ree_append_bar.text()
+
+                if location[-1:] == "/": #whole folder
+                    print("don't be greedy") #need to glob blob and make it loop like you alwas wated step brother
+                else: #single video
+                    cmd = [["-hwaccel", "auto", "-i", f"{location}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(location)[0]+append}"]]
+
+                #//Video Quality\\#
+                if "," in videoq:
+                    VQsplit = Vqual.split(",")
+                else:
+                    VQsplit = [Vqual,Vqual,Vqual]
+                #//Videeo Codec\\#
+                if(videoc == "libx265"):
+                    VideoCodec = ["-c:v", f"{videoc}"]
+                    quality = ["-crf", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
+                    Vformat = ["-vf", "format=yuv420p"]
+                    cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
+                elif(videoc == "copy"):
+                    VideoCodec = [f"-c:v", f"{videoc}"]
+                    cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
+                elif(videoc == "remove"):
+                    VideoCodec = ["-vn"]
+                    cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
+                else:
+                    VideoCodec = ["-c:v", f"{videoc}"]
+                    quality = ["-cq", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
+                    Vformat = ["-vf", "format=yuv420p"]
+                    cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
+                #//Audio\\#
+                if(audioc == "remove"):
+                    AudioEverything = ["-an"]
+                    cmd = [cmd[0]+AudioEverything,cmd[1]]
+                else:
+                    AudioEverything = ["-c:a", f"{audioc}", "-strict", "-2", "-b:a", f"{audiob}"]
+                    cmd = [cmd[0]+AudioEverything,cmd[1]]
+                #//Subtitles\\#
+                if(videoc == "remove"):
+                    SubsC = ""
+                    cmd = cmd[0]+cmd[1]
+                else:
+                    SubsC = ["-c:s", "copy"]
+                    cmd = cmd[0]+SubsC+cmd[1]
+
+                floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
+                if (fdir == True):
+                    cmd = floc+cmd
+                else:
+                    cmd = ["ffmpeg", "-hide_banner"]+cmd
+
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
+                for c in iter(lambda: process.stdout.read(1), b''):
+                    gui = window.isVisible()
+                    if gui == False: #if window of the app was closed kill the subrocess.
+                        process.terminate()
+                    else:
+                        c = str(c)
+                        c = c[2:-1]
+                        if "\\n" in c:
+                            c = c.replace("\\n", "\n")
+                        if "\\r" in c:
+                            c = c.replace("\\r", "\n")
+                        if "\\\\" in c:
+                            c = c.replace("\\\\","\\")
+                        if "\\'" in c:
+                            c = c.replace("\\'","'")
+                        self.ree_output_console.insertPlainText(c)
+                        self.scrollbar = self.ree_output_console.verticalScrollBar()
+                        self.scrollbar.setValue(self.scrollbar.maximum())
+                        QtWidgets.QApplication.processEvents()                                    
+
+                print("\a")
+                self.ree_output_console.insertPlainText("#yt-dl# Process has finished.")
+                QtWidgets.QApplication.processEvents()
+                self.scrollbar = self.ree_output_console.verticalScrollBar()
+                self.scrollbar.setValue(self.scrollbar.maximum())
+                running = False
+                status("Ready.")
+            else:
+                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+        
+        def ree_settings():
+            if self.ree_settings_combobox.currentIndex() == 2: #custom
+                self.ree_videoc_bar.setText(Vcodec)
+                self.ree_videoq_bar.setText(Vqual)
+                self.ree_audioc_bar.setText(Acodec)
+                self.ree_audiob_bar.setText(Abit)
+                self.ree_append_bar.setText("_custom.mkv")
+            elif self.ree_settings_combobox.currentIndex() == 0: #hevc_opus
+                self.ree_videoc_bar.setText("libx265")
+                self.ree_videoq_bar.setText("24,24,24")
+                self.ree_audioc_bar.setText("opus")
+                self.ree_audiob_bar.setText("190k")
+                self.ree_append_bar.setText("_hevcopus.mkv")
+            elif self.ree_settings_combobox.currentIndex() == 1: #h264_nvenc
+                self.ree_videoc_bar.setText("h264_nvenc")
+                self.ree_videoq_bar.setText("24,24,24")
+                self.ree_audioc_bar.setText("aac")
+                self.ree_audiob_bar.setText("190k")
+                self.ree_append_bar.setText("_nvenc.mov")
+
+        def ree_choose():
+            self.ree_location_bar.setText(QFileDialog.getOpenFileName()[0])
+
+        def ree_open():
+            location = self.ree_location_bar.text()
+            os.startfile(os.path.dirname(location))
+
+        #=====ree_controlls=====#
+        ree_settings()
+        self.ree_choose_button.clicked.connect(ree_choose)
+        self.ree_reencode_button.clicked.connect(Reencode)
+        self.ree_folder_button.clicked.connect(ree_open)
+        self.ree_settings_combobox.activated.connect(ree_settings)
+        self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
 
         #==========🎓ABOUT🎓==========#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"

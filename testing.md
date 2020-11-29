@@ -7,6 +7,7 @@ GUI:
 .#2     [done] (highest)        Subprocess output to a TextBox                                          Process events after every single line, see .#6                 all
 .#3     [done] (high)           Audio download                                                          Somewhat works                                                  all
 .#4     [done] (high)           You can start subpocess more than once download button                  Shown in the status, will throw a message box                   all
+.#18    [    ] (high)           Button than opens you downloads forder                                  Useful as fuck                                                  all
 .#5     [    ] (medium)         Remember to save download path with double separator at the end         * Check path saving more carefully                              Windows
 .#6    *[done] (medium)         UI runs really slowly while subprocess writing to TextBox               * I don't think I can fix that so I show satus                  all
 .#7     [done] (medium)         Link on a TextBox was opening in TextBox instead of external app        Allowing openExternalLinks                                      all
