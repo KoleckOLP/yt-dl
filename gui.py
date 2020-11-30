@@ -543,9 +543,7 @@ class MainWindow(QtWidgets.QMainWindow):
         curb = "Current branch: "+curb[2:-3]
         self.upd_branch_label.setText(curb)
 
-        global aup
-        if aup:
-            Update()
+        # I need to get an outside trigger to trigger a function int the innicialization after the UI is drawn
 
         self.upd_update_button.clicked.connect(Update)
         self.upd_branch_button.clicked.connect(upd_branch)
@@ -561,9 +559,8 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
-                                 
+
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()
 app.exec_()
-
