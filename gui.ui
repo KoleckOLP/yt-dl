@@ -708,6 +708,74 @@
        <attribute name="title">
         <string>Update</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="4">
+         <widget class="QPushButton" name="upd_auto_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>AutoUpdate=True</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="upd_update_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Update</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" colspan="4">
+         <widget class="QTextBrowser" name="upd_output_console">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QComboBox" name="upd_update_combobox">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QPushButton" name="upd_branch_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>ChangeBranch</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QLabel" name="upd_branch_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Current Branch: qt-gui</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QComboBox" name="upd_branch_combobox">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
       <widget class="QWidget" name="settings_tab">
        <attribute name="title">

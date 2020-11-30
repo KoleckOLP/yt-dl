@@ -5,7 +5,7 @@ import tempfile
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
 
-from call import year, lstupdt, spath, settings  
+from call import autoupdt, year, lstupdt, spath, settings
 
 class MainWindow(QtWidgets.QMainWindow):    
     def __init__(self, *args, **kwargs):
@@ -73,11 +73,34 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
-        loadpath()
+        def process_start(cmd="", output_console=""):
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
+            for c in iter(lambda: process.stdout.read(1), b''):
+                gui = self.isVisible()
+                if gui == False: #if window of the app was closed kill the subrocess.
+                    process.terminate()
+                else:
+                    c = str(c)
+                    c = c[2:-1]
+                    if "\\n" in c:
+                        c = c.replace("\\n", "\n")
+                    if "\\r" in c:
+                        c = c.replace("\\r", "\n")
+                    if "\\\\" in c:
+                        c = c.replace("\\\\","\\")
+                    if "\\'" in c:
+                        c = c.replace("\\'","'")
+                    output_console.insertPlainText(c)
+                    self.scrollbar = output_console.verticalScrollBar()
+                    self.scrollbar.setValue(self.scrollbar.maximum())
+                    QtWidgets.QApplication.processEvents()
+            print("\a")
+            output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
+            QtWidgets.QApplication.processEvents()
+            self.scrollbar = output_console.verticalScrollBar()
+            self.scrollbar.setValue(self.scrollbar.maximum())
 
-        self.ree_settings_combobox.addItem("hevc_opus")
-        self.ree_settings_combobox.addItem("h264_nvenc")
-        self.ree_settings_combobox.addItem("custom")
+        loadpath()
 
         global running
         running = False
@@ -89,6 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if running == False:
                 running = True
                 status("Busy.")
+                self.tabWidget.setTabText(0, "*Audio")
 
                 self.aud_output_console.setHtml("") #clearing the output_console
 
@@ -113,36 +137,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
+                process_start(cmd, self.aud_output_console)
 
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-
-                        self.aud_output_console.insertPlainText(c)
-                        self.scrollbar = self.aud_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()
-                
-                print("\a")
-                self.aud_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QtWidgets.QApplication.processEvents()
-                self.scrollbar = self.aud_output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
                 running = False
                 status("Ready.")
+                self.tabWidget.setTabText(0, "Audio")
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
                 
@@ -156,7 +155,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def aud_open():
             os.startfile(audio)
 
-        #=====aud_controlls=====#
+        #=====aud_controls=====#
         self.aud_folder_button.clicked.connect(aud_open)
         self.aud_download_button.clicked.connect(Audio)
         self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
@@ -168,6 +167,8 @@ class MainWindow(QtWidgets.QMainWindow):
             if running == False:
                 running = True
                 status("Busy.")
+
+                self.tabWidget.setTabText(1, "*Video")
 
                 self.vid_output_console.setHtml("") #clearing the output_console.
 
@@ -199,34 +200,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-                        self.vid_output_console.insertPlainText(c)
-                        self.scrollbar = self.vid_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()
+                process_start(cmd, self.vid_output_console)
                 
-                print("\a")
-                self.vid_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QtWidgets.QApplication.processEvents()
-                self.scrollbar = self.vid_output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
                 running = False
                 status("Ready.")
+                self.tabWidget.setTabText(1, "Video")
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
 
@@ -243,32 +221,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-                        self.vid_output_console.insertPlainText(c)
-                        self.scrollbar = self.vid_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()
-                
-                print("\a")
-                self.vid_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QtWidgets.QApplication.processEvents()
-                self.scrollbar = self.vid_output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
+                process_start(cmd, self.vid_output_console)
+
                 running = False
                 status("Ready.")
             else:
@@ -291,7 +245,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def vid_open():
             os.startfile(videos)
 
-        #=====vid_controlls=====#
+        #=====vid_controls=====#
         self.vid_folder_button.clicked.connect(vid_open)
         self.vid_download_button.clicked.connect(Video)
         self.vid_quality_button.clicked.connect(vid_quality)
@@ -305,6 +259,8 @@ class MainWindow(QtWidgets.QMainWindow):
             if running == False:
                 running = True
                 status("Busy.")
+
+                self.tabWidget.setTabText(2, "*Subs")
 
                 temp = tempfile.mkdtemp()+os.path.sep
 
@@ -324,7 +280,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     if lang != None:
                         cmd = cmd[0]+lang+floc+cmd[1]
                     else:
-                        cmd = cmd[0]+lang+floc+cmd[1]
+                        cmd = cmd[0]+floc+cmd[1]
                 else:
                     if lang != None:
                         cmd = cmd[0]+lang+cmd[1]
@@ -333,26 +289,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-                        self.sub_output_console.insertPlainText(c)
-                        self.scrollbar = self.sub_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()
+                process_start(cmd, self.sub_output_console)
                 
                 subpath = glob.glob(f"{temp}*.vtt")
                 subname = os.path.basename(subpath[0])
@@ -372,34 +309,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-                        self.sub_output_console.insertPlainText(c)
-                        self.scrollbar = self.sub_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()                                    
+                process_start(cmd, self.sub_output_console)
 
-                print("\a")
-                self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QtWidgets.QApplication.processEvents()
-                self.scrollbar = self.sub_output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
                 running = False
                 status("Ready.")
+                self.tabWidget.setTabText(2, "Subs")
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
 
@@ -452,7 +366,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.sub_lang_bar.setStyleSheet("background-color: #707070;")
 
-        #=====sub_controlls=====#
+        #=====sub_controls=====#
         self.sub_folder_button.clicked.connect(vid_open)
         self.sub_download_button.clicked.connect(Subs)
         self.sub_lang_button.clicked.connect(sub_lang)
@@ -465,6 +379,8 @@ class MainWindow(QtWidgets.QMainWindow):
             if running == False:
                 running = True
                 status("Busy.")
+
+                self.tabWidget.setTabText(3, "*Re-encode")
 
                 self.ree_output_console.setHtml("") #clearing the output_console
 
@@ -525,34 +441,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = ["ffmpeg", "-hide_banner"]+cmd
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-                        self.ree_output_console.insertPlainText(c)
-                        self.scrollbar = self.ree_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()                                    
+                process_start(cmd, self.ree_output_console)
 
-                print("\a")
-                self.ree_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QtWidgets.QApplication.processEvents()
-                self.scrollbar = self.ree_output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
                 running = False
                 status("Ready.")
+                self.tabWidget.setTabText(3, "Re-encode")
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
         
@@ -583,13 +476,80 @@ class MainWindow(QtWidgets.QMainWindow):
             location = self.ree_location_bar.text()
             os.startfile(os.path.dirname(location))
 
-        #=====ree_controlls=====#
-        ree_settings()
+        #=====ree_controls=====#
+        self.ree_settings_combobox.addItem("hevc_opus") # setting up items in combo list
+        self.ree_settings_combobox.addItem("h264_nvenc")
+        self.ree_settings_combobox.addItem("custom")
+        ree_settings() # load option on startup
         self.ree_choose_button.clicked.connect(ree_choose)
         self.ree_reencode_button.clicked.connect(Reencode)
         self.ree_folder_button.clicked.connect(ree_open)
         self.ree_settings_combobox.activated.connect(ree_settings)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
+
+        #==========🔄UPDATE🔄==========#
+        def update_yt_dl():
+            cmd = ["git", "pull", "--recurse-submodules"]
+            process_start(cmd, self.upd_output_console)
+
+        def update_depend():
+            cmd = [f"{py}", "-m", f"{pip}", "install", "-U", f"{pip}"] #this shit will not work if pip="pip" but pretend
+            process_start(cmd, self.upd_output_console)
+            cmd = [f"{pip}", "install", "-U", "-r", "requirements.txt"]
+            process_start(cmd, self.upd_output_console)
+
+        def Update():
+            global running
+            if running == False:
+                running = True
+                status("Busy.")
+
+                self.tabWidget.setTabText(4, "*Update")
+
+                self.upd_output_console.setHtml("") #clearing the output_console
+
+                if self.upd_update_combobox.currentIndex() == 1:
+                    update_yt_dl()
+                elif self.upd_update_combobox.currentIndex() == 2:
+                    update_depend()
+                else:
+                    update_yt_dl()
+                    update_depend()
+
+                running = False
+                status("Ready.")
+                self.tabWidget.setTabText(4, "Update")
+            else:
+                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+
+        def upd_branch():
+            pass
+
+        def upd_auto_toggle():
+            global aup
+            aup = not aup
+            #savepath???
+
+        #======upd_controls======#
+        self.upd_update_combobox.addItem("All") # setting up items in combo list
+        self.upd_update_combobox.addItem("yt-dl")
+        self.upd_update_combobox.addItem("dependencies")
+        branches = os.listdir(spath+".git/refs/heads")
+        for branch in branches:
+            self.upd_branch_combobox.addItem(branch)
+        
+        process = subprocess.Popen(["git", "rev-parse", "--abbrev-ref", "HEAD"], stdout=subprocess.PIPE)
+        curb = str(process.stdout.read())
+        curb = "Current branch: "+curb[2:-3]
+        self.upd_branch_label.setText(curb)
+
+        global aup
+        if aup:
+            Update()
+
+        self.upd_update_button.clicked.connect(Update)
+        self.upd_branch_button.clicked.connect(upd_branch)
+        self.upd_auto_button.clicked.connect(upd_auto_toggle)
 
         #==========🎓ABOUT🎓==========#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
@@ -601,8 +561,9 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
-        
+                                 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
 window.show()
 app.exec_()
+
