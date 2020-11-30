@@ -475,10 +475,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 audiob = self.ree_audiob_bar.text()
                 append = self.ree_append_bar.text()
 
+                '''
                 if location[-1:] == "/": #whole folder
                     print("don't be greedy") #need to glob blob and make it loop like you alwas wated step brother
                 else: #single video
-                    cmd = [["-hwaccel", "auto", "-i", f"{location}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(location)[0]+append}"]]
+                '''
+                cmd = [["-hwaccel", "auto", "-i", f"{location}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(location)[0]+append}"]]
 
                 #//Video Quality\\#
                 if "," in videoq:
