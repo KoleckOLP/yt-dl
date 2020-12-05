@@ -547,30 +547,17 @@
         <string>Re-encode</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_5">
-        <item row="1" column="2">
-         <widget class="QLabel" name="ree_videoq_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Video q,qmin,qmax:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="6">
-         <widget class="QComboBox" name="ree_settings_combobox">
+        <item row="4" column="5">
+         <widget class="QPushButton" name="ree_folder_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="ree_videoc_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
           <property name="text">
-           <string>Video codec:</string>
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
           </property>
          </widget>
         </item>
@@ -581,35 +568,8 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="2">
-         <widget class="QLabel" name="ree_audiob_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Audio bitrate:</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="1">
          <widget class="QLineEdit" name="ree_location_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="2">
-         <widget class="QLabel" name="ree_append_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>append:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="ree_videoc_bar">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
@@ -625,26 +585,6 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="6">
-         <widget class="QPushButton" name="ree_choose_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-          <property name="text">
-           <string>Choose</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="6">
-         <widget class="QPushButton" name="ree_reencode_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-          <property name="text">
-           <string>Re-encode</string>
-          </property>
-         </widget>
-        </item>
         <item row="4" column="3" colspan="2">
          <widget class="QLineEdit" name="ree_append_bar">
           <property name="styleSheet">
@@ -652,15 +592,44 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="0" colspan="7">
-         <widget class="QTextBrowser" name="ree_output_console">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
+        <item row="1" column="6">
+         <widget class="QComboBox" name="ree_settings_combobox">
           <property name="styleSheet">
-           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="ree_videoc_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="3" colspan="3">
+         <widget class="QLineEdit" name="ree_audiob_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="ree_videoc_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Video codec:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLabel" name="ree_append_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>append:</string>
           </property>
          </widget>
         </item>
@@ -674,24 +643,13 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="5">
-         <widget class="QPushButton" name="ree_folder_button">
+        <item row="1" column="2">
+         <widget class="QLabel" name="ree_videoq_label">
           <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+           <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3" colspan="3">
-         <widget class="QLineEdit" name="ree_audiob_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+           <string>Video q,qmin,qmax:</string>
           </property>
          </widget>
         </item>
@@ -702,7 +660,84 @@
           </property>
          </widget>
         </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="ree_audiob_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Audio bitrate:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="7">
+         <widget class="QPushButton" name="ree_settings_button">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>gui/save-solid.svg</normaloff>gui/save-solid.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="6" colspan="2">
+         <widget class="QPushButton" name="ree_reencode_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Re-encode</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="6" colspan="2">
+         <widget class="QPushButton" name="ree_choose_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Choose</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="8">
+         <widget class="QTextBrowser" name="ree_output_console">
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+         </widget>
+        </item>
        </layout>
+       <zorder>ree_settings_button</zorder>
+       <zorder>ree_videoq_label</zorder>
+       <zorder>ree_settings_combobox</zorder>
+       <zorder>ree_videoc_label</zorder>
+       <zorder>ree_audioc_bar</zorder>
+       <zorder>ree_audiob_label</zorder>
+       <zorder>ree_location_bar</zorder>
+       <zorder>ree_append_label</zorder>
+       <zorder>ree_videoc_bar</zorder>
+       <zorder>ree_audioc_label</zorder>
+       <zorder>ree_choose_button</zorder>
+       <zorder>ree_reencode_button</zorder>
+       <zorder>ree_append_bar</zorder>
+       <zorder>ree_output_console</zorder>
+       <zorder>ree_location_label</zorder>
+       <zorder>ree_folder_button</zorder>
+       <zorder>ree_audiob_bar</zorder>
+       <zorder>ree_videoq_bar</zorder>
       </widget>
       <widget class="QWidget" name="update_tab">
        <attribute name="title">

@@ -5,7 +5,7 @@ import tempfile
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog
 
-from call import autoupdt, year, lstupdt, spath, settings
+from call import year, lstupdt, spath, settings
 
 class MainWindow(QtWidgets.QMainWindow):    
     def __init__(self, *args, **kwargs):
@@ -20,7 +20,7 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.exec_()
 
         def loadpath(s="show"): # Fixed version from call.py display's mesage boxes
-            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, fdir #exposing all settings to the rest of the program.
+            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, Append, fdir #exposing all settings to the rest of the program.
             try:
                 fh = open(settings, "r") #opens file if there is any
                 try:
@@ -36,6 +36,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         path["Acodec"]
                         path["Vqual"]
                         path["Abit"]
+                        path["Append"]
                     except KeyError: #if keys are missing
                         MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is not compatible with this version.\n(run cli to fix)")
                         exit(0)
@@ -50,6 +51,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         Acodec = path["Acodec"]
                         Vqual = path["Vqual"]
                         Abit = path["Abit"]
+                        Append = path["Append"]
 
                     pffmpeg = glob.glob(f"{spath}/ffmpeg*")
                     pffprobe = glob.glob(f"{spath}/ffprobe*")
@@ -63,6 +65,50 @@ class MainWindow(QtWidgets.QMainWindow):
             except FileNotFoundError: #if file does not exist
                 MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "You are missing a config file,\n(run cli to fix)")
                 exit(0)
+
+        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default valiue because I dunno
+            loadpath()
+            if audp == "a":
+                global audio
+                audp = audio
+            elif audp == "":
+                audp = spath+"audio"
+            if vidp == "a":
+                global videos
+                vidp = videos
+            elif vidp == "":
+                vidp = spath+"videos"
+            if pyth == "a":
+                global py
+                pyth = py
+            if pipd == "a":
+                global pip
+                pipd = pip
+            if ytpip == "a":
+                global ydpip
+                ytpip = ydpip
+            if autup == "a":
+                global aup
+                autup = aup
+            if vidc == "a":
+                global Vcodec
+                vidc = Vcodec
+            if audc == "a":
+                global Acodec
+                audc = Acodec
+            if vidq == "a":
+                global Vqual
+                vidq = Vqual
+            if audb == "a":
+                global Abit
+                audb = Abit
+            if appe == "a":
+                global Append
+                appe = Append
+
+            fh = open(settings, "w")
+            json.dump({"audio": audp,"videos": vidp,"py": pyth,"pip": pipd,"ydpip": ytpip,"aup": autup,"Vcodec": vidc,"Acodec": audc,"Vqual": vidq,"Abit": audb, "Append": appe}, fh, indent=2)
+            fh.close()   
 
         def status( s=""): #shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
@@ -455,19 +501,31 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ree_videoq_bar.setText(Vqual)
                 self.ree_audioc_bar.setText(Acodec)
                 self.ree_audiob_bar.setText(Abit)
-                self.ree_append_bar.setText("_custom.mkv")
+                self.ree_append_bar.setText(Append)
+                self.ree_settings_button.setEnabled(True)
             elif self.ree_settings_combobox.currentIndex() == 0: #hevc_opus
                 self.ree_videoc_bar.setText("libx265")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("opus")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_hevcopus.mkv")
+                self.ree_settings_button.setEnabled(False)
             elif self.ree_settings_combobox.currentIndex() == 1: #h264_nvenc
                 self.ree_videoc_bar.setText("h264_nvenc")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("aac")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_nvenc.mov")
+                self.ree_settings_button.setEnabled(False)
+
+        def ree_settings_save():
+            if self.ree_settings_combobox.currentIndex() == 2: #custom
+                vidc = self.ree_videoc_bar.text()
+                audc = self.ree_audioc_bar.text()
+                vidq = self.ree_videoq_bar.text()
+                audb = self.ree_audiob_bar.text()
+                appe = self.ree_append_bar.text()
+                savepath(vidc=vidc, audc=audc, vidq=vidq, audb=audb, appe=appe)
 
         def ree_choose():
             self.ree_location_bar.setText(QFileDialog.getOpenFileName()[0])
@@ -485,6 +543,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_reencode_button.clicked.connect(Reencode)
         self.ree_folder_button.clicked.connect(ree_open)
         self.ree_settings_combobox.activated.connect(ree_settings)
+        self.ree_settings_button.clicked.connect(ree_settings_save)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
 
         #==========🔄UPDATE🔄==========#
@@ -522,13 +581,15 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
 
-        def upd_branch():
+        def upd_branch(): #I'm not sure if a branch switcher is neceserry
             pass
 
-        def upd_auto_toggle():
+        def upd_auto_toggle(): #autoupdate is not a thing tho
+            loadpath()
             global aup
-            aup = not aup
-            #savepath???
+            aupl = not aup
+            savepath(autup=aupl)
+            self.upd_auto_button.setText(f"Autoupdate=\"{aupl}\"")
 
         #======upd_controls======#
         self.upd_update_combobox.addItem("All") # setting up items in combo list
@@ -547,6 +608,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.upd_update_button.clicked.connect(Update)
         self.upd_branch_button.clicked.connect(upd_branch)
+        self.upd_auto_button.setText(f"Autoupdate=\"{aup}\"")
         self.upd_auto_button.clicked.connect(upd_auto_toggle)
 
         #==========🎓ABOUT🎓==========#
