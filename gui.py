@@ -3,7 +3,7 @@ import glob, json
 import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from call import year, lstupdt, spath, settings
 
@@ -13,13 +13,13 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi("gui.ui", self)
 
         def MessagePopup(title, icon, text, callf=None):
-            msg = QtWidgets.QMessageBox()
+            msg = QMessageBox()
             msg.setWindowTitle(title)
             msg.setIcon(icon)
             msg.setText(text)
             if callf != None:
-                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
-                msg.buttonClicked.connect(function)
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel) #Fuck pylance it says that this line is wrong anf that int can't bd a button, there is not int.
+                msg.buttonClicked.connect(callf)
             msg.exec_()
 
         def loadpath(s="show"): # Fixed version from call.py display's mesage boxes
@@ -41,7 +41,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         path["Abit"]
                         path["Append"]
                     except KeyError: #if keys are missing
-                        MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is not compatible with this version.\n(run cli to fix)", SaveDefaultConfig())
+                        MessagePopup("Settings error", QMessageBox.Critical, "Your config file is not compatible with this version.\nPress OK to load defaut config.", SaveDefaultConfig)
                         exit(0)
                     else:
                         audio = path["audio"]
@@ -63,14 +63,15 @@ class MainWindow(QtWidgets.QMainWindow):
                     else:
                         fdir = True
                 except ValueError: #if json not valid
-                    MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is corrupted.\n(run cli to fix)")
+                    pass
+                    MessagePopup("Settings error", QMessageBox.Critical, "Your config file is corrupted.\nPress OK to load defaut config.", SaveDefaultConfig)
                 fh.close()
             except FileNotFoundError: #if file does not exist
-                MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "You are missing a config file,\n(run cli to fix)")
+                MessagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load defaut config.", SaveDefaultConfig)
                 exit(0)
 
         def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default valiue because I dunno
-            loadpath()
+            #loadpath()
             if audp == "a":
                 global audio
                 audp = audio
@@ -109,13 +110,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 global Append
                 appe = Append
 
+            audp = audp+os.path.sep
+            vidp = vidp+os.path.sep
+
             fh = open(settings, "w")
             json.dump({"audio": audp,"videos": vidp,"py": pyth,"pip": pipd,"ydpip": ytpip,"aup": autup,"Vcodec": vidc,"Acodec": audc,"Vqual": vidq,"Abit": audb, "Append": appe}, fh, indent=2)
             fh.close()   
 
-        def SaveDefaultConfig():
-            savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv")
-
+        def SaveDefaultConfig(i):
+            if i.text() == "OK":
+                savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv")
+            
         def status( s=""): #shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
             if s == "Ready.":
@@ -195,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(0, "Audio")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
                 
         def aud_playlist_bar_toggle():
             self.aud_playlist_bar.setEnabled(self.aud_playlist_checkbox.isChecked())
@@ -258,7 +263,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(1, "Video")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def vid_quality():
             global running
@@ -278,7 +283,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 running = False
                 status("Ready.")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def vid_playlist_bar_toggle():
             self.vid_playlist_bar.setEnabled(self.vid_playlist_checkbox.isChecked())
@@ -367,7 +372,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(2, "Subs")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def sub_lang():
             global running
@@ -399,17 +404,17 @@ class MainWindow(QtWidgets.QMainWindow):
                         self.sub_output_console.insertPlainText(c)
                         self.scrollbar = self.sub_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
-                        QtWidgets.QApplication.processEvents()
+                        QApplication.processEvents()
                 
                 print("\a")
                 self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QtWidgets.QApplication.processEvents()
+                QApplication.processEvents()
                 self.scrollbar = self.sub_output_console.verticalScrollBar()
                 self.scrollbar.setValue(self.scrollbar.maximum())
                 running = False
                 status("Ready.")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def sub_lang_bar_toggle():
             self.sub_lang_bar.setEnabled(self.sub_lang_checkbox.isChecked())
@@ -499,7 +504,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(3, "Re-encode")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
         
         def ree_settings():
             if self.ree_settings_combobox.currentIndex() == 2: #custom
@@ -585,7 +590,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(4, "Update")
             else:
-                MessagePopup("Process warning", QtWidgets.QMessageBox.Warning, "One process already running!")
+                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def upd_branch(): #I'm not sure if a branch switcher is neceserry
             pass
@@ -617,6 +622,50 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_auto_button.setText(f"Autoupdate=\"{aup}\"")
         self.upd_auto_button.clicked.connect(upd_auto_toggle)
 
+        #==========📈SETTINGS📈==========#
+        def set_save():
+            a = self.set_audio_bar.text()
+            b = self.set_videos_bar.text()
+            c = self.set_py_bar.text()
+            d = self.set_pip_bar.text()
+            e = self.set_ydpip_checkbox.isChecked()
+            f = self.set_aup_checkbox.isChecked()
+            g = self.set_Acodec_bar.text()
+            h = self.set_Vcodec_bar.text()
+            i = self.set_Abit_bar.text()
+            j = self.set_Vqual_bar.text()
+            k = self.set_Append_bar.text()
+
+            savepath(a,b,c,d,e,f,h,g,j,i,k)
+            loadpath()
+
+        def set_load(a,b,c,d,e,f,g,h,i,j,k):
+            self.set_audio_bar.setText(a[:-1])
+            self.set_videos_bar.setText(b[:-1])
+            self.set_py_bar.setText(c)
+            self.set_pip_bar.setText(d)
+            self.set_ydpip_checkbox.setChecked(e)
+            self.set_aup_checkbox.setChecked(f)
+            self.set_Acodec_bar.setText(g)
+            self.set_Vcodec_bar.setText(h)
+            self.set_Abit_bar.setText(i)
+            self.set_Vqual_bar.setText(j)
+            self.set_Append_bar.setText(k)
+
+        def set_makeScript():
+            pass
+        def set_open():
+            os.startfile(os.path.dirname(spath))
+
+        #=====set_controls=====#
+        set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append)
+        self.set_loadcur_button.clicked.connect(lambda:set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append))
+        self.set_loaddef_button.clicked.connect(lambda:set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv"))
+        self.set_folder_button.clicked.connect(set_open)
+        self.set_launch_button.clicked.connect(set_makeScript)
+        self.set_save_button.clicked.connect(set_save)
+        
+        
         #==========🎓ABOUT🎓==========#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
                               +f"Last updated on: {lstupdt}<br>"
