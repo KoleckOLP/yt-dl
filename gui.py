@@ -3,7 +3,7 @@ import glob, json
 import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QMessageBox
 
 from call import year, lstupdt, spath, settings
 
@@ -12,11 +12,14 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
         uic.loadUi("gui.ui", self)
 
-        def MessagePopup(title, icon, text):
+        def MessagePopup(title, icon, text, callf=None):
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle(title)
             msg.setIcon(icon)
             msg.setText(text)
+            if callf != None:
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.buttonClicked.connect(function)
             msg.exec_()
 
         def loadpath(s="show"): # Fixed version from call.py display's mesage boxes
@@ -38,7 +41,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         path["Abit"]
                         path["Append"]
                     except KeyError: #if keys are missing
-                        MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is not compatible with this version.\n(run cli to fix)")
+                        MessagePopup("Settings error", QtWidgets.QMessageBox.Critical, "Your config file is not compatible with this version.\n(run cli to fix)", SaveDefaultConfig())
                         exit(0)
                     else:
                         audio = path["audio"]
@@ -109,6 +112,9 @@ class MainWindow(QtWidgets.QMainWindow):
             fh = open(settings, "w")
             json.dump({"audio": audp,"videos": vidp,"py": pyth,"pip": pipd,"ydpip": ytpip,"aup": autup,"Vcodec": vidc,"Acodec": audc,"Vqual": vidq,"Abit": audb, "Append": appe}, fh, indent=2)
             fh.close()   
+
+        def SaveDefaultConfig():
+            savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv")
 
         def status( s=""): #shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
