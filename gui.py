@@ -654,6 +654,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def set_makeScript():
             pass
+        
         def set_open():
             os.startfile(os.path.dirname(spath))
 
