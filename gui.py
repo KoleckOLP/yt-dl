@@ -615,7 +615,7 @@ class MainWindow(QtWidgets.QMainWindow):
         curb = "Current branch: "+curb[2:-3]
         self.upd_branch_label.setText(curb)
 
-        # I need to get an outside trigger to trigger a function int the innicialization after the UI is drawn
+        # I need to get an outside trigger to trigger a function in the inicialization after the UI is drawn
 
         self.upd_update_button.clicked.connect(Update)
         self.upd_branch_button.clicked.connect(upd_branch)
@@ -652,7 +652,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.set_Vqual_bar.setText(j)
             self.set_Append_bar.setText(k)
 
-        def set_makeScript():
+        def set_makeScript(): #I had an issue getting the venv working with gui
             pass
         
         def set_open():
