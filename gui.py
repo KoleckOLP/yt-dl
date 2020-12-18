@@ -2,16 +2,13 @@ import sys, os
 import glob, json
 import subprocess
 import tempfile
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
+from PySide2 import QtCore, QtWidgets, QtUiTools
+from PySide2.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from call import year, lstupdt, spath, settings
 
 class MainWindow(QtWidgets.QMainWindow):    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        uic.loadUi("gui.ui", self)
-
+    def init(self):
         def MessagePopup(title, icon, text, callf=None):
             msg = QMessageBox()
             msg.setWindowTitle(title)
@@ -679,6 +676,9 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
 
 app = QtWidgets.QApplication(sys.argv)
-window = MainWindow()
+loader = QtUiTools.QUiLoader() # load the gui file into a new instance of the "cls" Python class
+loader.registerCustomWidget(MainWindow)
+window = loader.load("gui.ui")
+window.init()
 window.show()
 app.exec_()
