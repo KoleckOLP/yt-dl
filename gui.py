@@ -2,8 +2,8 @@ import sys, os
 import glob, json
 import subprocess
 import tempfile
-from PySide2 import QtCore, QtWidgets, QtUiTools
-from PySide2.QtWidgets import QFileDialog, QMessageBox, QApplication
+from PySide6 import QtCore, QtWidgets, QtUiTools
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from call import year, lstupdt, spath, settings
 
