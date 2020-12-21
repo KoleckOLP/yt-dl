@@ -3,7 +3,7 @@ import glob, json
 import subprocess
 import tempfile
 from datetime import datetime
-from PySide6 import QtCore, QtWidgets, QtUiTools
+from PySide6 import QtWidgets, QtUiTools #QtCore
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 #from call import year, lstupdt, spath, settings
@@ -16,7 +16,7 @@ class MainWindow(QtWidgets.QMainWindow):
         settings = spath+"settings.json"
 
         def MessagePopup(title, icon, text, callf=None):
-            msg = QMessageBox()
+            msg = QMessageBox() #Pylance is being stupid, I had to disable Type checking.
             msg.setWindowTitle(title)
             msg.setIcon(icon)
             msg.setText(text)
@@ -618,8 +618,6 @@ class MainWindow(QtWidgets.QMainWindow):
         curb = "Current branch: "+curb[2:-3]
         self.upd_branch_label.setText(curb)
 
-        # I need to get an outside trigger to trigger a function int the innicialization after the UI is drawn
-        
         QtWidgets.QApplication.processEvents()
         if aup:
             Update()
@@ -659,7 +657,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.set_Vqual_bar.setText(j)
             self.set_Append_bar.setText(k)
 
-        def set_makeScript():
+        def set_makeScript():  #I had an issue getting the venv working with gui
             pass
         
         def set_open():
@@ -683,7 +681,7 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez<br>"
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
-                              +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalio</a> who always helps a ton!<br>"
+                              +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
 
 app = QtWidgets.QApplication(sys.argv)
