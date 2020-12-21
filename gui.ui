@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>665</width>
     <height>400</height>
    </rect>
   </property>
@@ -145,6 +145,14 @@
    <string notr="true">background-color: #A9A9A9;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>665</width>
+     <height>347</height>
+    </rect>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -164,7 +172,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -1150,8 +1158,25 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>3</width>
+     <height>5</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MainWindow</class>
+   <extends>QWidget</extends>
+   <header>mainwindow.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
