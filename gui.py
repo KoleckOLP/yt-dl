@@ -2,13 +2,19 @@ import sys, os
 import glob, json
 import subprocess
 import tempfile
+from datetime import datetime
 from PySide6 import QtCore, QtWidgets, QtUiTools
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
-from call import year, lstupdt, spath, settings
+#from call import year, lstupdt, spath, settings
 
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
+        year = datetime.now().year
+        lstupdt = "2020-12-21" #I keep forgetting to update this, in C# there was build date.
+        spath = sys.path[0]+os.path.sep #path of the yt-dl dir
+        settings = spath+"settings.json"
+
         def MessagePopup(title, icon, text, callf=None):
             msg = QMessageBox()
             msg.setWindowTitle(title)
@@ -613,6 +619,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_branch_label.setText(curb)
 
         # I need to get an outside trigger to trigger a function int the innicialization after the UI is drawn
+        
+        QtWidgets.QApplication.processEvents()
+        if aup:
+            Update()
 
         self.upd_update_button.clicked.connect(Update)
         self.upd_branch_button.clicked.connect(upd_branch)
@@ -673,12 +683,13 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez<br>"
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
+                              +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalio</a> who always helps a ton!<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
 
 app = QtWidgets.QApplication(sys.argv)
 loader = QtUiTools.QUiLoader() # load the gui file into a new instance of the "cls" Python class
 loader.registerCustomWidget(MainWindow)
 window = loader.load("gui.ui")
-window.init()
 window.show()
+window.init()
 app.exec_()
