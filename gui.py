@@ -2,7 +2,7 @@ import sys, os
 import glob, json
 import subprocess
 import tempfile
-from PySide6 import QtCore, QtWidgets, QtUiTools
+from PySide6 import QtWidgets, QtUiTools #QtCore
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from call import year, lstupdt, spath, settings
@@ -10,7 +10,7 @@ from call import year, lstupdt, spath, settings
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
         def MessagePopup(title, icon, text, callf=None):
-            msg = QMessageBox()
+            msg = QMessageBox() #Pylance is being stupid, I had to disable Type checking.
             msg.setWindowTitle(title)
             msg.setIcon(icon)
             msg.setText(text)
