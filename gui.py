@@ -73,6 +73,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 MessagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load defaut config.", SaveDefaultConfig)
                 exit(0)
 
+        self.tabWidget.setCurrentIndex(0)
+
         def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default valiue because I dunno
             #loadpath()
             if audp == "a":
@@ -620,6 +622,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         QtWidgets.QApplication.processEvents()
         if aup:
+            self.tabWidget.setCurrentIndex(4)
             Update()
 
         self.upd_update_button.clicked.connect(Update)
