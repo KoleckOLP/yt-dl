@@ -172,7 +172,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>6</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -471,7 +471,7 @@
            <string notr="true">background-color: #707070;</string>
           </property>
           <property name="text">
-           <string>not implemented</string>
+           <string/>
           </property>
          </widget>
         </item>

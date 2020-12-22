@@ -3,10 +3,8 @@ import glob, json
 import subprocess
 import tempfile
 from datetime import datetime
-from PySide6 import QtWidgets, QtUiTools #QtCore
+from PySide6 import QtWidgets, QtUiTools
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
-
-#from call import year, lstupdt, spath, settings
 
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
@@ -75,8 +73,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.tabWidget.setCurrentIndex(0)
 
-        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default valiue because I dunno
-            #loadpath()
+        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default value because I dunno
             if audp == "a":
                 global audio
                 audp = audio
@@ -330,7 +327,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 url = self.sub_url_bar.text()
 
-                cmd = [["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--no-playlist", "--write-sub", "--write-auto-sub"],["--sub-format", "vtt", "--skip-download", "--no-playlist", f"{url}"]]
+                cmd = [[],[]]
+
+                if self.sub_playlist_checkbox.isChecked():
+                    if self.sub_playlist_bar.text() == "":
+                        cmd[0] = ["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--yes-playlist", "--write-sub", "--write-auto-sub"]
+                    else:
+                        numb = self.sub_playlist_bar.text()
+                        cmd[0] = ["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--yes-playlist", "--playlist-items", f"{numb}", "--write-sub", "--write-auto-sub"]
+                else:
+                    cmd[0] = ["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--no-playlist", "--write-sub", "--write-auto-sub"]
+
+                cmd[1] = ["--sub-format", "vtt", "--skip-download", f"{url}"]
 
                 lang = None
 
@@ -351,27 +359,31 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
+                print(cmd)
+                
                 process_start(cmd, self.sub_output_console)
                 
                 subpath = glob.glob(f"{temp}*.vtt")
-                subname = os.path.basename(subpath[0])
-                subname = subname[:-3]
-                newsubpath = videos+subname+"srt"
                 os.makedirs(videos, exist_ok=True)
-
-                self.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
                 
-                cmd = ["-i", f"{subpath[0]}", f"{newsubpath}"]
+                for item in subpath:
+                    namei = os.path.basename(item)
+                    namei = namei[:-3]
+                    newsubpath = videos+namei+"srt"
+                    if os.path.isfile(newsubpath):
+                        self.sub_output_console.insertPlainText(f"#yt-dl# file {item} already exists skipping...\n")
+                    else:                        
+                        cmd = ["-i", f"{item}", f"{newsubpath}"]
 
-                floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
-                if (fdir == True):
-                    cmd = floc+cmd
-                else:
-                    cmd = ["ffmpeg", "-hide_banner"]+cmd
+                        floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
+                        if (fdir == True):
+                            cmd = floc+cmd
+                        else:
+                            cmd = ["ffmpeg", "-hide_banner"]+cmd
 
-                self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
+                        self.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
 
-                process_start(cmd, self.sub_output_console)
+                        process_start(cmd, self.sub_output_console)
 
                 running = False
                 status("Ready.")
@@ -421,6 +433,14 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
+        def sub_playlist_bar_toggle():
+            self.sub_lang_button.setEnabled(not self.sub_playlist_checkbox.isChecked())
+            self.sub_playlist_bar.setEnabled(self.sub_playlist_checkbox.isChecked())
+            if(self.sub_playlist_checkbox.isChecked()):
+                self.sub_playlist_bar.setStyleSheet("background-color: #909090;")
+            else:
+                self.sub_playlist_bar.setStyleSheet("background-color: #707070;")
+
         def sub_lang_bar_toggle():
             self.sub_lang_bar.setEnabled(self.sub_lang_checkbox.isChecked())
             if(self.sub_lang_checkbox.isChecked()):
@@ -432,6 +452,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_folder_button.clicked.connect(vid_open)
         self.sub_download_button.clicked.connect(Subs)
         self.sub_lang_button.clicked.connect(sub_lang)
+        self.sub_playlist_checkbox.toggled.connect(sub_playlist_bar_toggle)
         self.sub_lang_checkbox.toggled.connect(sub_lang_bar_toggle)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
 
@@ -458,6 +479,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     print("don't be greedy") #need to glob blob and make it loop like you alwas wated step brother
                 else: #single video
                 '''
+
                 cmd = [["-hwaccel", "auto", "-i", f"{location}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(location)[0]+append}"]]
 
                 #//Video Quality\\#
