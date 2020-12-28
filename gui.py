@@ -713,7 +713,7 @@ class MainWindow(QtWidgets.QMainWindow):
             openFolder(spath)
 
         #=====set_controls=====#
-        set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append)
+        set_load(audio, videos, py, pip, ydpip, aup, Acodec, Vcodec, Abit, Vqual, Append)
         self.set_loadcur_button.clicked.connect(lambda:set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append))
         self.set_loaddef_button.clicked.connect(lambda:set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv"))
         self.set_folder_button.clicked.connect(set_open)
