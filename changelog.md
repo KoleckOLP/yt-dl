@@ -42,3 +42,13 @@ some parts moved to a second repo (submodule)
 tons of bug fixes and overall QoL changes
 Finally a tested FreeBSD supprt!
 even an Easter egg.
+
+New in 2.1.8:
+Graphical user interface (gui.py)
+audio + playlist downlaod
+video + playlist + quality, list quality download
+subtitles + playlists + language, list language download
+re-encode + whole folder(folder\*)
+update + autoupdate
+settings ! default settings may not work for you after setting default check them!
+about with link that open

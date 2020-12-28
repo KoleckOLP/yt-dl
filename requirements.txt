@@ -1,6 +1,5 @@
 colorama
 py-getch
 pyside6
-pyqt5
 wheel
 youtube-dl
