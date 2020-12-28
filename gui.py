@@ -705,7 +705,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 f.close()
             elif(os.name == 'posix'):
                 f=open("yt-dl","w")
-                f.write(f"#!/bin/sh\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath} && {py} gui.py")
                 f.close()
         
         def set_open():
