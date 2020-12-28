@@ -3,8 +3,12 @@ import glob, json
 import subprocess
 import tempfile
 from datetime import datetime
-from PySide6 import QtWidgets, QtUiTools
+from PySide6 import QtWidgets, QtUiTools, QtGui
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
+if(os.name == 'nt'):
+    import ctypes
+    myappid = 'ArmorredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
@@ -685,10 +689,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def set_makeScript():  #I had an issue getting the venv working with gui
             if(os.name == 'nt'):
-                f=open("yt-dl.vbs","w")
+                f=open("yt-dl_gui.vbs","w")
                 f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
                 f.close()
-                f=open("yt-dl.bat","w")
+                f=open("yt-dl_gui.bat","w")
                 f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")
                 f.close()
             elif(os.name == 'posix'):
