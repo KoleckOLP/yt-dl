@@ -172,7 +172,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -752,27 +752,7 @@
         <string>Update</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="0" column="4">
-         <widget class="QPushButton" name="upd_auto_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-          <property name="text">
-           <string>AutoUpdate=True</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QPushButton" name="upd_update_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-          <property name="text">
-           <string>Update</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" colspan="4">
+        <item row="1" column="1" colspan="4">
          <widget class="QTextBrowser" name="upd_output_console">
           <property name="font">
            <font>
@@ -791,30 +771,23 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="4">
-         <widget class="QPushButton" name="upd_branch_button">
+        <item row="0" column="4">
+         <widget class="QPushButton" name="upd_auto_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
           <property name="text">
-           <string>ChangeBranch</string>
+           <string>AutoUpdate=True</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="3">
-         <widget class="QLabel" name="upd_branch_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Current Branch: qt-gui</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QComboBox" name="upd_branch_combobox">
+        <item row="0" column="3">
+         <widget class="QPushButton" name="upd_update_button">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Update</string>
           </property>
          </widget>
         </item>

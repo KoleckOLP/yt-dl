@@ -475,56 +475,59 @@ class MainWindow(QtWidgets.QMainWindow):
                 append = self.ree_append_bar.text()
 
                 if location[-2:] == "\*": #whole folder
-                    print("don't be greedy") #need to glob blob and make it loop like you alwas wated step brother
-                    VidsToRender = glob.glob(location+"*")
-                    print(VidsToRender)
-                else: #single video
-                    cmd = [["-hwaccel", "auto", "-i", f"{location}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(location)[0]+append}"]]
+                    VidsToRender = glob.glob(location)
+                else:
+                    VidsToRender = [f"{location}"]
+                for video in VidsToRender:
+                    if os.path.isfile(os.path.splitext(video)[0]+append):
+                        self.ree_output_console.insertPlainText(f"#yt-dl# file {video} already exists skipping...\n")
+                    else:
+                        cmd = [["-hwaccel", "auto", "-i", f"{video}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(video)[0]+append}"]]
 
-                    #//Video Quality\\#
-                    if "," in videoq:
-                        VQsplit = Vqual.split(",")
-                    else:
-                        VQsplit = [Vqual,Vqual,Vqual]
-                    #//Videeo Codec\\#
-                    if(videoc == "libx265"):
-                        VideoCodec = ["-c:v", f"{videoc}"]
-                        quality = ["-crf", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
-                        Vformat = ["-vf", "format=yuv420p"]
-                        cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
-                    elif(videoc == "copy"):
-                        VideoCodec = [f"-c:v", f"{videoc}"]
-                        cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
-                    elif(videoc == "remove"):
-                        VideoCodec = ["-vn"]
-                        cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
-                    else:
-                        VideoCodec = ["-c:v", f"{videoc}"]
-                        quality = ["-cq", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
-                        Vformat = ["-vf", "format=yuv420p"]
-                        cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
-                    #//Audio\\#
-                    if(audioc == "remove"):
-                        AudioEverything = ["-an"]
-                        cmd = [cmd[0]+AudioEverything,cmd[1]]
-                    else:
-                        AudioEverything = ["-c:a", f"{audioc}", "-strict", "-2", "-b:a", f"{audiob}"]
-                        cmd = [cmd[0]+AudioEverything,cmd[1]]
-                    #//Subtitles\\#
-                    if(videoc == "remove"):
-                        SubsC = ""
-                        cmd = cmd[0]+cmd[1]
-                    else:
-                        SubsC = ["-c:s", "copy"]
-                        cmd = cmd[0]+SubsC+cmd[1]
+                        #//Video Quality\\#
+                        if "," in videoq:
+                            VQsplit = Vqual.split(",")
+                        else:
+                            VQsplit = [Vqual,Vqual,Vqual]
+                        #//Videeo Codec\\#
+                        if(videoc == "libx265"):
+                            VideoCodec = ["-c:v", f"{videoc}"]
+                            quality = ["-crf", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
+                            Vformat = ["-vf", "format=yuv420p"]
+                            cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
+                        elif(videoc == "copy"):
+                            VideoCodec = [f"-c:v", f"{videoc}"]
+                            cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
+                        elif(videoc == "remove"):
+                            VideoCodec = ["-vn"]
+                            cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
+                        else:
+                            VideoCodec = ["-c:v", f"{videoc}"]
+                            quality = ["-cq", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
+                            Vformat = ["-vf", "format=yuv420p"]
+                            cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
+                        #//Audio\\#
+                        if(audioc == "remove"):
+                            AudioEverything = ["-an"]
+                            cmd = [cmd[0]+AudioEverything,cmd[1]]
+                        else:
+                            AudioEverything = ["-c:a", f"{audioc}", "-strict", "-2", "-b:a", f"{audiob}"]
+                            cmd = [cmd[0]+AudioEverything,cmd[1]]
+                        #//Subtitles\\#
+                        if(videoc == "remove"):
+                            SubsC = ""
+                            cmd = cmd[0]+cmd[1]
+                        else:
+                            SubsC = ["-c:s", "copy"]
+                            cmd = cmd[0]+SubsC+cmd[1]
 
-                    floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
-                    if (fdir == True):
-                        cmd = floc+cmd
-                    else:
-                        cmd = ["ffmpeg", "-hide_banner"]+cmd
+                        floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
+                        if (fdir == True):
+                            cmd = floc+cmd
+                        else:
+                            cmd = ["ffmpeg", "-hide_banner"]+cmd
 
-                    process_start(cmd, self.ree_output_console)
+                        process_start(cmd, self.ree_output_console)
 
                 running = False
                 status("Ready.")
@@ -618,9 +621,6 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
-        def upd_branch(): #I'm not sure if a branch switcher is neceserry
-            pass
-
         def upd_auto_toggle(): #autoupdate is not a thing tho
             loadpath()
             global aup
@@ -632,14 +632,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_combobox.addItem("All") # setting up items in combo list
         self.upd_update_combobox.addItem("yt-dl")
         self.upd_update_combobox.addItem("dependencies")
+        '''
         branches = os.listdir(spath+".git/refs/heads")
         for branch in branches:
             self.upd_branch_combobox.addItem(branch)
         
         process = subprocess.Popen(["git", "rev-parse", "--abbrev-ref", "HEAD"], stdout=subprocess.PIPE)
-        curb = str(process.stdout.read())
+        gcurb = str(process.stdout.read())
         curb = "Current branch: "+curb[2:-3]
         self.upd_branch_label.setText(curb)
+        '''
 
         QtWidgets.QApplication.processEvents()
         if aup:
@@ -647,7 +649,7 @@ class MainWindow(QtWidgets.QMainWindow):
             Update()
 
         self.upd_update_button.clicked.connect(Update)
-        self.upd_branch_button.clicked.connect(upd_branch)
+        #self.upd_branch_button.clicked.connect(upd_branch)
         self.upd_auto_button.setText(f"Autoupdate=\"{aup}\"")
         self.upd_auto_button.clicked.connect(upd_auto_toggle)
 
