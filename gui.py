@@ -138,7 +138,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
         def process_start(cmd="", output_console=""):
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
+            if (os.name == "nt"):
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
+            elif (os.name == "posix"):
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             for c in iter(lambda: process.stdout.read(1), b''):
                 gui = self.isVisible()
                 if gui == False: #if window of the app was closed kill the subrocess.
