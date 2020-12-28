@@ -3,16 +3,24 @@ import glob, json
 import subprocess
 import tempfile
 from datetime import datetime
-from PySide6 import QtWidgets, QtUiTools, QtGui
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
+#from PySide6 import QtWidgets, QtUiTools, QtGui
+#from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
+from PyQt5 import QtWidgets, QtGui, uic
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
 if(os.name == 'nt'):
     import ctypes
     myappid = 'ArmoredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-
+'''
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
+'''
+class MainWindow(QtWidgets.QMainWindow):    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        uic.loadUi("gui5.ui", self)
+
         year = datetime.now().year
         lstupdt = "2020-12-28" #I keep forgetting to update this, in C# there was build date.
         spath = sys.path[0]+os.path.sep #path of the yt-dl dir
@@ -372,7 +380,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         cmd = cmd[0]+cmd[1]
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
-                
+
                 process_start(cmd, self.sub_output_console)
                 
                 subpath = glob.glob(f"{temp}*.vtt")
@@ -733,9 +741,10 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
 
 app = QtWidgets.QApplication(sys.argv)
-loader = QtUiTools.QUiLoader() # load the gui file into a new instance of the "cls" Python class
-loader.registerCustomWidget(MainWindow)
-window = loader.load("gui.ui")
+#loader = QtUiTools.QUiLoader() # load the gui file into a new instance of the "cls" Python class
+#loader.registerCustomWidget(MainWindow)
+#window = loader.load("gui.ui")
+window = MainWindow()
 window.show()
-window.init()
+#window.init()
 app.exec_()
