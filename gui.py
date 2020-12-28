@@ -164,6 +164,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.scrollbar = output_console.verticalScrollBar()
             self.scrollbar.setValue(self.scrollbar.maximum())
 
+        def openFolder(loc=""):
+            if (os.name == "nt"):
+                os.system(f"start {loc}")
+            elif (os.name == "posix"):
+                os.system(f"xdg-open {loc}")
+
         loadpath()
 
         global running
@@ -217,7 +223,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.aud_playlist_bar.setStyleSheet("background-color: #707070;")
 
         def aud_open():
-            os.startfile(audio)
+            openFolder(audio)
 
         #=====aud_controls=====#
         self.aud_folder_button.clicked.connect(aud_open)
@@ -307,7 +313,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.vid_quality_bar.setStyleSheet("background-color: #707070;")
 
         def vid_open():
-            os.startfile(videos)
+            openFolder(videos)
 
         #=====vid_controls=====#
         self.vid_folder_button.clicked.connect(vid_open)
@@ -577,7 +583,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def ree_open():
             location = self.ree_location_bar.text()
-            os.startfile(os.path.dirname(location))
+            openFolder(os.path.dirname(location))
 
         #=====ree_controls=====#
         self.ree_settings_combobox.addItem("hevc_opus") # setting up items in combo list
@@ -702,7 +708,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 f.close()
         
         def set_open():
-            os.startfile(os.path.dirname(spath))
+            print(spath)
+            openFolder(spath)
 
         #=====set_controls=====#
         set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append)
