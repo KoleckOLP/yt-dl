@@ -372,8 +372,6 @@ class MainWindow(QtWidgets.QMainWindow):
                         cmd = cmd[0]+cmd[1]
 
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
-
-                print(cmd)
                 
                 process_start(cmd, self.sub_output_console)
                 
