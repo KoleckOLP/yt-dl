@@ -684,7 +684,17 @@ class MainWindow(QtWidgets.QMainWindow):
             self.set_Append_bar.setText(k)
 
         def set_makeScript():  #I had an issue getting the venv working with gui
-            pass
+            if(os.name == 'nt'):
+                f=open("yt-dl.vbs","w")
+                f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
+                f.close()
+                f=open("yt-dl.bat","w")
+                f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")
+                f.close()
+            elif(os.name == 'posix'):
+                f=open("yt-dl","w")
+                f.write(f"#!/bin/sh\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+                f.close()
         
         def set_open():
             os.startfile(os.path.dirname(spath))
