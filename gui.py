@@ -7,13 +7,13 @@ from PySide6 import QtWidgets, QtUiTools, QtGui
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 if(os.name == 'nt'):
     import ctypes
-    myappid = 'ArmorredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
+    myappid = 'ArmoredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
         year = datetime.now().year
-        lstupdt = "2020-12-21" #I keep forgetting to update this, in C# there was build date.
+        lstupdt = "2020-12-28" #I keep forgetting to update this, in C# there was build date.
         spath = sys.path[0]+os.path.sep #path of the yt-dl dir
         settings = spath+"settings.json"
 
@@ -713,7 +713,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         
         #==========🎓ABOUT🎓==========#
-        self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored inc (C){year}<br>"
+        self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">ArmoredMobilePony Inc. (C){year}<br>"
                               +f"Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"
                               +f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>"
