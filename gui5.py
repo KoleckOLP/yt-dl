@@ -21,6 +21,8 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
         uic.loadUi("gui5.ui", self)
 
+        self.show()
+
         year = datetime.now().year
         lstupdt = "2020-12-28" #I keep forgetting to update this, in C# there was build date.
         spath = sys.path[0]+os.path.sep #path of the yt-dl dir
@@ -745,6 +747,6 @@ app = QtWidgets.QApplication(sys.argv)
 #loader.registerCustomWidget(MainWindow)
 #window = loader.load("gui.ui")
 window = MainWindow()
-window.show()
+#window.show()
 #window.init()
 app.exec_()
