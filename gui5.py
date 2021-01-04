@@ -144,7 +144,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def process_start(cmd="", output_console=""):
             if (sys.platform.startswith("win")): #(os.name == "nt"):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
-            elif (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"):
+            else: #(sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             for c in iter(lambda: process.stdout.read(1), b''):
                 gui = self.isVisible()
@@ -174,10 +174,11 @@ class MainWindow(QtWidgets.QMainWindow):
         def openFolder(loc=""):
             if (sys.platform.startswith("win")):
                 os.system(f"start {loc}")
-            elif (sys.platform.startswith(("linux", "freebsd"))):
-                os.system(f"xdg-open {loc}")
             elif (sys.platform.startswith("darwin")):
-                os.system(f"opne {loc}")
+                os.system(f"open {loc}")
+            else: #(sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
+                os.system(f"xdg-open {loc}")
+            
 
         loadpath()
 
@@ -709,7 +710,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 f=open("yt-dl_gui.bat","w")
                 f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")
                 f.close()
-            elif(sys.platform.startswith(("linux", "darwin", "freebsd"))):
+            else: #(sys.platform.startswith(("linux", "darwin", "freebsd"))):
                 f=open("yt-dl","w")
                 f.write(f"#!/bin/sh\n\ncd {spath} && {py} gui.py")
                 f.close()
