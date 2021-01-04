@@ -10,11 +10,10 @@ if(os.name == 'nt'):
     myappid = 'ArmoredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-
 class MainWindow(QtWidgets.QMainWindow):    
     def init(self):
         year = datetime.now().year
-        lstupdt = "2020-12-28" #I keep forgetting to update this, in C# there was build date.
+        lstupdt = "2021-01-04" #I keep forgetting to update this, in C# there was build date.
         spath = sys.path[0]+os.path.sep #path of the yt-dl dir
         settings = spath+"settings.json"
 

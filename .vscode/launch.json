@@ -4,13 +4,21 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
-            "name": "Run yt-dl-gui",
+            "name": "Run yt-dl-gui PyQt5",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/gui5.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run yt-dl-gui PySide6",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/gui.py",
             "console": "integratedTerminal"
-        }
+        },
         {
             "name": "Run yt-dl-cli",
             "type": "python",

@@ -3,19 +3,13 @@ import glob, json
 import subprocess
 import tempfile
 from datetime import datetime
-#from PySide6 import QtWidgets, QtUiTools, QtGui
-#from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 from PyQt5 import QtWidgets, QtGui, uic
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
-if(os.name == 'nt'):
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication 
+if(sys.platform.startswith("win")): #win, linux, darvin, freebsd
     import ctypes
     myappid = 'ArmoredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-'''
-class MainWindow(QtWidgets.QMainWindow):    
-    def init(self):
-'''
 class MainWindow(QtWidgets.QMainWindow):    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -24,7 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
         year = datetime.now().year
-        lstupdt = "2020-12-28" #I keep forgetting to update this, in C# there was build date.
+        lstupdt = "2021-01-04" #I keep forgetting to update this, in C# there was build date.
         spath = sys.path[0]+os.path.sep #path of the yt-dl dir
         settings = spath+"settings.json"
 
@@ -148,9 +142,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
         def process_start(cmd="", output_console=""):
-            if (os.name == "nt"):
+            if (sys.platform.startswith("win")): #(os.name == "nt"):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
-            elif (os.name == "posix"):
+            elif (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             for c in iter(lambda: process.stdout.read(1), b''):
                 gui = self.isVisible()
@@ -178,10 +172,12 @@ class MainWindow(QtWidgets.QMainWindow):
             self.scrollbar.setValue(self.scrollbar.maximum())
 
         def openFolder(loc=""):
-            if (os.name == "nt"):
+            if (sys.platform.startswith("win")):
                 os.system(f"start {loc}")
-            elif (os.name == "posix"):
+            elif (sys.platform.startswith(("linux", "freebsd"))):
                 os.system(f"xdg-open {loc}")
+            elif (sys.platform.startswith("darwin")):
+                os.system(f"opne {loc}")
 
         loadpath()
 
@@ -706,14 +702,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.set_Append_bar.setText(k)
 
         def set_makeScript():  #I had an issue getting the venv working with gui
-            if(os.name == 'nt'):
+            if(sys.platform.startswith("win")):
                 f=open("yt-dl_gui.vbs","w")
                 f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
                 f.close()
                 f=open("yt-dl_gui.bat","w")
                 f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")
                 f.close()
-            elif(os.name == 'posix'):
+            elif(sys.platform.startswith(("linux", "darwin", "freebsd"))):
                 f=open("yt-dl","w")
                 f.write(f"#!/bin/sh\n\ncd {spath} && {py} gui.py")
                 f.close()
@@ -743,10 +739,5 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
 
 app = QtWidgets.QApplication(sys.argv)
-#loader = QtUiTools.QUiLoader() # load the gui file into a new instance of the "cls" Python class
-#loader.registerCustomWidget(MainWindow)
-#window = loader.load("gui.ui")
 window = MainWindow()
-#window.show()
-#window.init()
 app.exec_()
