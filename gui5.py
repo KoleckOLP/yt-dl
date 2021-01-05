@@ -652,6 +652,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_combobox.addItem("All") # setting up items in combo list
         self.upd_update_combobox.addItem("yt-dl")
         self.upd_update_combobox.addItem("dependencies")
+        if (sys.platform.startswith("haiku")):
+            self.upd_update_combobox.setCurrentIndex(1)
         '''
         branches = os.listdir(spath+".git/refs/heads")
         for branch in branches:
