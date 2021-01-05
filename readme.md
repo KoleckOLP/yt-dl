@@ -1,30 +1,15 @@
 # yt-dl
-Multiplatform cli (soon gui) youtube-dl simplifier
+Multiplatform gui(cli is acually falling behind) youtube-dl simplifier
 
 ### Rewriten in Python 3.
 
 runs on any OS if you can get these
 Requrements:
 + python3
-+ python libraries
++ PyQt5
 + youtube-dl
 + ffmpeg, ffprobe
-<br>
 
-Tested Working:<br>
-+ Windows 10 x64<br>
-+ Linux x64<br>
-
-Not Tested:<br>
-+ Mac OS 10.7 x64<br>
-+ HaikuOS x64<br>
-+ Android(Temux) x64<br>
-
-Tested Not Working:<br>
-+ freeBSD x64<br>
-<br>
-
-How to set yt-dl up:<br>
 ## Windows:
 1. intall git: https://git-scm.com/download/win
 2. install python3: https://www.python.org/downloads/
@@ -47,7 +32,7 @@ How to set yt-dl up:<br>
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
     2. than you can make a desktop shortcut from `yt-dl`
 
-## Haiku(icon and re-encode does not work yet):
+## Haiku:
 1. install git (from HaikuDepot)
 2. install pyqt_x86_python3, python3_x86, pip_python3 (from HaikuDepot, or 64bit equivalent)
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
@@ -57,10 +42,8 @@ How to set yt-dl up:<br>
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
     2. than you can make a desktop shortcut from `yt-dl`
 
-(Dependecy update won't work in Haiku, update with HaikuDepot)
-
 ## Mac:
-1. To do
+1. Will test on my MacMini 2007 running 10.7 Lion
 
 ## BSD:
-1. To do
+1. Will test on a VM running GhostBSD
