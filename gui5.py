@@ -612,7 +612,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def update_depend():
             pips = pip.spit(" ")
-            cmd = [f"{py}", "-m", f"{pip}", "install", "-U", f"{pip}"]
+            cmd = [f"{py}", "-m", "pip", "install", "-U", "pip"]
             process_start(cmd, self.upd_output_console)
             cmd = pips+["install", "-U", "-r", "requirements.txt"]
             process_start(cmd, self.upd_output_console)
