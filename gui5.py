@@ -174,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def openFolder(loc=""):
             if (sys.platform.startswith("win")):
                 os.system(f"start {loc}")
-            elif (sys.platform.startswith("darwin")):
+            elif (sys.platform.startswith(("darwin", "haiku"))): #haiku support :3
                 os.system(f"open {loc}")
             else: #(sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
                 os.system(f"xdg-open {loc}")
@@ -611,9 +611,10 @@ class MainWindow(QtWidgets.QMainWindow):
             process_start(cmd, self.upd_output_console)
 
         def update_depend():
-            cmd = [f"{py}", "-m", f"{pip}", "install", "-U", f"{pip}"] #this shit will not work if pip="pip" but pretend
+            pips = pip.spit(" ")
+            cmd = [f"{py}", "-m", f"{pip}", "install", "-U", f"{pip}"]
             process_start(cmd, self.upd_output_console)
-            cmd = [f"{pip}", "install", "-U", "-r", "requirements.txt"]
+            cmd = pips+["install", "-U", "-r", "requirements.txt"]
             process_start(cmd, self.upd_output_console)
 
         def Update():
