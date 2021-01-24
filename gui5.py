@@ -520,6 +520,11 @@ class MainWindow(QtWidgets.QMainWindow):
                         elif(videoc == "remove"):
                             VideoCodec = ["-vn"]
                             cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
+                        elif(videoc == "hevc_nvenc"):
+                            VideoCodec = ["-c:v", f"{videoc}"]
+                            quality = ["-rc", "vbr", "-qp", f"{int(VQsplit[0])+1}", "-qmin", f"{int(VQsplit[1])+1}", "-qmax", f"{int(VQsplit[2])+1}", "-bf", "1"]
+                            Vformat = ["-vf", "format=yuv420p"]
+                            cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
                         else:
                             VideoCodec = ["-c:v", f"{videoc}"]
                             quality = ["-cq", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
@@ -555,7 +560,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
         
         def ree_settings():
-            if self.ree_settings_combobox.currentIndex() == 2: #custom
+            if self.ree_settings_combobox.currentIndex() == 3: #custom
                 self.ree_videoc_bar.setText(Vcodec)
                 self.ree_videoq_bar.setText(Vqual)
                 self.ree_audioc_bar.setText(Acodec)
@@ -575,6 +580,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ree_audioc_bar.setText("aac")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_nvenc.mov")
+                self.ree_settings_button.setEnabled(False)
+            elif self.ree_settings_combobox.currentIndex() == 2: #hevc_nvenc
+                self.ree_videoc_bar.setText("hevc_nvenc")
+                self.ree_videoq_bar.setText("24,24,24")
+                self.ree_audioc_bar.setText("opus")
+                self.ree_audiob_bar.setText("190k")
+                self.ree_append_bar.setText("_henc.mkv")
                 self.ree_settings_button.setEnabled(False)
 
         def ree_settings_save():
@@ -596,6 +608,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #=====ree_controls=====#
         self.ree_settings_combobox.addItem("hevc_opus") # setting up items in combo list
         self.ree_settings_combobox.addItem("h264_nvenc")
+        self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("custom")
         ree_settings() # load option on startup
         self.ree_choose_button.clicked.connect(ree_choose)
