@@ -80,7 +80,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 MessagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load defaut config.", SaveDefaultConfig)
                 exit(0)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(0) # should be a setting
 
         def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default value because I dunno
             if audp == "a":
@@ -187,6 +187,7 @@ class MainWindow(QtWidgets.QMainWindow):
         status("Ready.")
 
         #==========🎶AUDIO🎶==========#
+        #region
         def Audio():
             global running
             if running == False:
@@ -240,8 +241,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.aud_download_button.clicked.connect(Audio)
         self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
+        #endregion
 
         #==========📼VIDEO📼==========#
+        #region
         def Video():
             global running
             if running == False:
@@ -332,8 +335,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_playlist_checkbox.clicked.connect(vid_playlist_bar_toggle)
         self.vid_custom_radio.toggled.connect(vid_quality_bar_toggle)
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
+        #endregion
 
         #==========📑SUBS📑==========#
+        #region
         def Subs():
             global running
             if running == False:
@@ -474,8 +479,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_playlist_checkbox.toggled.connect(sub_playlist_bar_toggle)
         self.sub_lang_checkbox.toggled.connect(sub_lang_bar_toggle)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
+        #endregion
 
         #==========💿REENCODE💿==========#
+        #region
         def Reencode():
             global running
             if running == False:
@@ -610,6 +617,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("custom")
+        self.ree_settings_combobox.setCurrentIndex(0) # should be a setting
         ree_settings() # load option on startup
         self.ree_choose_button.clicked.connect(ree_choose)
         self.ree_reencode_button.clicked.connect(Reencode)
@@ -617,8 +625,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.activated.connect(ree_settings)
         self.ree_settings_button.clicked.connect(ree_settings_save)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
+        #endregion
 
         #==========🔄UPDATE🔄==========#
+        #region
         def update_yt_dl():
             cmd = ["git", "pull", "--recurse-submodules"]
             process_start(cmd, self.upd_output_console)
@@ -668,6 +678,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if (sys.platform.startswith("haiku")):
             self.upd_update_combobox.setCurrentIndex(1)
         '''
+        #region (branch switching code)
         branches = os.listdir(spath+".git/refs/heads")
         for branch in branches:
             self.upd_branch_combobox.addItem(branch)
@@ -676,6 +687,7 @@ class MainWindow(QtWidgets.QMainWindow):
         gcurb = str(process.stdout.read())
         curb = "Current branch: "+curb[2:-3]
         self.upd_branch_label.setText(curb)
+        #endregion
         '''
 
         QtWidgets.QApplication.processEvents()
@@ -687,8 +699,10 @@ class MainWindow(QtWidgets.QMainWindow):
         #self.upd_branch_button.clicked.connect(upd_branch)
         self.upd_auto_button.setText(f"Autoupdate=\"{aup}\"")
         self.upd_auto_button.clicked.connect(upd_auto_toggle)
+        #endregion
 
         #==========📈SETTINGS📈==========#
+        #region
         def set_save():
             a = self.set_audio_bar.text()
             b = self.set_videos_bar.text()
@@ -741,7 +755,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_folder_button.clicked.connect(set_open)
         self.set_launch_button.clicked.connect(set_makeScript)
         self.set_save_button.clicked.connect(set_save)
-        
+        #endregion
         
         #==========🎓ABOUT🎓==========#
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">ArmoredMobilePony Inc. (C){year}<br>"
@@ -753,7 +767,7 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
-                              +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")  
+                              +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
