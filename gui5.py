@@ -84,17 +84,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 MessagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load defaut config.", SaveDefaultConfig)
                 exit(0)
 
-        self.tabWidget.setCurrentIndex(0) # should be a setting
-
         def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a", tab="a", codc="a"): #a is the default value because I dunno
             if audp == "a":
                 global audio
-                audp = audio
+                if audio[-1:] == "\\": # fix for windows separator bug (might still be issue in posix)
+                    audp = audio[:-1]
             elif audp == "":
                 audp = spath+"audio"
             if vidp == "a":
                 global videos
-                vidp = videos
+                if videos[-1:] == "\\": # fix for windows separator bug (might still be issue in posix)
+                    vidp = videos[:-1]
             elif vidp == "":
                 vidp = spath+"videos"
             if pyth == "a":
@@ -728,7 +728,7 @@ class MainWindow(QtWidgets.QMainWindow):
             savepath(a,b,c,d,e,f,h,g,j,i,k,l)
             loadpath()
 
-        def set_load(a,b,c,d,e,f,g,h,i,j,k,l):
+        def set_load(a,b,c,d,e,f,g,h,i,j,k,l,m=""):
             self.set_audio_bar.setText(a[:-1])
             self.set_videos_bar.setText(b[:-1])
             self.set_py_bar.setText(c)
@@ -759,9 +759,9 @@ class MainWindow(QtWidgets.QMainWindow):
             openFolder(spath)
 
         #=====set_controls=====#
-        set_load(audio, videos, py, pip, ydpip, aup, Acodec, Vcodec, Abit, Vqual, Append, Tab)
+        set_load(audio, videos, py, pip, ydpip, aup, Acodec, Vcodec, Abit, Vqual, Append, Tab, Codc)
         self.set_loadcur_button.clicked.connect(lambda:set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append, Tab))
-        self.set_loaddef_button.clicked.connect(lambda:set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv"))
+        self.set_loaddef_button.clicked.connect(lambda:set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0, 0))
         self.set_folder_button.clicked.connect(set_open)
         self.set_launch_button.clicked.connect(set_makeScript)
         self.set_save_button.clicked.connect(set_save)
@@ -777,7 +777,7 @@ class MainWindow(QtWidgets.QMainWindow):
         #==========🎓ABOUT🎓==========#
         #region
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">ArmoredMobilePony Inc. (C){year}<br>"
-                              +f"Last updated on: {lstupdt}<br>"
+                              +f"Version: 2.1.8 gui5, Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"
                               +f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>"
                               +f"need help? ask here: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://discord.gg/W88375j</a><br>"
