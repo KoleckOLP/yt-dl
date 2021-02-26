@@ -43,7 +43,9 @@ Requrements:
     2. than you can make a desktop shortcut from `yt-dl`
 
 ## Mac:
-1. Will test on my MacMini 2007 running 10.7 Lion
-
+Didn't worked on my Mac Mini 2007 running Mac OS 10.7 Lion<br>
+Should work on modern Mac OS just make sure to get all the requiremeints especially PyQt5<br>
+(I need a tester who has modern mac)
 ## BSD:
-1. Will test on a VM running GhostBSD
+I haven't managed to get it running on my Ghost BSD VM because I can't get PyQT5 to work.
+(I need a tester who is skilled with BSD)

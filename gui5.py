@@ -33,7 +33,7 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.exec_()
 
         def loadpath(s="show"): # Fixed version from call.py display's mesage boxes
-            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, Append, fdir #exposing all settings to the rest of the program.
+            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, Append, fdir, Tab, Codc #exposing all settings to the rest of the program.
             try:
                 fh = open(settings, "r") #opens file if there is any
                 try:
@@ -50,6 +50,8 @@ class MainWindow(QtWidgets.QMainWindow):
                         path["Vqual"]
                         path["Abit"]
                         path["Append"]
+                        path["Tab"]
+                        path["Codc"]
                     except KeyError: #if keys are missing
                         MessagePopup("Settings error", QMessageBox.Critical, "Your config file is not compatible with this version.\nPress OK to load defaut config.", SaveDefaultConfig)
                         exit(0)
@@ -65,6 +67,8 @@ class MainWindow(QtWidgets.QMainWindow):
                         Vqual = path["Vqual"]
                         Abit = path["Abit"]
                         Append = path["Append"]
+                        Tab = path["Tab"]
+                        Codc = path["Codc"]
 
                     pffmpeg = glob.glob(f"{spath}/ffmpeg*")
                     pffprobe = glob.glob(f"{spath}/ffprobe*")
@@ -82,7 +86,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.tabWidget.setCurrentIndex(0) # should be a setting
 
-        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a"): #a is the default value because I dunno
+        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a", tab="a", codc="a"): #a is the default value because I dunno
             if audp == "a":
                 global audio
                 audp = audio
@@ -120,17 +124,23 @@ class MainWindow(QtWidgets.QMainWindow):
             if appe == "a":
                 global Append
                 appe = Append
+            if tab == "a":
+                global Tab
+                tab = Tab
+            if codc == "a":
+                global Codc
+                codc = Codc
 
             audp = audp+os.path.sep
             vidp = vidp+os.path.sep
 
             fh = open(settings, "w")
-            json.dump({"audio": audp,"videos": vidp,"py": pyth,"pip": pipd,"ydpip": ytpip,"aup": autup,"Vcodec": vidc,"Acodec": audc,"Vqual": vidq,"Abit": audb, "Append": appe}, fh, indent=2)
+            json.dump({"audio": audp,"videos": vidp,"py": pyth,"pip": pipd,"ydpip": ytpip,"aup": autup,"Vcodec": vidc,"Acodec": audc,"Vqual": vidq,"Abit": audb, "Append": appe, "Tab": tab, "Codc": codc}, fh, indent=2)
             fh.close()   
 
         def SaveDefaultConfig(i):
             if i.text() == "OK":
-                savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv")
+                savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv", 0, 0)
             
         def status( s=""): #shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
@@ -179,8 +189,10 @@ class MainWindow(QtWidgets.QMainWindow):
             else: #(sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
                 os.system(f"xdg-open {loc}")
             
-
         loadpath()
+
+        global Tab
+        self.tabWidget.setCurrentIndex(Tab)
 
         global running
         running = False
@@ -573,37 +585,33 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ree_audioc_bar.setText(Acodec)
                 self.ree_audiob_bar.setText(Abit)
                 self.ree_append_bar.setText(Append)
-                self.ree_settings_button.setEnabled(True)
             elif self.ree_settings_combobox.currentIndex() == 0: #hevc_opus
                 self.ree_videoc_bar.setText("libx265")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("opus")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_hevcopus.mkv")
-                self.ree_settings_button.setEnabled(False)
             elif self.ree_settings_combobox.currentIndex() == 1: #h264_nvenc
                 self.ree_videoc_bar.setText("h264_nvenc")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("aac")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_nvenc.mov")
-                self.ree_settings_button.setEnabled(False)
             elif self.ree_settings_combobox.currentIndex() == 2: #hevc_nvenc
                 self.ree_videoc_bar.setText("hevc_nvenc")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("opus")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_henc.mkv")
-                self.ree_settings_button.setEnabled(False)
 
         def ree_settings_save():
-            if self.ree_settings_combobox.currentIndex() == 2: #custom
-                vidc = self.ree_videoc_bar.text()
-                audc = self.ree_audioc_bar.text()
-                vidq = self.ree_videoq_bar.text()
-                audb = self.ree_audiob_bar.text()
-                appe = self.ree_append_bar.text()
-                savepath(vidc=vidc, audc=audc, vidq=vidq, audb=audb, appe=appe)
+            vidc = self.ree_videoc_bar.text()
+            audc = self.ree_audioc_bar.text()
+            vidq = self.ree_videoq_bar.text()
+            audb = self.ree_audiob_bar.text()
+            appe = self.ree_append_bar.text()
+            codc = self.ree_settings_combobox.currentIndex()
+            savepath(vidc=vidc, audc=audc, vidq=vidq, audb=audb, appe=appe, codc=codc)
 
         def ree_choose():
             self.ree_location_bar.setText(QFileDialog.getOpenFileName()[0])
@@ -617,7 +625,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("custom")
-        self.ree_settings_combobox.setCurrentIndex(0) # should be a setting
+        self.ree_settings_combobox.setCurrentIndex(Codc) # should be a setting
         ree_settings() # load option on startup
         self.ree_choose_button.clicked.connect(ree_choose)
         self.ree_reencode_button.clicked.connect(Reencode)
@@ -715,11 +723,12 @@ class MainWindow(QtWidgets.QMainWindow):
             i = self.set_Abit_bar.text()
             j = self.set_Vqual_bar.text()
             k = self.set_Append_bar.text()
+            l = self.set_Tab_combobox.currentIndex()
 
-            savepath(a,b,c,d,e,f,h,g,j,i,k)
+            savepath(a,b,c,d,e,f,h,g,j,i,k,l)
             loadpath()
 
-        def set_load(a,b,c,d,e,f,g,h,i,j,k):
+        def set_load(a,b,c,d,e,f,g,h,i,j,k,l):
             self.set_audio_bar.setText(a[:-1])
             self.set_videos_bar.setText(b[:-1])
             self.set_py_bar.setText(c)
@@ -731,6 +740,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.set_Abit_bar.setText(i)
             self.set_Vqual_bar.setText(j)
             self.set_Append_bar.setText(k)
+            self.set_Tab_combobox.setCurrentIndex(l)
 
         def set_makeScript():  #I had an issue getting the venv working with gui
             if(sys.platform.startswith("win")):
@@ -738,26 +748,34 @@ class MainWindow(QtWidgets.QMainWindow):
                 f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
                 f.close()
                 f=open("yt-dl_gui.bat","w")
-                f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")
+                f.write(f"@echo off\n\nstart /b pythonw.exe gui5.py")
                 f.close()
             else: #(sys.platform.startswith(("linux", "darwin", "freebsd"))):
                 f=open("yt-dl","w")
-                f.write(f"#!/bin/sh\n\ncd {spath} && {py} gui.py")
+                f.write(f"#!/bin/sh\n\ncd {spath} && {py} gui5.py")
                 f.close()
         
         def set_open():
             openFolder(spath)
 
         #=====set_controls=====#
-        set_load(audio, videos, py, pip, ydpip, aup, Acodec, Vcodec, Abit, Vqual, Append)
-        self.set_loadcur_button.clicked.connect(lambda:set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append))
+        set_load(audio, videos, py, pip, ydpip, aup, Acodec, Vcodec, Abit, Vqual, Append, Tab)
+        self.set_loadcur_button.clicked.connect(lambda:set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append, Tab))
         self.set_loaddef_button.clicked.connect(lambda:set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv"))
         self.set_folder_button.clicked.connect(set_open)
         self.set_launch_button.clicked.connect(set_makeScript)
         self.set_save_button.clicked.connect(set_save)
+        self.set_Tab_combobox.addItem("Audio") # setting up items in combo list
+        self.set_Tab_combobox.addItem("Video")
+        self.set_Tab_combobox.addItem("Subs")
+        self.set_Tab_combobox.addItem("Re-encode")
+        self.set_Tab_combobox.addItem("Update")
+        self.set_Tab_combobox.addItem("Settings")
+        self.set_Tab_combobox.addItem("About")
         #endregion
         
         #==========🎓ABOUT🎓==========#
+        #region
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">ArmoredMobilePony Inc. (C){year}<br>"
                               +f"Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"
@@ -768,6 +786,7 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")
+        #endregion
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
