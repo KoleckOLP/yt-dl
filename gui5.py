@@ -18,7 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.show()
 
         year = datetime.now().year
-        lstupdt = "2021-01-04" #I keep forgetting to update this, in C# there was build date.
+        lstupdt = "2021-02.26" #I keep forgetting to update this, in C# there was build date.
         spath = sys.path[0]+os.path.sep #path of the yt-dl dir
         settings = spath+"settings.json"
 
