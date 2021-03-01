@@ -43,9 +43,18 @@ Requrements:
     2. than you can make a desktop shortcut from `yt-dl`
 
 ## Mac:
-Didn't worked on my Mac Mini 2007 running Mac OS 10.7 Lion<br>
-Should work on modern Mac OS just make sure to get all the requiremeints especially PyQt5<br>
-(I need a tester who has modern mac)
+1. install git by typing git into terminal
+2. install python3 and licences
+    1. \(optional) update pip (with pip): `py -m pip install -U pip`
+3. Add pip to path (I am lazy too explain google is your friend)
+4. install requirements: `pip install -r requirements.txt`
+5. download ffmpeg and ffprobe: https://ffbinaries.com/downloads and put them into the yt-dl directory
+6. launch ffmpeg and ffprobe and allow them to run
+7. launch `python gui5.py` (if you are missing a config hit ok and restart the app)
+    1. \(recommended) on the settings tab fix your setting and Make Lauch Script
+    2. than you can make a desktop shortcut from `yt-dl` pin it or move to apps or something, suit yourself<br>
+(icon does not work and nav bar is centered might fix might not)
+
 ## BSD:
-I haven't managed to get it running on my Ghost BSD VM because I can't get PyQT5 to work.
+I haven't managed to get it running on my Ghost BSD VM because I can't get PyQT5 to work.<br>
 (I need a tester who is skilled with BSD)
