@@ -2,12 +2,12 @@ import sys, os
 import glob, json
 import subprocess
 import tempfile
-from datetime import datetime
-from PyQt5 import QtWidgets, QtGui, uic
+from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication 
+from release import year, lstupdt, spath, settings, curb, ver
 if(sys.platform.startswith("win")): #win, linux, darvin, freebsd
     import ctypes
-    myappid = 'ArmoredMobilePony.yt-dl.gui.2.1.8' # arbitrary string
+    myappid = 'ArmoredMobilePony.yt-dl.gui.'+f'{ver}' # arbitrary string
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 class MainWindow(QtWidgets.QMainWindow):    
@@ -16,11 +16,6 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi("gui5.ui", self)
 
         self.show()
-
-        year = datetime.now().year
-        lstupdt = "2021-02.26" #I keep forgetting to update this, in C# there was build date.
-        spath = sys.path[0]+os.path.sep #path of the yt-dl dir
-        settings = spath+"settings.json"
 
         def MessagePopup(title, icon, text, callf=None):
             msg = QMessageBox() #Pylance is being stupid, I had to disable Type checking.
@@ -777,7 +772,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #==========🎓ABOUT🎓==========#
         #region
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">ArmoredMobilePony Inc. (C){year}<br>"
-                              +f"Version: 2.1.8 gui5, Last updated on: {lstupdt}<br>"
+                              +f"Version: {ver} gui5 ({curb} branch)<br>"
+                              +f"Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"
                               +f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>"
                               +f"need help? ask here: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://discord.gg/W88375j</a><br>"

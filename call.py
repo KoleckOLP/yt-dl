@@ -5,6 +5,7 @@ import sys, os
 import glob
 import json
 from colorama import init, Fore, Style #Back
+from release import year, lstupdt, spath, settings, curb, ver
 
 init() #initialises colorama
 
@@ -16,16 +17,9 @@ global year
 global lstupdt
 global spath
 
-year = datetime.now().year
-curb = "qt-gui"
-ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-11-20" #I keep forgetting to update this, in C# there was build date.
-spath = sys.path[0]+os.path.sep #path of the yt-dl dir
-settings = spath+"settings.json"
-
 #==========NAME==========#
 def name(newline=True):
-    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
+    BC("yt-dl {ver} cli ({curb} branch) by KoleckOLP (C){year}\n", newline) 
 
 #==========FIRST TIME SETUP MENU==========#
 def firstrun(py=""):
@@ -115,6 +109,7 @@ def about():
     clear()
     name(False)
     print(f"HorseArmored inc (C){year}\n"
+         +f"Version: {ver} cli ({curb} branch)\n"
          +f"Last updated on: {lstupdt}\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
