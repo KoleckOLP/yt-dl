@@ -771,7 +771,7 @@ class MainWindow(QtWidgets.QMainWindow):
         
         #==========🎓ABOUT🎓==========#
         #region
-        self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">ArmoredMobilePony Inc. (C){year}<br>"
+        self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored Inc. (C){year}<br>"
                               +f"Version: {ver} gui5 ({curb} branch)<br>"
                               +f"Last updated on: {lstupdt}<br>"
                               +f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>"

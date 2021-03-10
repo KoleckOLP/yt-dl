@@ -13,10 +13,6 @@ def is_venv(): #reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
-global year
-global lstupdt
-global spath
-
 #==========NAME==========#
 def name(newline=True):
     BC("yt-dl {ver} cli ({curb} branch) by KoleckOLP (C){year}\n", newline) 
