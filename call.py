@@ -5,6 +5,7 @@ import sys, os
 import glob
 import json
 from colorama import init, Fore, Style #Back
+from release import year, lstupdt, spath, settings, curb, ver
 
 init() #initialises colorama
 
@@ -12,16 +13,9 @@ def is_venv(): #reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
 
-year = datetime.now().year
-curb = "testing"
-ver = f"2.1.7-{curb}" #lang(2=python3) #featureset #patch/bugfix pre, RC
-lstupdt = "2020-11-20" #I keep forgetting to update this, in C# there was build date.
-spath = sys.path[0]+os.path.sep #path of the yt-dl dir
-settings = spath+"settings.json"
-
 #==========NAME==========#
 def name(newline=True):
-    BC("yt-dl {ver} by KoleckOLP (C){year}\n", newline) 
+    BC("yt-dl {ver} cli ({curb} branch) by KoleckOLP (C){year}\n", newline) 
 
 #==========FIRST TIME SETUP MENU==========#
 def firstrun(py=""):
@@ -111,6 +105,7 @@ def about():
     clear()
     name(False)
     print(f"HorseArmored inc (C){year}\n"
+         +f"Version: {ver} cli ({curb} branch)\n"
          +f"Last updated on: {lstupdt}\n"
          +f"My webpage: https://koleckolp.comli.com/\n"
          +f"Project page: https://github.com/KoleckOLP/yt-dl\n"
@@ -151,11 +146,11 @@ def savepath(a="chp", x="", y="", z="", q="",vc="",ac="",vq="",ab=""):
                 if (vid == ""):
                     vid = spath+"videos"
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": vc,"Acodec": ac,"Vqual": vq,"Abit": ab}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": vc,"Acodec": ac,"Vqual": vq,"Abit": ab}, fh, indent=2)
                     fh.close()
                 else:
                     fh = open(settings, "w")
-                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
+                    json.dump({"audio": aud+os.path.sep,"videos": vid+os.path.sep,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh, indent=2)
                     fh.close()
     if (a != "chp"):
         #loadpath("hid")
@@ -721,7 +716,7 @@ def BC(stri="no input", newline=True, reverse=False):
     if(reverse == True):
         if(curb == "master"):
             branch = "testing"
-        elif(curb == "testing"):
+        else:
             branch = "master"
     else:
         branch = curb  

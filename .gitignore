@@ -7,7 +7,10 @@ audio
 videos
 *.bat
 *.ps1
+*.vbs
+yt-dl
 ffmpeg.exe
 ffprobe.exe
 ffplay.exe
 ffdir
+~$*
