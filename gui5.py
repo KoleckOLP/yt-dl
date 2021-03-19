@@ -4,10 +4,11 @@ import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication 
-from release import year, lstupdt, spath, settings, curb, ver
+from release import year, lstupdt, spath, curb, ver
+from release import settigui5 as settings
 if(sys.platform.startswith("win")): #win, linux, darvin, freebsd
     import ctypes
-    myappid = 'ArmoredMobilePony.yt-dl.gui.'+f'{ver}' # arbitrary string
+    myappid = 'HorseArmored.yt-dl.gui5.'+ver #Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 class MainWindow(QtWidgets.QMainWindow):    
@@ -16,6 +17,21 @@ class MainWindow(QtWidgets.QMainWindow):
         uic.loadUi("gui5.ui", self)
 
         self.show()
+
+#region ===== Drag and Drop support =====
+        self.setAcceptDrops(True)
+		
+        def dragEnterEvent(self, e):
+            print(e)
+                
+            if e.mimeData().hasText():
+                e.accept()
+            else:
+                e.ignore()
+                    
+        def dropEvent(self, e):
+            self.addItem(e.mimeData().text())
+#endregion
 
         def MessagePopup(title, icon, text, callf=None):
             msg = QMessageBox() #Pylance is being stupid, I had to disable Type checking.
@@ -183,7 +199,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 os.system(f"open {loc}")
             else: #(sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
                 os.system(f"xdg-open {loc}")
-            
+
+#region ===== startup =====
         loadpath()
 
         global Tab
@@ -192,9 +209,9 @@ class MainWindow(QtWidgets.QMainWindow):
         global running
         running = False
         status("Ready.")
+#endregion
 
-        #==========🎶AUDIO🎶==========#
-        #region
+        #region ==========🎶AUDIO🎶==========
         def Audio():
             global running
             if running == False:
@@ -250,8 +267,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         #endregion
 
-        #==========📼VIDEO📼==========#
-        #region
+        #region ==========📼VIDEO📼==========
         def Video():
             global running
             if running == False:
@@ -344,8 +360,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         #endregion
 
-        #==========📑SUBS📑==========#
-        #region
+        #region ==========📑SUBS📑==========
         def Subs():
             global running
             if running == False:
@@ -488,8 +503,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
         #endregion
 
-        #==========💿REENCODE💿==========#
-        #region
+        #region ==========💿REENCODE💿==========
         def Reencode():
             global running
             if running == False:
@@ -574,7 +588,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
         
         def ree_settings():
-            if self.ree_settings_combobox.currentIndex() == 3: #custom
+            if self.ree_settings_combobox.currentIndex() == 4: #custom
                 self.ree_videoc_bar.setText(Vcodec)
                 self.ree_videoq_bar.setText(Vqual)
                 self.ree_audioc_bar.setText(Acodec)
@@ -598,6 +612,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ree_audioc_bar.setText("opus")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_henc.mkv")
+            elif self.ree_settings_combobox.currentIndex() == 3: #mp3
+                self.ree_videoc_bar.setText("remove")
+                self.ree_videoq_bar.setText("none")
+                self.ree_audioc_bar.setText("mp3")
+                self.ree_audiob_bar.setText("190k")
+                self.ree_append_bar.setText(".mp3")
 
         def ree_settings_save():
             vidc = self.ree_videoc_bar.text()
@@ -619,6 +639,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("hevc_opus") # setting up items in combo list
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
+        self.ree_settings_combobox.addItem("mp3")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(Codc) # should be a setting
         ree_settings() # load option on startup
@@ -628,10 +649,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.activated.connect(ree_settings)
         self.ree_settings_button.clicked.connect(ree_settings_save)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
+        self.ree_location_bar.setDragEnabled(True)
         #endregion
 
-        #==========🔄UPDATE🔄==========#
-        #region
+        #region ==========🔄UPDATE🔄==========
         def update_yt_dl():
             cmd = ["git", "pull", "--recurse-submodules"]
             process_start(cmd, self.upd_output_console)
@@ -704,8 +725,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_auto_button.clicked.connect(upd_auto_toggle)
         #endregion
 
-        #==========📈SETTINGS📈==========#
-        #region
+        #region ==========📈SETTINGS📈==========
         def set_save():
             a = self.set_audio_bar.text()
             b = self.set_videos_bar.text()
@@ -769,8 +789,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("About")
         #endregion
         
-        #==========🎓ABOUT🎓==========#
-        #region
+        #region ==========🎓ABOUT🎓==========
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored Inc. (C){year}<br>"
                               +f"Version: {ver} gui5 ({curb} branch)<br>"
                               +f"Last updated on: {lstupdt}<br>"

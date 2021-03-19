@@ -5,7 +5,8 @@ import sys, os
 import glob
 import json
 from colorama import init, Fore, Style #Back
-from release import year, lstupdt, spath, settings, curb, ver
+from release import year, lstupdt, spath, curb, ver
+from release import setticli as settings
 
 init() #initialises colorama
 
@@ -157,7 +158,6 @@ def savepath(a="chp", x="", y="", z="", q="",vc="",ac="",vq="",ab=""):
         fh = open(settings, "w")
         json.dump({"audio": audio,"videos": videos,"py": x,"pip": y,"ydpip": z,"aup": q,"Vcodec": Vcodec,"Acodec": Acodec,"Vqual": Vqual,"Abit": Abit}, fh)
         fh.close()
-    
         
 #==========LOAD PATH==========#
 def loadpath(s="show"):
@@ -250,7 +250,7 @@ def upytdl():
         os.system("git pull --recurse-submodules")
     else:
         print("yt-dl wasn't installed trought git.\n"
-        +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")    
+        +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")
 
 #==========UPDATE DEPEND==========#
 def upyd():
@@ -528,7 +528,8 @@ def reencode():
                 SubsC = ""
             else:
                 SubsC = "-c:s copy"
-            os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
+            #os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
+            print(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == '1'): #====================WHOLE FOLDER====================#
         if(Vcodec == "remove" and Acodec == "remove"):
@@ -693,7 +694,7 @@ def debug():
             name()
             break
 
-#==========COLOR FUNCTIONS==========#
+#region ==========COLOR FUNCTIONS==========
 def TF(var="", newline=True):
     if newline == True:
         end = "\n"
@@ -725,3 +726,4 @@ def BC(stri="no input", newline=True, reverse=False):
         print(Fore.CYAN + eval(f'f"""{stri}"""') + Style.RESET_ALL, end=end)
     else:
         print(Fore.MAGENTA + eval(f'f"""{stri}"""') + Style.RESET_ALL, end=end)
+#endregion

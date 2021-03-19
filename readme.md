@@ -15,7 +15,7 @@ Requrements:
 2. install python3: https://www.python.org/downloads/
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
     1. \(optional) update pip: `py -m pip install -U pip`
-4. install requirements: `pip install -r requirements.txt`
+4. install requirements: `pip install -r req-gui5.txt`
 5. download ffmpeg.exe and ffprobe.exe: https://ffbinaries.com/downloads and put them into the yt-dl directory
 6. launch `pythonw gui5.py` (if you are missing a config hit ok and restart the app)
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
@@ -28,7 +28,7 @@ Requrements:
 2. install python3 and licences
     1. \(optional) update pip (with pip): `py -m pip install -U pip`
 3. Add pip to path (I am lazy too explain google is your friend)
-4. install requirements: `pip install -r requirements.txt`
+4. install requirements: `pip install -r req-gui5.txt`
 5. download ffmpeg and ffprobe: https://ffbinaries.com/downloads and put them into the yt-dl directory
 6. launch ffmpeg and ffprobe and allow them to run
 7. launch `python gui5.py` (if you are missing a config hit ok and restart the app)
@@ -43,7 +43,7 @@ Requrements:
 2. install python3 (with your package manager)
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
     1. \(optional) update pip (with pip): `py -m pip install -U pip`
-4. install requirements: `pip install -r requirements.txt`
+4. install requirements: `pip install -r req-gui5.txt`
 5. install ffmpeg (with your package manager)
 6. launch `python gui5.py` (if you are missing a config hit ok and restart the app)
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
@@ -63,6 +63,17 @@ Requrements:
 
 ![alt text](gui/HaikuOS.png)
 
-## BSD:
-I haven't managed to get it running on my Ghost BSD VM because I can't get PyQT5 to work.<br>
-(I need a tester who is skilled with BSD)
+<br>
+
+### Tried to get it running on BSD and Solaris but can't get all of the requirements to install.
+
+## installing the cli version (win, lin, mac, android)
+1. intall git
+2. install python3
+3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
+    1. \(optional) update pip: `py -m pip install -U pip`
+4. install requirements: `pip install -r req-cli.txt`
+5. get ffmpeg and ffprobe(may come with ffmpeg, or ffmpeg-tools) and put them into the yt-dl directory
+6. launch `pythonw main.py`
+    1. \(recommended) on the settings (7) fix your setting and Make Lauch Script (3)
+    2. than you can make a desktop shortcut from `yt-dl.bat` or `yt-dl` (which ever you get, don't forget to chmod +x on posix systems)
