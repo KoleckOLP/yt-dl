@@ -200,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else: #(sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
                 os.system(f"xdg-open {loc}")
 
-#region ===== startup =====
+        #region ===== startup =====
         loadpath()
 
         global Tab
@@ -209,7 +209,7 @@ class MainWindow(QtWidgets.QMainWindow):
         global running
         running = False
         status("Ready.")
-#endregion
+        #endregion
 
         #region ==========🎶AUDIO🎶==========
         def Audio():

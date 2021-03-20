@@ -13,13 +13,6 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Run yt-dl-gui PySide6",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/gui.py",
-            "console": "integratedTerminal"
-        },
-        {
             "name": "Run yt-dl-cli",
             "type": "python",
             "request": "launch",

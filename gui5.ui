@@ -164,7 +164,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -572,6 +572,9 @@
          <widget class="QLineEdit" name="ree_location_bar">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="dragEnabled">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
