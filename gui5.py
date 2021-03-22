@@ -11,27 +11,29 @@ if(sys.platform.startswith("win")): #win, linux, darvin, freebsd
     myappid = 'HorseArmored.yt-dl.gui5.'+ver #Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-class MainWindow(QtWidgets.QMainWindow):    
+class MainWindow(QtWidgets.QMainWindow):
+    def dragEnterEvent(self, e):
+        #print(e)
+        
+        if e.mimeData().hasText():
+            e.accept()
+        else:
+            e.ignore()
+                
+    def dropEvent(self, e): #this thing is absolutely aweful, I have no clue how could it work before
+        drag = "" #fixes a crash
+        if "file:///" in  e.mimeData().text():
+            drag = e.mimeData().text().replace("file:///", "")
+            
+        self.ree_location_bar.setText(drag) #dopping anywhere on the main window drops into ree_location_bar
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         uic.loadUi("gui5.ui", self)
 
         self.show()
 
-#region ===== Drag and Drop support =====
         self.setAcceptDrops(True)
-		
-        def dragEnterEvent(self, e):
-            print(e)
-                
-            if e.mimeData().hasText():
-                e.accept()
-            else:
-                e.ignore()
-                    
-        def dropEvent(self, e):
-            self.addItem(e.mimeData().text())
-#endregion
 
         def MessagePopup(title, icon, text, callf=None):
             msg = QMessageBox() #Pylance is being stupid, I had to disable Type checking.
@@ -649,7 +651,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.activated.connect(ree_settings)
         self.ree_settings_button.clicked.connect(ree_settings_save)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
-        self.ree_location_bar.setDragEnabled(True)
+        #self.ree_location_bar.setDragEnabled(True)
+        self.ree_location_bar.setAcceptDrops(True)
         #endregion
 
         #region ==========🔄UPDATE🔄==========
