@@ -670,7 +670,7 @@ class MainWindow(QtWidgets.QMainWindow):
             pips = pip.split(" ")
             cmd = [f"{py}", "-m", "pip", "install", "-U", "pip"]
             process_start(cmd, self.upd_output_console)
-            cmd = pips+["install", "-U", "-r", "requirements.txt"]
+            cmd = pips+["install", "-U", "-r", "req-gui5.txt"]
             process_start(cmd, self.upd_output_console)
 
         def Update():
