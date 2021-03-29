@@ -535,9 +535,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
                         #//Video Quality\\#
                         if "," in videoq:
-                            VQsplit = Vqual.split(",")
+                            VQsplit = videoq.split(",")
                         else:
-                            VQsplit = [Vqual,Vqual,Vqual]
+                            VQsplit = [videoq,videoq,videoq]
                         #//Videeo Codec\\#
                         if(videoc == "libx265"):
                             VideoCodec = ["-c:v", f"{videoc}"]
@@ -552,7 +552,12 @@ class MainWindow(QtWidgets.QMainWindow):
                             cmd = [cmd[0]+VideoCodec+cmd[1],cmd[2]]
                         elif(videoc == "hevc_nvenc"):
                             VideoCodec = ["-c:v", f"{videoc}"]
-                            quality = ["-rc", "vbr", "-qp", f"{int(VQsplit[0])+1}", "-qmin", f"{int(VQsplit[1])+1}", "-qmax", f"{int(VQsplit[2])+1}", "-bf", "1"]
+                            quality = ["-rc:v", "vbr", "-qmin", f"{int(VQsplit[1])}", "-qmax", f"{int(VQsplit[2])}", "-bf", "1"]
+                            Vformat = ["-vf", "format=yuv420p"]
+                            cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
+                        elif(videoc == "h264_nvenc"):
+                            VideoCodec = ["-c:v", f"{videoc}"]
+                            quality = ["-rc:v", "vbr", "-qmin", f"{int(VQsplit[1])}", "-qmax", f"{int(VQsplit[2])}"]
                             Vformat = ["-vf", "format=yuv420p"]
                             cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
                         else:
@@ -582,6 +587,7 @@ class MainWindow(QtWidgets.QMainWindow):
                             cmd = ["ffmpeg", "-hide_banner"]+cmd
 
                         process_start(cmd, self.ree_output_console)
+                        #print(cmd)
 
                 running = False
                 status("Ready.")
