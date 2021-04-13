@@ -809,7 +809,7 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
-                              +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/whatsnew.md\">here</a></pre></p>")
+                              +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/changelog.md\">here</a></pre></p>")
         #endregion
 
 app = QtWidgets.QApplication(sys.argv)
