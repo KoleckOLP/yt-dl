@@ -1,4 +1,6 @@
 settings.json
+gui5_settings.json
+cli_settings.json
 __pycache__
 .helpfiles
 env
@@ -7,9 +9,11 @@ audio
 videos
 *.bat
 *.ps1
+*.vbs
 .vscode
+yt-dl
 ffmpeg.exe
 ffprobe.exe
 ffplay.exe
 ffdir
-testing.md
+~$*
