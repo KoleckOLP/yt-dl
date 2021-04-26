@@ -476,7 +476,6 @@ class MainWindow(QtWidgets.QMainWindow):
                         self.scrollbar = self.sub_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
                         QApplication.processEvents()
-
                 print("\a")
                 self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QApplication.processEvents()
