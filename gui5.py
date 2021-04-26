@@ -3,29 +3,30 @@ import glob, json
 import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication 
+from PyQt5.QtWidgets import QFileDialog, QMessageBox, QApplication
 from release import year, lstupdt, spath, curb, ver
 from release import settigui5 as settings
-if(sys.platform.startswith("win")): #win, linux, darvin, freebsd
+if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
-    myappid = 'HorseArmored.yt-dl.gui5.'+ver #Program Sting
+    myappid = 'HorseArmored.yt-dl.gui5.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def dragEnterEvent(self, e):
-        #print(e)
-        
+        # print(e)
+
         if e.mimeData().hasText():
             e.accept()
         else:
             e.ignore()
-                
-    def dropEvent(self, e): #this thing is absolutely aweful, I have no clue how could it work before
-        drag = "" #fixes a crash
-        if "file:///" in  e.mimeData().text():
+
+    def dropEvent(self, e):  # this thing is absolutely awful, I have no clue how could it work before
+        drag = ""  # fixes a crash
+        if "file:///" in e.mimeData().text():
             drag = e.mimeData().text().replace("file:///", "")
-            
-        self.ree_location_bar.setText(drag) #dopping anywhere on the main window drops into ree_location_bar
+
+        self.ree_location_bar.setText(drag)  # dropping anywhere on the main window drops into ree_location_bar
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,22 +36,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.setAcceptDrops(True)
 
-        def MessagePopup(title, icon, text, callf=None):
-            msg = QMessageBox() #Pylance is being stupid, I had to disable Type checking.
+        def messagePopup(title, icon, text, callf=None):
+            msg = QMessageBox()  # Pylance is being stupid, I had to disable Type checking.
             msg.setWindowTitle(title)
             msg.setIcon(icon)
             msg.setText(text)
-            if callf != None:
-                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel) #Fuck pylance it says that this line is wrong anf that int can't bd a button, there is not int.
+            if callf is not None:
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)  # Fuck pylance it says that this line is wrong anf that int can't bd a button, there is not int.
                 msg.buttonClicked.connect(callf)
             msg.exec_()
 
         def loadpath(s="show"): # Fixed version from call.py display's mesage boxes
-            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, Append, fdir, Tab, Codc #exposing all settings to the rest of the program.
+            global audio, videos, py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit, Append, fdir, Tab, Codc  # exposing all settings to the rest of the program.
             try:
-                fh = open(settings, "r") #opens file if there is any
+                fh = open(settings, "r") # opens file if there is any
                 try:
-                    path = json.loads(fh.read()) #loads json values if it's a valid json
+                    path = json.loads(fh.read()) # loads json values if it's a valid json
                     try:
                         path["audio"]
                         path["videos"]
@@ -65,8 +66,8 @@ class MainWindow(QtWidgets.QMainWindow):
                         path["Append"]
                         path["Tab"]
                         path["Codc"]
-                    except KeyError: #if keys are missing
-                        MessagePopup("Settings error", QMessageBox.Critical, "Your config file is not compatible with this version.\nPress OK to load defaut config.", SaveDefaultConfig)
+                    except KeyError: # if keys are missing
+                        messagePopup("Settings error", QMessageBox.Critical, "Your config file is not compatible with this version.\nPress OK to load default config.", SaveDefaultConfig)
                         exit(0)
                     else:
                         audio = path["audio"]
@@ -89,24 +90,29 @@ class MainWindow(QtWidgets.QMainWindow):
                         fdir = False
                     else:
                         fdir = True
-                except ValueError: #if json not valid
+                except ValueError:  # if json not valid
                     pass
-                    MessagePopup("Settings error", QMessageBox.Critical, "Your config file is corrupted.\nPress OK to load defaut config.", SaveDefaultConfig)
+                    messagePopup(
+                        "Settings error",
+                        QMessageBox.Critical,
+                        "Your config file is corrupted.\nPress OK to load default config.",
+                        SaveDefaultConfig
+                    )
                 fh.close()
-            except FileNotFoundError: #if file does not exist
-                MessagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load defaut config.", SaveDefaultConfig)
+            except FileNotFoundError:  # if file does not exist
+                messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", SaveDefaultConfig)
                 exit(0)
 
-        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a", tab="a", codc="a"): #a is the default value because I dunno
+        def savepath(audp="a", vidp="a", pyth="a", pipd="a", ytpip="a", autup="a", vidc="a", audc="a", vidq="a", audb="a", appe="a", tab="a", codc="a"):  # a is the default value because I dunno
             if audp == "a":
                 global audio
-                if audio[-1:] == "\\": # fix for windows separator bug (might still be issue in posix)
+                if audio[-1:] == "\\":  # fix for windows separator bug (might still be issue in posix)
                     audp = audio[:-1]
             elif audp == "":
                 audp = spath+"audio"
             if vidp == "a":
                 global videos
-                if videos[-1:] == "\\": # fix for windows separator bug (might still be issue in posix)
+                if videos[-1:] == "\\":  # fix for windows separator bug (might still be issue in posix)
                     vidp = videos[:-1]
             elif vidp == "":
                 vidp = spath+"videos"
@@ -149,13 +155,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
             fh = open(settings, "w")
             json.dump({"audio": audp,"videos": vidp,"py": pyth,"pip": pipd,"ydpip": ytpip,"aup": autup,"Vcodec": vidc,"Acodec": audc,"Vqual": vidq,"Abit": audb, "Append": appe, "Tab": tab, "Codc": codc}, fh, indent=2)
-            fh.close()   
+            fh.close()
 
         def SaveDefaultConfig(i):
             if i.text() == "OK":
                 savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv", 0, 0)
-            
-        def status( s=""): #shows status message and changes color of the status bar.
+
+        def status( s=""): # shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
             if s == "Ready.":
                 self.statusBar().setStyleSheet("background-color: #00BB00")
@@ -165,13 +171,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
         def process_start(cmd="", output_console=""):
-            if (sys.platform.startswith("win")): #(os.name == "nt"):
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000) #this one does not check if another process is running
-            else: #(sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
+            if (sys.platform.startswith("win")): # (os.name == "nt"):
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)  # this one does not check if another process is running
+            else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             for c in iter(lambda: process.stdout.read(1), b''):
                 gui = self.isVisible()
-                if gui == False: #if window of the app was closed kill the subrocess.
+                if not gui:  # if window of the app was closed kill the subprocess.
                     process.terminate()
                 else:
                     c = str(c)
@@ -197,12 +203,12 @@ class MainWindow(QtWidgets.QMainWindow):
         def openFolder(loc=""):
             if (sys.platform.startswith("win")):
                 os.system(f"start {loc}")
-            elif (sys.platform.startswith(("darwin", "haiku"))): #haiku support :3
+            elif (sys.platform.startswith(("darwin", "haiku"))): # haiku support :3
                 os.system(f"open {loc}")
-            else: #(sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
+            else: # (sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
                 os.system(f"xdg-open {loc}")
 
-        #region ===== startup =====
+        # region ===== startup =====
         loadpath()
 
         global Tab
@@ -211,17 +217,17 @@ class MainWindow(QtWidgets.QMainWindow):
         global running
         running = False
         status("Ready.")
-        #endregion
+        # endregion
 
-        #region ==========🎶AUDIO🎶==========
+        # region ==========🎶AUDIO🎶==========
         def Audio():
             global running
-            if running == False:
+            if not running:
                 running = True
                 status("Busy.")
                 self.tabWidget.setTabText(0, "*Audio")
 
-                self.aud_output_console.setHtml("") #clearing the output_console
+                self.aud_output_console.setHtml("") # clearing the output_console
 
                 url = self.aud_url_bar.text()
                 if self.aud_playlist_checkbox.isChecked():
@@ -242,7 +248,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+cmd[1]
 
-                self.sub_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
+                self.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
                 process_start(cmd, self.aud_output_console)
 
@@ -250,8 +256,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(0, "Audio")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-                
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+
         def aud_playlist_bar_toggle():
             self.aud_playlist_bar.setEnabled(self.aud_playlist_checkbox.isChecked())
             if(self.aud_playlist_checkbox.isChecked()):
@@ -262,14 +268,14 @@ class MainWindow(QtWidgets.QMainWindow):
         def aud_open():
             openFolder(audio)
 
-        #=====aud_controls=====#
+        # =====aud_controls=====#
         self.aud_folder_button.clicked.connect(aud_open)
         self.aud_download_button.clicked.connect(Audio)
         self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
-        #endregion
+        # endregion
 
-        #region ==========📼VIDEO📼==========
+        # region ==========📼VIDEO📼==========
         def Video():
             global running
             if running == False:
@@ -278,7 +284,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.tabWidget.setTabText(1, "*Video")
 
-                self.vid_output_console.setHtml("") #clearing the output_console.
+                self.vid_output_console.setHtml("") # clearing the output_console.
 
                 url = self.vid_url_bar.text()
                 if self.vid_playlist_checkbox.isChecked():
@@ -286,7 +292,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     numb = None
 
-                if(numb == None):
+                if(numb is None):
                     cmd = [["youtube-dl", "-o", f"{videos}%(title)s.%(ext)s", "-f"],["--no-playlist", f"{url}"]]
                 elif(numb == ""):
                     cmd = [["youtube-dl", "-o", f"{videos}%(playlist_index)s. %(title)s.%(ext)s", "-f"],["--yes-playlist", f"{url}"]]
@@ -306,15 +312,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+qual+cmd[1]
 
-                self.sub_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
+                self.vid_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
                 process_start(cmd, self.vid_output_console)
-                
+
                 running = False
                 status("Ready.")
                 self.tabWidget.setTabText(1, "Video")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def vid_quality():
             global running
@@ -322,19 +328,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 running = True
                 status("Busy.")
 
-                self.vid_output_console.setHtml("") #clearing the output_console
+                self.vid_output_console.setHtml("") # clearing the output_console
 
                 url = self.vid_url_bar.text()
                 cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
 
-                self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
+                self.vid_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
                 process_start(cmd, self.vid_output_console)
 
                 running = False
                 status("Ready.")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def vid_playlist_bar_toggle():
             self.vid_playlist_bar.setEnabled(self.vid_playlist_checkbox.isChecked())
@@ -353,16 +359,16 @@ class MainWindow(QtWidgets.QMainWindow):
         def vid_open():
             openFolder(videos)
 
-        #=====vid_controls=====#
+        # =====vid_controls=====#
         self.vid_folder_button.clicked.connect(vid_open)
         self.vid_download_button.clicked.connect(Video)
         self.vid_quality_button.clicked.connect(vid_quality)
         self.vid_playlist_checkbox.clicked.connect(vid_playlist_bar_toggle)
         self.vid_custom_radio.toggled.connect(vid_quality_bar_toggle)
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
-        #endregion
+        # endregion
 
-        #region ==========📑SUBS📑==========
+        # region ==========📑SUBS📑==========
         def Subs():
             global running
             if running == False:
@@ -373,7 +379,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 temp = tempfile.mkdtemp()+os.path.sep
 
-                self.sub_output_console.setHtml("") #clearing the output_console.
+                self.sub_output_console.setHtml("") # clearing the output_console.
 
                 url = self.sub_url_bar.text()
 
@@ -410,17 +416,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
                 process_start(cmd, self.sub_output_console)
-                
+
                 subpath = glob.glob(f"{temp}*.vtt")
                 os.makedirs(videos, exist_ok=True)
-                
+
                 for item in subpath:
                     namei = os.path.basename(item)
                     namei = namei[:-3]
                     newsubpath = videos+namei+"srt"
                     if os.path.isfile(newsubpath):
                         self.sub_output_console.insertPlainText(f"#yt-dl# file {item} already exists skipping...\n")
-                    else:                        
+                    else:
                         cmd = ["-i", f"{item}", f"{newsubpath}"]
 
                         floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
@@ -437,7 +443,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(2, "Subs")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def sub_lang():
             global running
@@ -445,7 +451,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 running = True
                 status("Busy.")
 
-                self.sub_output_console.setHtml("") #clearing the output_console
+                self.sub_output_console.setHtml("") # clearing the output_console
 
                 url = self.sub_url_bar.text()
                 cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
@@ -453,7 +459,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
                 for c in iter(lambda: process.stdout.read(1), b''):
                     gui = window.isVisible()
-                    if gui == False: #if window of the app was closed kill the subrocess.
+                    if gui == False: # if window of the app was closed kill the subrocess.
                         process.terminate()
                     else:
                         c = str(c)
@@ -470,7 +476,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         self.scrollbar = self.sub_output_console.verticalScrollBar()
                         self.scrollbar.setValue(self.scrollbar.maximum())
                         QApplication.processEvents()
-                
+
                 print("\a")
                 self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
                 QApplication.processEvents()
@@ -479,7 +485,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 running = False
                 status("Ready.")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def sub_playlist_bar_toggle():
             self.sub_lang_button.setEnabled(not self.sub_playlist_checkbox.isChecked())
@@ -496,16 +502,16 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.sub_lang_bar.setStyleSheet("background-color: #707070;")
 
-        #=====sub_controls=====#
+        # =====sub_controls=====#
         self.sub_folder_button.clicked.connect(vid_open)
         self.sub_download_button.clicked.connect(Subs)
         self.sub_lang_button.clicked.connect(sub_lang)
         self.sub_playlist_checkbox.toggled.connect(sub_playlist_bar_toggle)
         self.sub_lang_checkbox.toggled.connect(sub_lang_bar_toggle)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtites) paste a link and hit download.")
-        #endregion
+        # endregion
 
-        #region ==========💿REENCODE💿==========
+        # region ==========💿REENCODE💿==========
         def Reencode():
             global running
             if running == False:
@@ -514,7 +520,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.tabWidget.setTabText(3, "*Re-encode")
 
-                self.ree_output_console.setHtml("") #clearing the output_console
+                self.ree_output_console.setHtml("") # clearing the output_console
 
                 location = self.ree_location_bar.text()
                 videoc = self.ree_videoc_bar.text()
@@ -523,7 +529,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 audiob = self.ree_audiob_bar.text()
                 append = self.ree_append_bar.text()
 
-                if location[-2:] == "\*": #whole folder
+                if location[-2:] == "\*": # whole folder
                     VidsToRender = glob.glob(location)
                 else:
                     VidsToRender = [f"{location}"]
@@ -533,12 +539,12 @@ class MainWindow(QtWidgets.QMainWindow):
                     else:
                         cmd = [["-hwaccel", "auto", "-i", f"{video}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],["-max_muxing_queue_size", "9999", "-b:v", "0K"],[f"{os.path.splitext(video)[0]+append}"]]
 
-                        #//Video Quality\\#
+                        # //Video Quality\\#
                         if "," in videoq:
                             VQsplit = videoq.split(",")
                         else:
                             VQsplit = [videoq,videoq,videoq]
-                        #//Videeo Codec\\#
+                        # //Videeo Codec\\#
                         if(videoc == "libx265"):
                             VideoCodec = ["-c:v", f"{videoc}"]
                             quality = ["-crf", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
@@ -565,14 +571,14 @@ class MainWindow(QtWidgets.QMainWindow):
                             quality = ["-cq", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
                             Vformat = ["-vf", "format=yuv420p"]
                             cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat,cmd[2]]
-                        #//Audio\\#
+                        # //Audio\\#
                         if(audioc == "remove"):
                             AudioEverything = ["-an"]
                             cmd = [cmd[0]+AudioEverything,cmd[1]]
                         else:
                             AudioEverything = ["-c:a", f"{audioc}", "-strict", "-2", "-b:a", f"{audiob}"]
                             cmd = [cmd[0]+AudioEverything,cmd[1]]
-                        #//Subtitles\\#
+                        # //Subtitles\\#
                         if(videoc == "remove"):
                             SubsC = ""
                             cmd = cmd[0]+cmd[1]
@@ -587,40 +593,40 @@ class MainWindow(QtWidgets.QMainWindow):
                             cmd = ["ffmpeg", "-hide_banner"]+cmd
 
                         process_start(cmd, self.ree_output_console)
-                        #print(cmd)
+                        # print(cmd)
 
                 running = False
                 status("Ready.")
                 self.tabWidget.setTabText(3, "Re-encode")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-        
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+
         def ree_settings():
-            if self.ree_settings_combobox.currentIndex() == 4: #custom
+            if self.ree_settings_combobox.currentIndex() == 4: # custom
                 self.ree_videoc_bar.setText(Vcodec)
                 self.ree_videoq_bar.setText(Vqual)
                 self.ree_audioc_bar.setText(Acodec)
                 self.ree_audiob_bar.setText(Abit)
                 self.ree_append_bar.setText(Append)
-            elif self.ree_settings_combobox.currentIndex() == 0: #hevc_opus
+            elif self.ree_settings_combobox.currentIndex() == 0: # hevc_opus
                 self.ree_videoc_bar.setText("libx265")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("opus")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_hevcopus.mkv")
-            elif self.ree_settings_combobox.currentIndex() == 1: #h264_nvenc
+            elif self.ree_settings_combobox.currentIndex() == 1: # h264_nvenc
                 self.ree_videoc_bar.setText("h264_nvenc")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("aac")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_nvenc.mov")
-            elif self.ree_settings_combobox.currentIndex() == 2: #hevc_nvenc
+            elif self.ree_settings_combobox.currentIndex() == 2: # hevc_nvenc
                 self.ree_videoc_bar.setText("hevc_nvenc")
                 self.ree_videoq_bar.setText("24,24,24")
                 self.ree_audioc_bar.setText("opus")
                 self.ree_audiob_bar.setText("190k")
                 self.ree_append_bar.setText("_henc.mkv")
-            elif self.ree_settings_combobox.currentIndex() == 3: #mp3
+            elif self.ree_settings_combobox.currentIndex() == 3: # mp3
                 self.ree_videoc_bar.setText("remove")
                 self.ree_videoq_bar.setText("none")
                 self.ree_audioc_bar.setText("mp3")
@@ -643,7 +649,7 @@ class MainWindow(QtWidgets.QMainWindow):
             location = self.ree_location_bar.text()
             openFolder(os.path.dirname(location))
 
-        #=====ree_controls=====#
+        # =====ree_controls=====#
         self.ree_settings_combobox.addItem("hevc_opus") # setting up items in combo list
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
@@ -657,11 +663,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.activated.connect(ree_settings)
         self.ree_settings_button.clicked.connect(ree_settings_save)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
-        #self.ree_location_bar.setDragEnabled(True)
+        # self.ree_location_bar.setDragEnabled(True)
         self.ree_location_bar.setAcceptDrops(True)
-        #endregion
+        # endregion
 
-        #region ==========🔄UPDATE🔄==========
+        # region ==========🔄UPDATE🔄==========
         def update_yt_dl():
             cmd = ["git", "pull", "--recurse-submodules"]
             process_start(cmd, self.upd_output_console)
@@ -681,7 +687,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 self.tabWidget.setTabText(4, "*Update")
 
-                self.upd_output_console.setHtml("") #clearing the output_console
+                self.upd_output_console.setHtml("") # clearing the output_console
 
                 if self.upd_update_combobox.currentIndex() == 1:
                     update_yt_dl()
@@ -695,16 +701,16 @@ class MainWindow(QtWidgets.QMainWindow):
                 status("Ready.")
                 self.tabWidget.setTabText(4, "Update")
             else:
-                MessagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+                messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
-        def upd_auto_toggle(): #autoupdate is not a thing tho
+        def upd_auto_toggle(): # autoupdate is not a thing tho
             loadpath()
             global aup
             aupl = not aup
             savepath(autup=aupl)
             self.upd_auto_button.setText(f"Autoupdate=\"{aupl}\"")
 
-        #======upd_controls======#
+        # ======upd_controls======#
         self.upd_update_combobox.addItem("All") # setting up items in combo list
         self.upd_update_combobox.addItem("yt-dl")
         self.upd_update_combobox.addItem("dependencies")
@@ -729,12 +735,12 @@ class MainWindow(QtWidgets.QMainWindow):
             Update()
 
         self.upd_update_button.clicked.connect(Update)
-        #self.upd_branch_button.clicked.connect(upd_branch)
+        # self.upd_branch_button.clicked.connect(upd_branch)
         self.upd_auto_button.setText(f"Autoupdate=\"{aup}\"")
         self.upd_auto_button.clicked.connect(upd_auto_toggle)
-        #endregion
+        # endregion
 
-        #region ==========📈SETTINGS📈==========
+        # region ==========📈SETTINGS📈==========
         def set_save():
             a = self.set_audio_bar.text()
             b = self.set_videos_bar.text()
@@ -766,7 +772,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.set_Append_bar.setText(k)
             self.set_Tab_combobox.setCurrentIndex(l)
 
-        def set_makeScript():  #I had an issue getting the venv working with gui
+        def set_makeScript():  # I had an issue getting the venv working with gui
             if(sys.platform.startswith("win")):
                 f=open("yt-dl_gui.vbs","w")
                 f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
@@ -774,15 +780,15 @@ class MainWindow(QtWidgets.QMainWindow):
                 f=open("yt-dl_gui.bat","w")
                 f.write(f"@echo off\n\nstart /b pythonw.exe gui5.py")
                 f.close()
-            else: #(sys.platform.startswith(("linux", "darwin", "freebsd"))):
+            else: # (sys.platform.startswith(("linux", "darwin", "freebsd"))):
                 f=open("yt-dl","w")
                 f.write(f"#!/bin/sh\n\ncd {spath} && {py} gui5.py")
                 f.close()
-        
+
         def set_open():
             openFolder(spath)
 
-        #=====set_controls=====#
+        # =====set_controls=====#
         set_load(audio, videos, py, pip, ydpip, aup, Acodec, Vcodec, Abit, Vqual, Append, Tab, Codc)
         self.set_loadcur_button.clicked.connect(lambda:set_load(audio, videos, py, pip, True, True, Acodec, Vcodec, Abit, Vqual, Append, Tab))
         self.set_loaddef_button.clicked.connect(lambda:set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0, 0))
@@ -796,9 +802,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
-        #endregion
-        
-        #region ==========🎓ABOUT🎓==========
+        # endregion
+
+        # region ==========🎓ABOUT🎓==========
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored Inc. (C){year}<br>"
                               +f"Version: {ver} gui5 ({curb} branch)<br>"
                               +f"Last updated on: {lstupdt}<br>"
@@ -810,7 +816,7 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
                               +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/changelog.md\">here</a></pre></p>")
-        #endregion
+        # endregion
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
