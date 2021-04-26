@@ -12,7 +12,7 @@ except ModuleNotFoundError:
         print("updating pip...")
         os.system(f"{py} -m pip install -U pip")
     print("installing dependecies...")
-    os.system("pip install -r requirements.txt")
+    os.system("pip install -r req-cli.txt")
 
 try:
     from kolreq.kolreq import clear, readchar #testing if submodule is installed and importing it
