@@ -44,11 +44,12 @@ Finally a tested FreeBSD supprt!<br>
 even an Easter egg.<br>
 
 ### New in 2.1.8:
-Graphical user interface (gui.py)<br>
+Graphical user interface (gui5.py)<br>
 audio + playlist downlaod<br>
 video + playlist + quality, list quality download<br>
 subtitles + playlists + language, list language download<br>
-re-encode + whole folder(folder\\*)<br>
+re-encode + whole folder(folder\\*), presets and more<br>
+very bad drag and drop implementation (I hate it, needs to be fixed somehow)<br>
 update + autoupdate<br>
-settings ! default settings may not work for you after setting default check them!<br>
-about with link that open<br>
+settings !default settings may not work for you after setting default check them!<br>
+about with link that opens<br>

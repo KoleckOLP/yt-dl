@@ -135,7 +135,7 @@
    </palette>
   </property>
   <property name="windowTitle">
-   <string>yt-dl 2.1.8</string>
+   <string>yt-dl 2.1.8.1</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -164,7 +164,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -1112,7 +1112,7 @@
            <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>Default Tab:</string>
           </property>
          </widget>
         </item>

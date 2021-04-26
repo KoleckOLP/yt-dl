@@ -1,16 +1,19 @@
 # yt-dl
-Multiplatform gui(cli is acually falling behind) youtube-dl simplifier
+Multiplatform CLI and GUI youtube-dl simplifier
 
 ### Rewriten in Python 3.
 
 runs on any OS if you can get these
 Requrements:
 + python3
-+ PyQt5
++ PyQt5 (for GUI)
 + youtube-dl
 + ffmpeg, ffprobe
++ py-getch (for CLI)
++ colorama (for CLI)
 
-## Windows:
+<details>
+    <summary>Windows</summary>
 1. intall git: https://git-scm.com/download/win
 2. install python3: https://www.python.org/downloads/
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
@@ -20,10 +23,12 @@ Requrements:
 6. launch `pythonw gui5.py` (if you are missing a config hit ok and restart the app)
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
     2. than you can make a desktop shortcut from `yt-dl_gui.bat` or `yt-dl_gui.vbs` (which ever you like)
+</details>
 
-![alt text](gui/Windows10.png)
+![GUI on Windows 10](gui/Windows10.png)
 
-## Mac:
+<details>
+    <summary>Mac</summary>
 1. install git by typing git into terminal
 2. install python3 and licences
     1. \(optional) update pip (with pip): `py -m pip install -U pip`
@@ -35,10 +40,12 @@ Requrements:
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
     2. than you can make a desktop shortcut from `yt-dl` pin it or move to apps or something, suit yourself<br>
 (icon does not work and nav bar is centered might fix might not)
+</details>
 
-![alt text](gui/MacOS11.png)
+![GUI on MacOS 11](gui/MacOS11.png)
 
-## Linux:
+<details>
+    <summary>Linux</summary>
 1. install git (with your package manager)
 2. install python3 (with your package manager)
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
@@ -48,10 +55,12 @@ Requrements:
 6. launch `python gui5.py` (if you are missing a config hit ok and restart the app)
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
     2. than you can make a desktop shortcut from `yt-dl`
+</details>
 
-![alt text](gui/Xubuntu20.04.png)
+![GUI on Xubuntu 20.04](gui/Xubuntu20.04.png)
 
-## Haiku:
+<details>
+    <summary>Haiku</summary>
 1. install git (from HaikuDepot)
 2. install pyqt_x86_python3, python3_x86, pip_python3 (from HaikuDepot, or 64bit equivalent)
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
@@ -60,14 +69,13 @@ Requrements:
 6. launch `python gui5.py` (if you are missing a config hit ok and restart the app)
     1. \(recommended) on the settings tab fix your setting and Make Lauch Script
     2. than you can make a desktop shortcut from `yt-dl`
+</details>
 
-![alt text](gui/HaikuOS.png)
+![GUI on Haiku](gui/HaikuOS.png)
 
-<br>
 
-### Tried to get it running on BSD and Solaris but can't get all of the requirements to install.
-
-## installing the cli version (win, lin, mac, android)
+<details>
+    <summary>Cli (win,mac,lin,android)</summary>
 1. intall git
 2. install python3
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
@@ -77,3 +85,6 @@ Requrements:
 6. launch `pythonw main.py`
     1. \(recommended) on the settings (7) fix your setting and Make Lauch Script (3)
     2. than you can make a desktop shortcut from `yt-dl.bat` or `yt-dl` (which ever you get, don't forget to chmod +x on posix systems)
+</details>
+
+![CLI on Windows 10 in Powershell 7](gui/cli_win_pwsh.png)
