@@ -74,7 +74,7 @@ def launchs(p=""):
             f.write(f"Set-Location {spath}{cmd}{os.path.sep}Scripts\n.{os.path.sep}Activate.ps1\nSet-Location {spath}\n{py} main.py")
             f.close()
         else:
-            f=open("yt-dl.bat","w")
+            f=open("yt-dl.ps1","w")
             f.write(f"Set-Location {spath}\n{py} main.py")
             f.close()
     else:
