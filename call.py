@@ -22,7 +22,7 @@ def name(newline=True):
 def firstrun(py=""):
     clear()
     print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
-    print("What's the name of your python executable.\n<enter> for python (apologise fo inconvinience)")
+    print("What's the name of your python executable.\n<enter> for python (apologise fo inconvenience)")
     py = input("#")
     if (py == ""):
         py = "python"
@@ -30,7 +30,7 @@ def firstrun(py=""):
     pip = input("#")
     if (pip == ""):
         pip = "pip"
-    print("Have you installed youtube-dl with pip? (yes if you insatlled requrements) [Y/n]")
+    print("Have you installed youtube-dl with pip? (yes if you installed requirements) [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"):
         ydpip = True
@@ -74,7 +74,7 @@ def launchs(p=""):
             f.write(f"Set-Location {spath}{cmd}{os.path.sep}Scripts\n.{os.path.sep}Activate.ps1\nSet-Location {spath}\n{py} main.py")
             f.close()
         else:
-            f=open("yt-dl.bat","w")
+            f=open("yt-dl.ps1","w")
             f.write(f"Set-Location {spath}\n{py} main.py")
             f.close()
     else:
@@ -249,7 +249,7 @@ def upytdl():
         os.system("cd "+spath)
         os.system("git pull --recurse-submodules")
     else:
-        print("yt-dl wasn't installed trought git.\n"
+        print("yt-dl wasn't installed trough git.\n"
         +"delete yt-dl and install it with \"git clone https://github.com/KoleckOLP/yt-dl.git\"")
 
 #==========UPDATE DEPEND==========#
@@ -371,7 +371,7 @@ def videod():
              +"1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
         if(numb == ""): #no playlist
-            print("<Enter> for best quality 1080p + if availeble (\"bestvideo+bestaudio\"),\n"
+            print("<Enter> for best quality 1080p + if available (\"bestvideo+bestaudio\"),\n"
                  +"1 for 720 or lower (\"best\")\n"
                  +"2 to choose yourself")
             qual = input("#")
@@ -450,7 +450,7 @@ def reencode():
         floc = ""
 
     clear()
-    print(Fore.RED + "Files with special charactes in the path may not work, also keep filenames short" + Style.RESET_ALL)
+    print(Fore.RED + "Files with special characters in the path may not work, also keep filenames short" + Style.RESET_ALL)
     global Vcodec
     global Acodec
     global Vqual
@@ -490,7 +490,7 @@ def reencode():
                 if(append == ""):
                     append = ".mp3"
             else:
-                print("reenceded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
+                print("reencoded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
                 append = input("#")
                 if(append == ""):
                     append = "_hevcopus.mkv"
@@ -688,7 +688,7 @@ def debug():
             else:
                 print("no than lol.")
         elif(cmd == "help"):
-            print("You are not supposed to be here, this place is for debugging.\nall - shows program variables\ndeldown - deletes your specific video and audio download foders\n<Enter> - return back to main menu")
+            print("You are not supposed to be here, this place is for debugging.\nall - shows program variables\ndeldown - deletes your specific video and audio download folders\n<Enter> - return back to main menu")
         else:
             clear()
             name()

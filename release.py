@@ -6,5 +6,5 @@ lstupdt = "2021-04-26" #Well not that it's a separete file I should be updating 
 spath = sys.path[0]+os.path.sep #path of the yt-dl dir
 settigui5 = spath+"gui5_settings.json"
 setticli = spath+"cli_settings.json"
-curb = "testing"
+curb = "temp-test"
 ver = "2.1.8.1"
