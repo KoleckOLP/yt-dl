@@ -781,7 +781,9 @@ class MainWindow(QtWidgets.QMainWindow):
                               +f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez<br>"
                               +f"                 (C)2011-{year} youtube-dl developers<br>"
                               +f"ffmpeg (C)2000-{year} FFmpeg team<br>"
-                              +f"Big thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
+                              +f"Thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>"
+                              +f"Thanks to <a href=\"https://github.com/siscodeorg\">siscode</a> for featuring my project<br>"
+                              +f"and helping me improve it.<br>"
                               +f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/changelog.md\">here</a></pre></p>")
         # endregion
 
