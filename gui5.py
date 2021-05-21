@@ -447,31 +447,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 url = self.sub_url_bar.text()
                 cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
 
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)
-                for c in iter(lambda: process.stdout.read(1), b''):
-                    gui = window.isVisible()
-                    if gui == False: # if window of the app was closed kill the subrocess.
-                        process.terminate()
-                    else:
-                        c = str(c)
-                        c = c[2:-1]
-                        if "\\n" in c:
-                            c = c.replace("\\n", "\n")
-                        if "\\r" in c:
-                            c = c.replace("\\r", "\n")
-                        if "\\\\" in c:
-                            c = c.replace("\\\\","\\")
-                        if "\\'" in c:
-                            c = c.replace("\\'","'")
-                        self.sub_output_console.insertPlainText(c)
-                        self.scrollbar = self.sub_output_console.verticalScrollBar()
-                        self.scrollbar.setValue(self.scrollbar.maximum())
-                        QApplication.processEvents()
-                print("\a")
-                self.sub_output_console.insertPlainText("#yt-dl# Process has finished.")
-                QApplication.processEvents()
-                self.scrollbar = self.sub_output_console.verticalScrollBar()
-                self.scrollbar.setValue(self.scrollbar.maximum())
+                process_start(cmd, self.sub_output_console)
+
                 running = False
                 status("Ready.")
             else:
