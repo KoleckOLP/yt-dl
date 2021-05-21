@@ -172,28 +172,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def process_start(cmd="", output_console=""):
             if (sys.platform.startswith("win")): # (os.name == "nt"):
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000)  # this one does not check if another process is running
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True)  # this one does not check if another process is running
             else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            for c in iter(lambda: process.stdout.read(1), b''):
-                gui = self.isVisible()
-                if not gui:  # if window of the app was closed kill the subprocess.
-                    process.terminate()
-                else:
-                    c = str(c)
-                    c = c[2:-1]
-                    if "\\n" in c:
-                        c = c.replace("\\n", "\n")
-                    if "\\r" in c:
-                        c = c.replace("\\r", "\n")
-                    if "\\\\" in c:
-                        c = c.replace("\\\\","\\")
-                    if "\\'" in c:
-                        c = c.replace("\\'","'")
-                    output_console.insertPlainText(c)
-                    self.scrollbar = output_console.verticalScrollBar()
-                    self.scrollbar.setValue(self.scrollbar.maximum())
-                    QtWidgets.QApplication.processEvents()
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+            while True:
+                test = process.stdout.readline()
+                if not test: break
+                test = str(test)
+                if "\\n" in test:
+                    test = test.replace("\\n", "\n")
+                output_console.insertPlainText(test)
+                self.scrollbar = output_console.verticalScrollBar()
+                self.scrollbar.setValue(self.scrollbar.maximum())
+                QtWidgets.QApplication.processEvents()
             print("\a")
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
             QtWidgets.QApplication.processEvents()
