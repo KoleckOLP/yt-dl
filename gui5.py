@@ -158,7 +158,8 @@ class MainWindow(QtWidgets.QMainWindow):
             fh.close()
 
         def SaveDefaultConfig(i):
-            if i.text() == "OK":
+            text : str = i.text().lower()
+            if "ok" in text:
                 savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv", 0, 0)
 
         def status( s=""): # shows status message and changes color of the status bar.
