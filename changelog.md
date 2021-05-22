@@ -1,6 +1,6 @@
 Due to some miracles on this planet OSANA got relesed on 2020-08-31, so this joke is nolonger relevant.<br>
-But at-least I'm not pushing bugfixes everyday since than :D, I'm not updating almost at all.<br>
-If you want to see what I'm up to checkout testing or other branches.<br>
+But at-least I'm not pushing bugfixes everyday since than :D<br>
+Yeah this meme is old by now.<br>
 
 ### New in 2.1.3:
 new versioning system, Lang, Featureset, patch/bugfix<br>
@@ -53,3 +53,17 @@ very bad drag and drop implementation (I hate it, needs to be fixed somehow)<br>
 update + autoupdate<br>
 settings !default settings may not work for you after setting default check them!<br>
 about with link that opens<br>
+
+### New in 2.1.8.1 bugfix:
+Fixed output being written into a wrong console label.<br>
+Replaced placeholder text in setting tab.<br>
+Found by Domo and KoleckOLP, fixed by KoleckOLP<br>
+
+### New in 2.1.9.0:
+Improved text rendering on console label, this improves cpu usage and speed by a lot!<br>
+Suggested improvement by siscode, fixed by KoleckOLP.<br>
+
+### New in 2.1.9.1 bugfix:
+Fixed bug that resulted in default config not generatin on some Linux distubutions.<br>
+Found by KoleckOLP (Arch VM) & Kangalioo (Antergos), KoleckOLP found the cause,<br>
+Rori fixed it with a pull request.<br>
