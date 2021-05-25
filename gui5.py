@@ -156,7 +156,8 @@ class MainWindow(QtWidgets.QMainWindow):
             fh.close()
 
         def SaveDefaultConfig(i):
-            if i.text() == "OK":
+            text: str = i.text().lower()
+            if "ok" in text:
                 savepath("", "", "python", "pip", True, False, "libx265", "opus", "24,24,24", "190k", "_custom.mkv", 0, 0)
 
         def status(s=""):  # shows status message and changes color of the status bar.
@@ -172,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if (sys.platform.startswith("win")):  # (os.name == "nt"):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
             else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, encoding="utf8")
+                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, errors="ignore")
             while True:
                 test = process.stdout.readline()
                 if not test:

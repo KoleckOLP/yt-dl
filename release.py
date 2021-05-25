@@ -7,4 +7,4 @@ spath = sys.path[0]+os.path.sep  # path of the yt-dl dir
 settigui5 = spath+"gui5_settings.json"
 setticli = spath+"cli_settings.json"
 curb = "temp-test"
-ver = "2.1.9.0"
+ver = "2.1.9.1"
