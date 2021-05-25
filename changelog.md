@@ -67,3 +67,7 @@ Suggested improvement by siscode, fixed by KoleckOLP.<br>
 Fixed bug that resulted in default config not generating on some Linux distributions.<br>
 Found by KoleckOLP (Arch VM) & kangalioo (Antergos), KoleckOLP found the cause,<br>
 Rori fixed it with a pull request.<br>
+
+### New in 2.1.9.2 bugfix:
+Fixing issues suggested by PyCharm, which lead me to find that whole folder re-encode "path\\*"<br>
+was not working at all.
