@@ -1,7 +1,7 @@
-import os #importing os so I can os.system to install dependencies
+import os  # importing os so I can os.system to install dependencies
 try:
-    import getch #testing if dependencies are installed, not used in main.py
-    import colorama #point sf this is preventing crashes on missing dependencies in kolreq submodule and call.py
+    import getch  # testing if dependencies are installed, not used in main.py
+    import colorama  # point sf this is preventing crashes on missing dependencies in kolreq submodule and call.py
 except ModuleNotFoundError:
     print("You are missing dependencies, we'll try to install them with pip.")
     input("press any key to continue")
@@ -15,7 +15,7 @@ except ModuleNotFoundError:
     os.system("pip install -r req-cli.txt")
 
 try:
-    from kolreq.kolreq import clear, readchar #testing if submodule is installed and importing it
+    from kolreq.kolreq import clear, readchar  # testing if submodule is installed and importing it
 except ModuleNotFoundError:
     print("this program requires a submodule that will download now.")
     input("press any key to continue")
@@ -40,25 +40,25 @@ while(True):
     print("1. Audio\t5. Re-encode\n2. Video\t6. Update\n3. Exit\t\t7. Download path\n4. Subtitles\t8. About, Changelog")
     cmd = readchar("#")
 
-    if(cmd == "1"): #audio
+    if(cmd == "1"):  # audio
         audiod()
-    elif(cmd == "2"): #video
+    elif(cmd == "2"):  # video
         videod()
-    elif(cmd == "3"): #exit
+    elif(cmd == "3"):  # exit
         print("See you later alligator.")
         break
-    elif(cmd == "4"): #subtitles
+    elif(cmd == "4"):  # subtitles
         subd()
-    elif(cmd == "5"): #re-encode
+    elif(cmd == "5"):  # re-encode
         reencode()
-    elif(cmd == "6"): #update
+    elif(cmd == "6"):  # update
         update()
-    elif(cmd == "7"): #save load path
+    elif(cmd == "7"):  # save load path
         clear()
         slpath()
-    elif(cmd == "8"): #about
+    elif(cmd == "8"):  # about
         about()
-    elif(cmd == ";"): #debug (usually '`' but I don't have that key on my czech work laptop keyboard)
+    elif(cmd == ";"):  # debug (usually '`' but I don't have that key on my czech work laptop keyboard)
         debug()
     else:
         clear()
