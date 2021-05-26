@@ -1,11 +1,15 @@
-import sys, os
-import glob, json
+import os
+import sys
+import json
+import glob
 import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
+# My local
 from release import year, lstupdt, spath, curb, ver
 from release import settigui5 as settings
+
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
     myappid = 'HorseArmored.yt-dl.gui5.'+ver  # Program Sting
@@ -414,7 +418,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 for item in subpath:
                     namei = os.path.basename(item)
                     namei = namei[:-3]
-                    newsubpath = f"{videos}{namei}srt"
+                    newsubpath = f"{videos}{namei}srt"  # I don't like this fix to a complain about var type
                     if os.path.isfile(newsubpath):
                         self.sub_output_console.insertPlainText(f"#yt-dl# file {item} already exists skipping...\n")
                     else:
