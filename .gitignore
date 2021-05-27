@@ -1,20 +1,27 @@
-settings.json
-gui5_settings.json
-cli_settings.json
-__pycache__
 .helpfiles
-env
-tenv
-audio
-videos
+~$*
+
+# IDE folders
+.idea
+.vscode
+
+# python junk
+__pycache__
+
+# generated launchscripts
 *.bat
 *.ps1
 *.vbs
-.vscode
 yt-dl
+# generated json sonfigs
+*.json
+
+# default download folders
+audio
+videos
+
+# fftools and dir to hide it
 ffmpeg.exe
 ffprobe.exe
 ffplay.exe
 ffdir
-~$*
-.idea

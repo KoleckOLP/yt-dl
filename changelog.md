@@ -71,3 +71,6 @@ Rori fixed it with a pull request.<br>
 ### New in 2.1.9.2 bugfix:
 Fixing issues suggested by PyCharm, which lead me to find that whole folder re-encode "path\\*"<br>
 was not working at all.
+
+### New in 2.1.10.0:
+Improved settings (json) file, big thanks to Paulo! With this a lot of Bugs and Warnings were eliminated.
