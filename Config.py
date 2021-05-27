@@ -1,6 +1,6 @@
-import os
 import json
-from release import spath
+# Imports from this projects
+from release import videoDirDefault, audioDirDefault
 
 
 class Encoder(json.JSONEncoder):
@@ -66,8 +66,8 @@ class Settings:
     def loadDefault():
         return Settings(PythonSettings("python",  # I don't like this because some systems need python3 or python3.x here
                                        "pip"),  # some systems might have pip3.x here
-                        YoutubedlSettings(f"{spath}videos{os.path.sep}",  # gets replace with path to yt-dl at some point???
-                                          f"{spath}audio{os.path.sep}",  # same as above
+                        YoutubedlSettings(videoDirDefault,  # videos folder inside of yt-dl
+                                          audioDirDefault,  # audio folder inside of yt-dl
                                           True),  # only true if youtube-dl is from pip which this just assumes
                         FfmpegSettings("libx265",  # This is just fine
                                        "opus",  # same as above
@@ -76,4 +76,4 @@ class Settings:
                                        "_custom.mkv"),  # same as above
                         False,  # I would recommend not having auto update off xD
                         0,  # audio tab
-                        0)  # hevc opus
+                        0)  # hevc_opus

@@ -5,9 +5,8 @@ import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
-# My local
-from release import year, lstupdt, spath, curb, ver
-from release import settingsPath
+# Imports from this projects
+from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -669,7 +668,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # =====set_controls=====#
         set_load(settings.Youtubedl.audioDir, settings.Youtubedl.videoDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab)
         self.set_loadcur_button.clicked.connect(lambda: set_load(settings.Youtubedl.audioDir, settings.Youtubedl.audioDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab))
-        self.set_loaddef_button.clicked.connect(lambda: set_load(spath+"audio"+os.path.sep, spath+"videos"+os.path.sep, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
+        self.set_loaddef_button.clicked.connect(lambda: set_load(audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(set_open)
         self.set_launch_button.clicked.connect(set_makeScript)
         self.set_save_button.clicked.connect(set_save)
