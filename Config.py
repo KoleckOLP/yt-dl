@@ -1,4 +1,6 @@
+import os
 import json
+from release import spath
 
 
 class Encoder(json.JSONEncoder):
@@ -48,9 +50,9 @@ class Settings:
             x = json.loads(fh.read())
         return Settings(PythonSettings(x["Python"]["python"],
                                        x["Python"]["pip"]),
-                        YoutubedlSettings(x["Youtbedl"]["audioDir"],
-                                          x["Youtbedl"]["videoDir"],
-                                          x["Youtbedl"]["fromPip"]),
+                        YoutubedlSettings(x["Youtubedl"]["audioDir"],
+                                          x["Youtubedl"]["videoDir"],
+                                          x["Youtubedl"]["fromPip"]),
                         FfmpegSettings(x["Ffmpeg"]["videoCodec"],
                                        x["Ffmpeg"]["audioCodec"],
                                        x["Ffmpeg"]["videoQuality"],
@@ -64,8 +66,8 @@ class Settings:
     def loadDefault():
         return Settings(PythonSettings("python",  # I don't like this because some systems need python3 or python3.x here
                                        "pip"),  # some systems might have pip3.x here
-                        YoutubedlSettings("",  # gets replace with path to yt-dl at some point???
-                                          "",  # same as above
+                        YoutubedlSettings(f"{spath}videos{os.path.sep}",  # gets replace with path to yt-dl at some point???
+                                          f"{spath}audio{os.path.sep}",  # same as above
                                           True),  # only true if youtube-dl is from pip which this just assumes
                         FfmpegSettings("libx265",  # This is just fine
                                        "opus",  # same as above
