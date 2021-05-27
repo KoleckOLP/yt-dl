@@ -47,28 +47,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 msg.buttonClicked.connect(callf)
             msg.exec_()
 
-        def loadpath():
-            # old mess
-            global settings, fdir
-            pffmpeg = glob.glob(f"{spath}/ffmpeg*")
-            pffprobe = glob.glob(f"{spath}/ffprobe*")
-            if (not pffmpeg and not pffprobe):
-                fdir = False
+        def SaveDefaultConfig(i):
+            text: str = i.text().lower()
+            if "ok" in text:
+                nonlocal settings
+                settings = Settings.loadDefault()
+                settings.toJson(settingsPath)
             else:
-                fdir = True
-            # new stuff
-            if (os.path.exists(settingsPath)):
-                settings = Settings.fromJson(settingsPath)
-            else:
-                messagePopup("Settings error", QMessageBox.Critical,
-                             "You are missing a config file,\nPress OK to load default config.\nAnd start the program again.", SaveDefaultConfig)
-                exit(0)
-
-        def SaveDefaultConfig():
-            print("test")
-            settings = Settings.loadDefault()
-            print(settings)
-            settings.toJson(settingsPath)
+                exit()
 
         def status(s=""):  # shows status message and changes color of the status bar.
             self.statusBar().showMessage(s)
@@ -110,7 +96,19 @@ class MainWindow(QtWidgets.QMainWindow):
                 os.system(f"xdg-open {loc}")
 
         # region ===== startup =====
-        loadpath()
+        pffmpeg = glob.glob(f"{spath}/ffmpeg*")
+        pffprobe = glob.glob(f"{spath}/ffprobe*")
+        if (not pffmpeg and not pffprobe):
+            fdir = False
+        else:
+            fdir = True
+
+        if (os.path.exists(settingsPath)):
+            settings = Settings.fromJson(settingsPath)
+        else:
+            messagePopup("Settings error", QMessageBox.Critical,
+                         "You are missing a config file,\nPress OK to load default config.",
+                         SaveDefaultConfig)
 
         self.tabWidget.setCurrentIndex(settings.defaultTab)  # the code will not get here if settings is undefined.
 
@@ -530,7 +528,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("mp3")
         self.ree_settings_combobox.addItem("custom")
-        self.ree_settings_combobox.setCurrentIndex(settings.defaultCodec)  # should be a setting
+        self.ree_settings_combobox.setCurrentIndex(settings.defaultCodec)
         ree_settings()  # load option on startup
         self.ree_choose_button.clicked.connect(ree_choose)
         self.ree_reencode_button.clicked.connect(Reencode)
@@ -579,7 +577,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
         def upd_auto_toggle():  # autoupdate is not a thing tho
-            loadpath()
             settings.autoUpdate = not settings.autoUpdate
             settings.toJson(settingsPath)
             self.upd_auto_button.setText(f"Autoupdate=\"{settings.autoUpdate}\"")
@@ -630,21 +627,20 @@ class MainWindow(QtWidgets.QMainWindow):
             settings.defaultTab = self.set_Tab_combobox.currentIndex()
 
             settings.toJson(settingsPath)
-            loadpath()
 
-        def set_load(a, b, c, d, e, f, g, h, i, j, k, l):
-            self.set_audio_bar.setText(a[:-1])
-            self.set_videos_bar.setText(b[:-1])
-            self.set_py_bar.setText(c)
-            self.set_pip_bar.setText(d)
-            self.set_ydpip_checkbox.setChecked(e)
-            self.set_aup_checkbox.setChecked(f)
-            self.set_Acodec_bar.setText(g)
-            self.set_Vcodec_bar.setText(h)
-            self.set_Abit_bar.setText(i)
-            self.set_Vqual_bar.setText(j)
-            self.set_Append_bar.setText(k)
-            self.set_Tab_combobox.setCurrentIndex(l)
+        def set_load(audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vqual, append, tab):
+            self.set_audio_bar.setText(audio[:-1])
+            self.set_videos_bar.setText(video[:-1])
+            self.set_py_bar.setText(py)
+            self.set_pip_bar.setText(pip)
+            self.set_ydpip_checkbox.setChecked(ydpip)
+            self.set_aup_checkbox.setChecked(aup)
+            self.set_Acodec_bar.setText(acodec)
+            self.set_Vcodec_bar.setText(vcodec)
+            self.set_Abit_bar.setText(abit)
+            self.set_Vqual_bar.setText(vqual)
+            self.set_Append_bar.setText(append)
+            self.set_Tab_combobox.setCurrentIndex(tab)
 
         def set_makeScript():  # I had an issue getting the venv working with gui
             if(sys.platform.startswith("win")):
@@ -663,7 +659,6 @@ class MainWindow(QtWidgets.QMainWindow):
             openFolder(spath)
 
         # =====set_controls=====#
-        set_load(settings.Youtubedl.audioDir, settings.Youtubedl.videoDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab)
         self.set_loadcur_button.clicked.connect(lambda: set_load(settings.Youtubedl.audioDir, settings.Youtubedl.audioDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab))
         self.set_loaddef_button.clicked.connect(lambda: set_load(audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(set_open)
@@ -676,6 +671,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
+        set_load(settings.Youtubedl.audioDir, settings.Youtubedl.videoDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab)
         # endregion
 
         # region ==========🎓ABOUT🎓==========
