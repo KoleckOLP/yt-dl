@@ -3,6 +3,7 @@ import sys
 import glob
 import subprocess
 import tempfile
+from typing import List
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 # Imports from this project
@@ -14,6 +15,7 @@ if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     myappid = 'HorseArmored.yt-dl.gui5.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
+global running
 
 class MainWindow(QtWidgets.QMainWindow):
     def dragEnterEvent(self, e):
@@ -65,7 +67,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
-        def process_start(cmd: list[str], output_console):
+        def process_start(cmd: List[str], output_console):
             if (sys.platform.startswith("win")):  # (os.name == "nt"):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
             else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
@@ -112,7 +114,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.setWindowTitle(f"yt-dl {ver}")
 
-        global Tab
         self.tabWidget.setCurrentIndex(settings.defaultTab)  # the code will not get here if settings is undefined.
 
         global running

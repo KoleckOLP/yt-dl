@@ -9,4 +9,4 @@ settingsPath = spath+"settings.json"
 videoDirDefault = spath+"videos"+os.path.sep
 audioDirDefault = spath+"audio"+os.path.sep
 curb = "master"
-ver = "2.1.10.0"
+ver = "2.1.10.1"
