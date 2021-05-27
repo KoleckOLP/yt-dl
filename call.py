@@ -406,28 +406,24 @@ def reencode():
 
     clear()
     print(Fore.RED + "Files with special characters in the path may not work, also keep filenames short" + Style.RESET_ALL)
-    global Vcodec
-    global Acodec
-    global Vqual
-    global Abit
     print("(video codec=\"", end="")
-    if (Vcodec == "none"):
-        print(Fore.RED + Vcodec + Style.RESET_ALL, end="")
+    if (settings.Ffmpeg == "none"):
+        print(Fore.RED + settings.Ffmpeg.videoCodec + Style.RESET_ALL, end="")
     else:
-        print(Fore.YELLOW + Vcodec + Style.RESET_ALL, end="")
-    print("\", audio codec=\"" + Fore.CYAN + Acodec + Style.RESET_ALL + "\", video q,qmin,qmax=\"", end="")
-    if (Vcodec == "none"):
-        print(Fore.RED + Vqual + Style.RESET_ALL, end="")
+        print(Fore.YELLOW + settings.Ffmpeg.videoCodec + Style.RESET_ALL, end="")
+    print("\", audio codec=\"" + Fore.CYAN + settings.Ffmpeg.audioCodec + Style.RESET_ALL + "\", video q,qmin,qmax=\"", end="")
+    if (settings.Ffmpeg.videoCodec == "none"):
+        print(Fore.RED + settings.Ffmpeg.videoQuality + Style.RESET_ALL, end="")
     else:
-        print(Fore.YELLOW + Vqual + Style.RESET_ALL, end="")
-    print("\", audio bitrate=\"" + Fore.CYAN + Abit + Style.RESET_ALL + "\")\n" +
+        print(Fore.YELLOW + settings.Ffmpeg.videoQuality + Style.RESET_ALL, end="")
+    print("\", audio bitrate=\"" + Fore.CYAN + settings.Ffmpeg.audioBitrate + Style.RESET_ALL + "\")\n" +
           "<Enter> single video\n" +
           "1. whole folder\n" +
           "2. change settings\n" +
           "0. GoBack")
     cmd = input("#")
     if(cmd == ""):  # ====================SINGLE==================== #
-        if(Vcodec == "remove" and Acodec == "remove"):
+        if(settings.Ffmpeg.videoCodec == "remove" and settings.Ffmpeg.audioCodec == "remove"):
             print("I mean you can delete the file yourself. :)")
         else:
             print("write path to the file you want to reencode")
@@ -439,7 +435,7 @@ def reencode():
             elif(url[0:1] == "'"):  # posix (' ' )
                 url = url[1:-2]
             # //append\\ #
-            if(Vcodec == "remove"):
+            if(settings.Ffmpeg.videoCodec == "remove"):
                 print("re-encoded file will get \".mp3\" appended, or type a different one")
                 append = input("#")
                 if(append == ""):
@@ -452,34 +448,34 @@ def reencode():
                 elif(append == "1"):
                     append = "_nvenc.mov"
             # //Video Quality\\ #
-            if "," in Vqual:
-                VQsplit = Vqual.split(",")
+            if "," in settings.Ffmpeg.videoQuality:
+                VQsplit = settings.Ffmpeg.videoQuality.split(",")
             else:
-                VQsplit = [Vqual, Vqual, Vqual]
+                VQsplit = [settings.Ffmpeg.videoQuality, settings.Ffmpeg.videoQuality, settings.Ffmpeg.videoQuality]
             # //Video Codec\\ #
-            if(Vcodec == "libx265"):
-                VideoCodec = f"-c:v {Vcodec}"
+            if(settings.Ffmpeg.videoCodec == "libx265"):
+                VideoCodec = f"-c:v {settings.Ffmpeg.videoCodec}"
                 quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[1])-1} -qmax {int(VQsplit[2])-1}"
                 Vformat = "-vf format=yuv420p"
-            elif(Vcodec == "copy"):
-                VideoCodec = f"-c:v {Vcodec}"
+            elif(settings.Ffmpeg.videoCodec == "copy"):
+                VideoCodec = f"-c:v {settings.Ffmpeg.videoCodec}"
                 quality = ""
                 Vformat = ""
-            elif(Vcodec == "remove"):
+            elif(settings.Ffmpeg.videoCodec == "remove"):
                 VideoCodec = "-vn"
                 quality = ""
                 Vformat = ""
             else:
-                VideoCodec = f"-c:v {Vcodec}"
+                VideoCodec = f"-c:v {settings.Ffmpeg.videoCodec}"
                 quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
                 Vformat = "-vf format=yuv420p"
             # //Audio\\ #
-            if(Acodec == "remove"):
+            if(settings.Ffmpeg.audioCodec == "remove"):
                 AudioEverything = "-an"
             else:
-                AudioEverything = f"-c:a {Acodec} -strict -2 -b:a {Abit}"
+                AudioEverything = f"-c:a {settings.Ffmpeg.audioCodec} -strict -2 -b:a {settings.Ffmpeg.audioBitrate}"
             # //Subtitles\\ #
-            if(Vcodec == "remove"):
+            if(settings.Ffmpeg.videoCodec == "remove"):
                 SubsC = ""
             else:
                 SubsC = "-c:s copy"
@@ -487,13 +483,13 @@ def reencode():
             print(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0]+append}\"")
         print("\a")
     elif(cmd == '1'):  # ====================WHOLE FOLDER==================== #
-        if(Vcodec == "remove" and Acodec == "remove"):
+        if(settings.Ffmpeg.videoCodec == "remove" and settings.Ffmpeg.audioCodec == "remove"):
             print("I'm not gonna delete the folder for you. hmpf")
         else:
             print("write path to the folder with videos")
             url = input("#")
             # //append\\ #
-            if(Vcodec == "remove"):
+            if(settings.Ffmpeg.videoCodec == "remove"):
                 print("re-encoded file will get \".mp3\" appended, or type a different one")
                 append = input("#")
                 if(append == ""):
@@ -506,34 +502,34 @@ def reencode():
                 elif(append == "1"):
                     append = "_nvenc.mov"
             # //Video Quality\\ #
-            if "," in Vqual:
-                VQsplit = Vqual.split(",")
+            if "," in settings.Ffmpeg.videoQuality:
+                VQsplit = settings.Ffmpeg.videoQuality.split(",")
             else:
-                VQsplit = [Vqual, Vqual, Vqual]
+                VQsplit = [settings.Ffmpeg.videoQuality, settings.Ffmpeg.videoQuality, settings.Ffmpeg.videoQuality]
             # //Video Codec\\ #
-            if(Vcodec == "libx265"):
-                VideoCodec = f"-c:v {Vcodec}"
+            if(settings.Ffmpeg.videoCodec == "libx265"):
+                VideoCodec = f"-c:v {settings.Ffmpeg.videoCodec}"
                 quality = f"-crf {int(VQsplit[0])-1} -qmin {int(VQsplit[1])-1} -qmax {int(VQsplit[2])-1}"
                 Vformat = "-vf format=yuv420p"
-            elif(Vcodec == "copy"):
-                VideoCodec = f"-c:v {Vcodec}"
+            elif(settings.Ffmpeg.videoCodec == "copy"):
+                VideoCodec = f"-c:v {settings.Ffmpeg.videoCodec}"
                 quality = ""
                 Vformat = ""
-            elif(Vcodec == "remove"):
+            elif(settings.Ffmpeg.videoCodec == "remove"):
                 VideoCodec = "-vn"
                 quality = ""
                 Vformat = ""
             else:
-                VideoCodec = f"-c:v {Vcodec}"
+                VideoCodec = f"-c:v {settings.Ffmpeg.videoCodec}"
                 quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
                 Vformat = "-vf format=yuv420p"
             # //Audio\\ #
-            if(Acodec == "remove"):
+            if(settings.Ffmpeg.audioCodec == "remove"):
                 AudioEverything = "-an"
             else:
-                AudioEverything = f"-c:a {Acodec} -strict -2 -b:a {Abit}"
+                AudioEverything = f"-c:a {settings.Ffmpeg.audioCodec} -strict -2 -b:a {settings.Ffmpeg.audioBitrate}"
             # //Subtitles\\ #
-            if(Vcodec == "remove"):
+            if(settings.Ffmpeg.videoCodec == "remove"):
                 SubsC = ""
             else:
                 SubsC = "-c:s copy"
@@ -543,56 +539,56 @@ def reencode():
                 os.system(f"{floc}ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{video[:-4]+append}\"")
         print("\a")
     elif(cmd == '2'):
-        print(f"VideoCodec = {Vcodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, 3. copy, 4. remove or write your own")
+        print(f"VideoCodec = {settings.Ffmpeg.videoCodec}, <Enter> keep, 1. libx265, 2. h264_nvenc, 3. copy, 4. remove or write your own")
         cmd = input("#")
         if (cmd == ""):
             pass
         elif(cmd == "1"):
-            Vcodec = "libx265"
+            settings.Ffmpeg.videoCodec = "libx265"
         elif(cmd == "2"):
-            Vcodec = "h264_nvenc"
+            settings.Ffmpeg.videoCodec = "h264_nvenc"
         elif(cmd == "3"):
-            Vcodec = "copy"
+            settings.Ffmpeg.videoCodec = "copy"
         elif(cmd == "4"):
-            Vcodec = "remove"
+            settings.Ffmpeg.videoCodec = "remove"
         else:
-            Vcodec = cmd
-        print(f"AudioCodec = {Acodec}, <Enter> keep, 1. Opus, 2. AAC, 3. copy, 4. remove or write your own")
+            settings.Ffmpeg.videoCodec = cmd
+        print(f"AudioCodec = {settings.Ffmpeg.audioCodec}, <Enter> keep, 1. Opus, 2. AAC, 3. copy, 4. remove or write your own")
         cmd = input("#")
         if (cmd == ""):
             pass
         elif(cmd == "1"):
-            Acodec = "opus"
+            settings.Ffmpeg.audioCodec = "opus"
         elif(cmd == "2"):
-            Acodec = "aac"
+            settings.Ffmpeg.audioCodec = "aac"
         elif(cmd == "3"):
-            Acodec = "copy"
+            settings.Ffmpeg.audioCodec = "copy"
         elif(cmd == "4"):
-            Acodec = "remove"
+            settings.Ffmpeg.audioCodec = "remove"
         else:
-            Acodec = cmd
-        if (Vcodec not in ("copy", "remove")):
-            print(f"VideoQuality = {Vqual}, <Enter> keep, 1. 24,24,24; or write your own q,qmin,qmax, or just q")
+            settings.Ffmpeg.audioCodec = cmd
+        if (settings.Ffmpeg.videoCodec not in ("copy", "remove")):
+            print(f"VideoQuality = {settings.Ffmpeg.videoQuality}, <Enter> keep, 1. 24,24,24; or write your own q,qmin,qmax, or just q")
             cmd = input("#")
             if (cmd == ""):
                 pass
             elif(cmd == "1"):
-                Vqual = "24,24,24"
+                settings.Ffmpeg.videoQuality = "24,24,24"
             else:
-                Vqual = cmd
+                settings.Ffmpeg.videoQuality = cmd
         else:
-            Vqual = "none"
-        if(Acodec not in ("copy", "remove")):
-            print(f"AudioBitrate = {Abit}, <Enter> keep, 1. 190k, or write your own")
+            settings.Ffmpeg.videoQuality = "none"
+        if(settings.Ffmpeg.audioCodec not in ("copy", "remove")):
+            print(f"AudioBitrate = {settings.Ffmpeg.audioBitrate}, <Enter> keep, 1. 190k, or write your own")
             cmd = input("#")
             if (cmd == ""):
                 pass
             elif(cmd == "1"):
-                Abit = "190k"
+                settings.Ffmpeg.audioBitrate = "190k"
             else:
-                Abit = cmd
+                settings.Ffmpeg.audioBitrate = cmd
         else:
-            Abit = "none"
+            settings.Ffmpeg.audioBitrate = "none"
         savepath()
         loadpath("hid")
     else:
@@ -625,7 +621,7 @@ def debug():
             TF(git)
             print("autoupdate: ", end="")
             TF(settings.autoUpdate)
-            print(f"Vcodec: {Vcodec}\nAcodec: {Acodec}\nVqual: {Vqual}\nAbit: {Abit}")
+            print(f"videoCodec: {settings.Ffmpeg.videoCodec}\naudioCodec: {settings.Ffmpeg.audioCodec}\nvideoQuality: {settings.Ffmpeg.videoQuality}\naudioBitrate: {settings.Ffmpeg.audioBitrate}")
             if is_venv():
                 venv = True
             else:

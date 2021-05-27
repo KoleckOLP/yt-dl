@@ -47,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 msg.buttonClicked.connect(callf)
             msg.exec_()
 
-        def loadpath():  # Fixed version from call.py display's message boxes
+        def loadpath():
             # old mess
             global settings, fdir
             pffmpeg = glob.glob(f"{spath}/ffmpeg*")
@@ -61,10 +61,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 settings = Settings.fromJson(settingsPath)
             else:
                 messagePopup("Settings error", QMessageBox.Critical,
-                             "You are missing a config file,\nPress OK to load default config.", SaveDefaultConfig)
+                             "You are missing a config file,\nPress OK to load default config.\nAnd start the program again.", SaveDefaultConfig)
                 exit(0)
 
-        def savepath():  # a is the default value because I dunno
+        def savepath():
             settings.toJson(settingsPath)
 
         def SaveDefaultConfig():

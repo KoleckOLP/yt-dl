@@ -66,8 +66,8 @@ class Settings:
     def loadDefault():
         return Settings(PythonSettings("python",  # I don't like this because some systems need python3 or python3.x here
                                        "pip"),  # some systems might have pip3.x here
-                        YoutubedlSettings(videoDirDefault,  # videos folder inside of yt-dl
-                                          audioDirDefault,  # audio folder inside of yt-dl
+                        YoutubedlSettings(audioDirDefault,  # audio folder inside of yt-dl
+                                          videoDirDefault,  # video folder inside of yt-dl
                                           True),  # only true if youtube-dl is from pip which this just assumes
                         FfmpegSettings("libx265",  # This is just fine
                                        "opus",  # same as above
