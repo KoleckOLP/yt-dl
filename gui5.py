@@ -5,7 +5,7 @@ import subprocess
 import tempfile
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
-# Imports from this projects
+# Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from Config import Settings
 
@@ -82,7 +82,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
-        def process_start(cmd: list[str], output_console=""):
+        def process_start(cmd: list[str], output_console):
             if (sys.platform.startswith("win")):  # (os.name == "nt"):
                 process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
             else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
@@ -115,7 +115,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # region ===== startup =====
         loadpath()
 
-        self.tabWidget.setCurrentIndex(settings.defaultTab)  # will eventually fix settings can be undefined
+        self.tabWidget.setCurrentIndex(settings.defaultTab)  # the code will not get here if settings is undefined.
 
         global running
         running = False

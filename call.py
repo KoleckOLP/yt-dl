@@ -1,13 +1,12 @@
 import os
 import sys
-import json
 import glob
 import tempfile
 from colorama import init, Fore, Style  # Back
-# My local
+# Imports from this projects
 from kolreq.kolreq import clear, readchar
-from release import year, lstupdt, spath, curb, ver
-from release import setticli as settings
+from release import year, lstupdt, spath, curb, ver, settingsPath
+from Config import Settings
 
 init()  # initialises colorama
 
@@ -25,33 +24,35 @@ def name(newline=True):
 # ==========FIRST TIME SETUP MENU========== #
 def firstrun():
     clear()
+    global settings
+    settings = Settings.loadDefault()
     print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
     print("What's the name of your python executable.\n<enter> for python (apologise fo inconvenience)")
-    py = input("#")
-    if (py == ""):
-        py = "python"
+    settings.Python.python = input("#")
+    if (settings.Python.python == ""):
+        settings.Python.python = "python"
     print("What's the name of your pip executable.\n<Enter> for pip")
-    pip = input("#")
-    if (pip == ""):
-        pip = "pip"
+    settings.Python.pip = input("#")
+    if (settings.Python.pip == ""):
+        settings.Python.pip = "pip"
     print("Have you installed youtube-dl with pip? (yes if you installed requirements) [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"):
-        ydpip = True
+        settings.Youtubedl.fromPip = True
     else:
-        ydpip = False
+        settings.Youtubedl.fromPip = False
     print("\nDo you want autoudate on launch? [Y/n]")
     cmd = readchar("#")
     if (cmd == "y"):
-        aup = True
+        settings.autoUpdate = True
     else:
-        aup = False
+        settings.autoUpdate = False
     print()
-    Vcodec = "libx265"  # libx265, h264_nvenc
-    Acodec = "opus"  # opus, acc
-    Vqual = "24,24,24"  # 24
-    Abit = "190k"  # 190
-    savepath("chp", py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit)
+    settings.Ffmpeg.videoCodec = "libx265"  # libx265, h264_nvenc
+    settings.Ffmpeg.audioCodec = "opus"  # opus, acc
+    settings.Ffmpeg.videoQuality = "24,24,24"  # 24
+    settings.Ffmpeg.audioBitrate = "190k"  # 190
+    savepath()
     loadpath()
     print("Do you want a Launch script? [Y/n] or p=" + Fore.BLUE + "Powershell" + Style.RESET_ALL)
     cmd = readchar("#")
@@ -66,7 +67,7 @@ def firstrun():
 
 
 # ==========MAKE LAUNCH SCRIPT========== #
-def launchs(p=""):
+def launchs(p=False):
     if is_venv:
         print("type name of your venv")
         cmd = input("#")
@@ -76,32 +77,32 @@ def launchs(p=""):
     if p:
         if(cmd != ""):
             f = open("yt-dl.ps1", "w")
-            f.write(f"Set-Location {spath}{cmd}{os.path.sep}Scripts\n.{os.path.sep}Activate.ps1\nSet-Location {spath}\n{py} main.py")
+            f.write(f"Set-Location {spath}{cmd}{os.path.sep}Scripts\n.{os.path.sep}Activate.ps1\nSet-Location {spath}\n{settings.Python.python} main.py")
             f.close()
         else:
             f = open("yt-dl.ps1", "w")
-            f.write(f"Set-Location {spath}\n{py} main.py")
+            f.write(f"Set-Location {spath}\n{settings.Python.python} main.py")
             f.close()
     else:
         if(cmd != ""):
             if(os.name == 'nt'):
                 f = open("yt-dl.bat", "w")
-                f.write(f"@echo off\n\ncmd /c \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {py} main.py\"")
+                f.write(f"@echo off\n\ncmd /c \"cd /d {spath}{cmd}{os.path.sep}Scripts & activate & cd /d {spath} & {settings.Python.python} main.py\"")
                 f.close()
             elif(os.name == 'posix'):
                 f = open("yt-dl", "w")
-                f.write(f"#!/bin/sh\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath}{cmd}{os.path.sep}bin && source activate && cd {spath} && {settings.Python.python} main.py")
                 f.close()
             else:
                 print('####If you see this please contact the dev. 0x1015####')
         else:
             if(os.name == 'nt'):
                 f = open("yt-dl.bat", "w")
-                f.write(f"@echo off\n\ncmd /c \"cd /d {spath} & {py} main.py\"")
+                f.write(f"@echo off\n\ncmd /c \"cd /d {spath} & {settings.Python.python} main.py\"")
                 f.close()
             elif(os.name == 'posix'):
                 f = open("yt-dl", "w")
-                f.write(f"#!/bin/sh\n\ncd {spath} && {py} main.py")
+                f.write(f"#!/bin/sh\n\ncd {spath} && {settings.Python.python} main.py")
                 f.close()
             else:
                 print('####If you see this please contact the dev. 0x1005####')
@@ -137,94 +138,31 @@ def about():
 
 
 # ==========SAVE PATH========== #
-def savepath(a="chp", x="", y="", z="", q="", vc="", ac="", vq="", ab=""):
-    if (a == "chp"):
-        print("Type path were you want to store audio,\n" +
-              "<Enter> a default subdir 0. GoBack")
-        aud = input("#")
-        if (aud == "0"):
-            clear()
-            name()
-        else:
-            if (aud == ""):
-                aud = spath+"audio"
-            print("Type path were you want to store videos,\n" +
-                  "<Enter> a default subdir 0. GoBack")
-            vid = input("#")
-            if (vid == "0"):
-                clear()
-                name()
-            else:
-                with open(settings, "w") as fh:
-                    if (vid == ""):
-                        vid = spath+"videos"
-                        json.dump({"audio": aud+os.path.sep, "videos": vid+os.path.sep, "py": x, "pip": y, "ydpip": z, "aup": q, "Vcodec": vc, "Acodec": ac, "Vqual": vq, "Abit": ab}, fh, indent=2)
-                    else:
-                        json.dump({"audio": aud+os.path.sep, "videos": vid+os.path.sep, "py": x, "pip": y, "ydpip": z, "aup": q, "Vcodec": Vcodec, "Acodec": Acodec, "Vqual": Vqual, "Abit": Abit}, fh, indent=2)
-    if (a != "chp"):
-        # loadpath("hid")
-        fh = open(settings, "w")
-        json.dump({"audio": audio, "videos": videos, "py": x, "pip": y, "ydpip": z, "aup": q, "Vcodec": Vcodec, "Acodec": Acodec, "Vqual": Vqual, "Abit": Abit}, fh)
-        fh.close()
+def savepath():
+    settings.toJson(settingsPath)
 
 
 # ==========LOAD PATH========== #
 def loadpath(s="show"):
-    global audio
-    global videos
-    global py
-    global pip
-    global ydpip
-    global aup
-    global Vcodec
-    global Acodec
-    global Vqual
-    global Abit
-    global fdir
-    fh = open(settings, "r")
-    try:
-        path = json.loads(fh.read())
-    except ValueError:
-        firstrun() 
-        path = json.loads(fh.read())
-    fh.close()
-    try:
-        path["audio"]
-        path["videos"]
-        path["py"]
-        path["pip"]
-        path["ydpip"]
-        path["aup"]
-        path["Vcodec"]
-        path["Acodec"]
-        path["Vqual"]
-        path["Abit"]
-    except KeyError:
-        firstrun()
-    else:
-        audio = path["audio"]
-        videos = path["videos"]
-        py = path["py"]
-        pip = path["pip"]
-        ydpip = path["ydpip"]
-        aup = path["aup"]
-        Vcodec = path["Vcodec"]
-        Acodec = path["Acodec"]
-        Vqual = path["Vqual"]
-        Abit = path["Abit"]
-
+    # old mess
+    global settings, fdir
     pffmpeg = glob.glob(f"{spath}/ffmpeg*")
     pffprobe = glob.glob(f"{spath}/ffprobe*")
     if (not pffmpeg and not pffprobe):
         fdir = False
     else:
         fdir = True
+    # new stuff
+    if (os.path.exists(settingsPath)):
+        settings = Settings.fromJson(settingsPath)
+    else:
+        firstrun()
 
     if(s == "show"):
         print(Style.BRIGHT + "audio is saved to: " + Style.RESET_ALL, end="")
-        print(audio)
+        print(settings.Youtubedl.audioDir)
         print(Style.BRIGHT + "video is saved to: " + Style.RESET_ALL, end="")
-        print(videos + "\n")
+        print(settings.Youtubedl.videoDir + "\n")
 
 
 # ==========SAVE MENU========== #
@@ -267,18 +205,17 @@ def upytdl():
 # ==========UPDATE DEPEND========== #
 def upyd():
     print("updating pip...")
-    os.system(f"{py} -m {pip} install --upgrade {pip}")
+    os.system(f"{settings.Python.python} -m {settings.Python.pip} install --upgrade {settings.Python.pip}")
     print("Updating dependencies...")
-    os.system(f"{pip} install -U -r req-cli.txt")
+    os.system(f"{settings.Python.pip} install -U -r req-cli.txt")
 
 
 # ==========UPDATE MENU========== #
 def update():
     clear()
-    global aup
-    if ydpip:
+    if settings.Youtubedl.fromPip:
         print(Style.BRIGHT + f"What do you want to update?" + Style.RESET_ALL + "\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=", end="")
-        TF(aup, False)
+        TF(settings.autoUpdate, False)
         print(f"\n5. change branch=", end="")
         BC(curb)
         print("\n0. GoBack")
@@ -297,11 +234,11 @@ def update():
             upyd()
             print("")
         elif (cmd == "4"):
-            aup = not aup
-            savepath("", py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit)
+            settings.autoUpdate = not settings.autoUpdate
+            savepath()
             loadpath("hid")
             clear()
-            print(f"autoupdate={aup}\n")
+            print(f"autoupdate={settings.autoUpdate}\n")
         elif(cmd == '5'):
             clear()
             print(f"What branch do you wat to change to? You are in a {curb}")
@@ -330,8 +267,8 @@ def update():
 # ==========AUTO UPDATE========== #
 def autoupdt():
     print(f"autoupdate=", end="")
-    TF(aup)
-    if aup:
+    TF(settings.autoUpdate)
+    if settings.autoUpdate:
         upytdl()
         upyd()
         print()
@@ -358,11 +295,11 @@ def audiod():
               "1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
         if(numb == ""):
-            lnk = f"-o \"{audio}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{settings.Youtubedl.audioDir}%(title)s.%(ext)s\" --no-playlist -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         elif(numb == "1"):
-            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         else:
-            lnk = f"-o \"{audio}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i --playlist-items {numb} -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
+            lnk = f"-o \"{settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s\" --yes-playlist -i --playlist-items {numb} -x --prefer-ffmpeg {floc} --audio-format mp3 \"{url}\""
         print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         print("\a")
@@ -392,29 +329,29 @@ def videod():
                   "2 to choose yourself")
             qual = input("#")
             if (qual == "1"):
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg {floc} \"{url}\""
+                lnk = f"-o \"{settings.Youtubedl.videoDir}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg {floc} \"{url}\""
             elif(qual == "2"):
                 print("starting youtube-dl please wait...")
                 os.system(f"youtube-dl -F --no-playlist {url}")
                 print("choose video and audio quality by typing numb+numb")
                 numb = input("#")
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg {floc} \"{url}\""
+                lnk = f"-o \"{settings.Youtubedl.videoDir}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg {floc} \"{url}\""
             else:
-                lnk = f"-o \"{videos}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg {floc} \"{url}\""
+                lnk = f"-o \"{settings.Youtubedl.videoDir}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg {floc} \"{url}\""
         else:  # playlist
             print("<Enter> for the best quality 1080p + if available, \n" +
                   "1 for 720p or lower")
             qual = input("#")
             if(qual == "1"): 
                 if(numb == "1"):
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
+                    lnk = f"-o \"{settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
                 else:
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
+                    lnk = f"-o \"{settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
             else:
                 if(numb == "1"):
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
+                    lnk = f"-o \"{settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
                 else:
-                    lnk = f"-o \"{videos}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
+                    lnk = f"-o \"{settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
         print("starting youtube-dl please wait...")
         os.system("youtube-dl "+lnk)
         print("\a")
@@ -452,8 +389,8 @@ def subd():
         pie = glob.glob(f"{temp}*.vtt")
         cream = os.path.basename(pie[0])
         cream = cream[:-3]
-        lick = f"{videos}{cream}srt"  # I don't like this fix to a complain about var type
-        os.makedirs(videos, exist_ok=True)
+        lick = f"{settings.Youtubedl.videoDir}{cream}srt"  # I don't like this fix to a complain about var type
+        os.makedirs(settings.Youtubedl.videoDir, exist_ok=True)
         print("starting youtube-dl please wait...")
         os.system(f"ffmpeg -i \"{pie[0]}\" \"{lick}\"")
         print("\a")
@@ -656,7 +593,7 @@ def reencode():
                 Abit = cmd
         else:
             Abit = "none"
-        savepath("", py, pip, ydpip, aup, Vcodec, Acodec, Vqual, Abit)
+        savepath()
         loadpath("hid")
     else:
         clear()
@@ -679,15 +616,15 @@ def debug():
                 git = False
             loadpath()
             print("Variables:")
-            print(f"python executable name: {py}\npip executable name: {pip}")
+            print(f"python executable name: {settings.Python.python}\npip executable name: {settings.Python.pip}")
             print("youtube-dl from pip: ", end="")
-            TF(ydpip)
+            TF(settings.Youtubedl.fromPip)
             print("ffmpeg in yt-dl dir: ", end="")
             TF(fdir)
             print("yt-dl from git: ", end="")
             TF(git)
             print("autoupdate: ", end="")
-            TF(aup)
+            TF(settings.autoUpdate)
             print(f"Vcodec: {Vcodec}\nAcodec: {Acodec}\nVqual: {Vqual}\nAbit: {Abit}")
             if is_venv():
                 venv = True
@@ -700,11 +637,11 @@ def debug():
             cmd = readchar("")
             if(cmd == "y"):
                 if(os.name == 'nt'):
-                    os.system('del '+audio)
-                    os.system('del '+videos)
+                    os.system('del '+settings.Youtubedl.audioDir)
+                    os.system('del '+settings.Youtubedl.videoDir)
                 elif(os.name == 'posix'):
-                    os.system('rm '+audio+os.pathsep)
-                    os.system('rm '+videos+os.pathsep)
+                    os.system('rm '+settings.Youtubedl.audioDir+os.pathsep)
+                    os.system('rm '+settings.Youtubedl.videoDir+os.pathsep)
             else:
                 print("no than lol.")
         elif(cmd == "help"):
@@ -716,7 +653,7 @@ def debug():
 
 
 # region ==========COLOR FUNCTIONS==========
-def TF(var="", newline=True):
+def TF(var, newline=True):
     if newline:
         end = "\n"
     else:
