@@ -1,3 +1,6 @@
+## New in X.XX.X.X:
+updater now shows you python version (along with package updates)
+
 ## New in 2.1.10.1:
 Fixed an issue that resulted in yt-dl crashing on Python3.8<br>
 This prevented me from using it on HaikuOS.<br>
