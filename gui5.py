@@ -629,8 +629,8 @@ class MainWindow(QtWidgets.QMainWindow):
             settings.toJson(settingsPath)
 
         def set_load(audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vqual, append, tab):
-            self.set_audio_bar.setText(audio[:-1])
-            self.set_videos_bar.setText(video[:-1])
+            self.set_audio_bar.setText(audio)
+            self.set_videos_bar.setText(video)
             self.set_py_bar.setText(py)
             self.set_pip_bar.setText(pip)
             self.set_ydpip_checkbox.setChecked(ydpip)
@@ -659,7 +659,7 @@ class MainWindow(QtWidgets.QMainWindow):
             openFolder(spath)
 
         # =====set_controls=====#
-        self.set_loadcur_button.clicked.connect(lambda: set_load(settings.Youtubedl.audioDir, settings.Youtubedl.audioDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab))
+        self.set_loadcur_button.clicked.connect(lambda: set_load(settings.Youtubedl.audioDir, settings.Youtubedl.videoDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab))
         self.set_loaddef_button.clicked.connect(lambda: set_load(audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(set_open)
         self.set_launch_button.clicked.connect(set_makeScript)
