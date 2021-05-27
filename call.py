@@ -10,6 +10,7 @@ from Config import Settings
 
 init()  # initialises colorama
 
+global settings, fdir
 
 def is_venv():  # reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
@@ -129,7 +130,7 @@ def about():
     cmd = readchar("#")
     if (cmd == "y"): 
         clear()
-        fh = open("whatsnew.md", "r")
+        fh = open("changelog.md", "r")
         print(fh.read()+"\n")
         fh.close()
     else:
