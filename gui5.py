@@ -206,6 +206,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # region ===== startup =====
         loadpath()
 
+        self.setWindowTitle(f"yt-dl {ver}")
+
         global Tab
         self.tabWidget.setCurrentIndex(Tab)
 
