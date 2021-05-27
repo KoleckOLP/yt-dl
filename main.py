@@ -25,11 +25,11 @@ except ModuleNotFoundError:
     input("press any key to continue")
     exit()
 
-from call import settings, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
+from call import settingsPath, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
 clear()
 
-if(os.path.exists(settings)):
+if(os.path.exists(settingsPath)):
     name()
     loadpath()
     autoupdt()
