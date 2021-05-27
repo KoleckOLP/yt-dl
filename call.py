@@ -52,7 +52,7 @@ def firstrun():
     settings.Ffmpeg.audioCodec = "opus"  # opus, acc
     settings.Ffmpeg.videoQuality = "24,24,24"  # 24
     settings.Ffmpeg.audioBitrate = "190k"  # 190
-    savepath()
+    settings.toJson(settingsPath)
     loadpath()
     print("Do you want a Launch script? [Y/n] or p=" + Fore.BLUE + "Powershell" + Style.RESET_ALL)
     cmd = readchar("#")
@@ -137,11 +137,6 @@ def about():
         name()
 
 
-# ==========SAVE PATH========== #
-def savepath():
-    settings.toJson(settingsPath)
-
-
 # ==========LOAD PATH========== #
 def loadpath(s="show"):
     # old mess
@@ -171,7 +166,7 @@ def slpath():
     print("1. change download path\n2. delete settings\n3. generate Launch script\n0. GoBack")
     cmd = readchar("#")
     if (cmd == "1"):
-        savepath()
+        settings.toJson(settingsPath)
         clear()
         loadpath()
     elif (cmd == "2"):
@@ -235,7 +230,7 @@ def update():
             print("")
         elif (cmd == "4"):
             settings.autoUpdate = not settings.autoUpdate
-            savepath()
+            settings.toJson(settingsPath)
             loadpath("hid")
             clear()
             print(f"autoupdate={settings.autoUpdate}\n")
@@ -588,7 +583,7 @@ def reencode():
                 settings.Ffmpeg.audioBitrate = cmd
         else:
             settings.Ffmpeg.audioBitrate = "none"
-        savepath()
+        settings.toJson(settingsPath)
         loadpath("hid")
     else:
         clear()

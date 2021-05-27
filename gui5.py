@@ -64,9 +64,6 @@ class MainWindow(QtWidgets.QMainWindow):
                              "You are missing a config file,\nPress OK to load default config.\nAnd start the program again.", SaveDefaultConfig)
                 exit(0)
 
-        def savepath():
-            settings.toJson(settingsPath)
-
         def SaveDefaultConfig():
             print("test")
             settings = Settings.loadDefault()
@@ -518,7 +515,7 @@ class MainWindow(QtWidgets.QMainWindow):
             settings.Ffmpeg.audioBitrate = self.ree_audiob_bar.text()
             settings.Ffmpeg.append = self.ree_append_bar.text()
             settings.defaultCodec = self.ree_settings_combobox.currentIndex()
-            savepath()
+            settings.toJson(settingsPath)
 
         def ree_choose():
             self.ree_location_bar.setText(QFileDialog.getOpenFileName()[0])
@@ -584,7 +581,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def upd_auto_toggle():  # autoupdate is not a thing tho
             loadpath()
             settings.autoUpdate = not settings.autoUpdate
-            savepath()  # This thing is why my whole save path is a horrible mess, fixing this would fix savepath.
+            settings.toJson(settingsPath)
             self.upd_auto_button.setText(f"Autoupdate=\"{settings.autoUpdate}\"")
 
         # ======upd_controls======#
@@ -632,7 +629,7 @@ class MainWindow(QtWidgets.QMainWindow):
             settings.Ffmpeg.append = self.set_Append_bar.text()
             settings.defaultTab = self.set_Tab_combobox.currentIndex()
 
-            savepath()
+            settings.toJson(settingsPath)
             loadpath()
 
         def set_load(a, b, c, d, e, f, g, h, i, j, k, l):
