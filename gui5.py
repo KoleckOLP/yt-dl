@@ -550,6 +550,8 @@ class MainWindow(QtWidgets.QMainWindow):
             process_start(cmd, self.upd_output_console)
 
         def update_depend():
+            cmd = [settings.Python.python, "-V"]
+            process_start(cmd, self.upd_output_console)
             pips = settings.Python.pip.split(" ")
             cmd = [f"{settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
             process_start(cmd, self.upd_output_console)
