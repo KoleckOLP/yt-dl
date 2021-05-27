@@ -1,6 +1,4 @@
-settings.json
-gui5_settings.json
-cli_settings.json
+*.json
 __pycache__
 .helpfiles
 env
