@@ -33,7 +33,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi("gui5.ui", self)
+        uic.loadUi(f"gui{os.path.sep}gui5.ui", self)
 
         self.show()
 

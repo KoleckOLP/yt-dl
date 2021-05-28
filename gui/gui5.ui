@@ -164,7 +164,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -236,13 +236,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QLineEdit" name="aud_url_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="3">
          <widget class="QPushButton" name="aud_folder_button">
           <property name="styleSheet">
@@ -254,6 +247,23 @@
           <property name="icon">
            <iconset>
             <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="aud_url_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="aud_cookie_checkbox">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>use cookies</string>
           </property>
          </widget>
         </item>
@@ -301,13 +311,6 @@
           </property>
           <property name="text">
            <string>Vid+Aud</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" colspan="7">
-         <widget class="QLineEdit" name="vid_url_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
           </property>
          </widget>
         </item>
@@ -417,6 +420,23 @@
           </property>
          </widget>
         </item>
+        <item row="0" column="2" colspan="6">
+         <widget class="QLineEdit" name="vid_url_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="8">
+         <widget class="QCheckBox" name="vid_cookie_checkbox">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>use cookies</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="subs_tab">
@@ -511,13 +531,6 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="3" colspan="3">
-         <widget class="QLineEdit" name="sub_url_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="4">
          <widget class="QLabel" name="sub_lang_label">
           <property name="styleSheet">
@@ -537,6 +550,23 @@
           </property>
           <property name="styleSheet">
            <string notr="true">background-color: #000000; color: #FFFFFF;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QLineEdit" name="sub_url_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QCheckBox" name="sub_cookie_checkbox">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>use cookies</string>
           </property>
          </widget>
         </item>
@@ -793,165 +823,13 @@
         <string>Settings</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_7">
-        <item row="11" column="3">
-         <widget class="QPushButton" name="set_launch_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-          <property name="text">
-           <string>Make Lauch script</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="4">
-         <widget class="QCheckBox" name="set_ydpip_checkbox">
+        <item row="9" column="3">
+         <widget class="QLabel" name="set_Append_label">
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>youtube-dl from pip</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="3">
-         <widget class="QLineEdit" name="set_pip_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="0">
-         <widget class="QLabel" name="set_Acodec_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Audio codec:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="set_videos_label">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Video</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="2">
-         <widget class="QLabel" name="set_pip_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Pip:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" colspan="6">
-         <widget class="QLabel" name="set_download_label">
-          <property name="font">
-           <font>
-            <pointsize>15</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-            <underline>true</underline>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Download paths:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="4" colspan="2">
-         <widget class="QLineEdit" name="set_Vqual_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0" colspan="6">
-         <widget class="QLabel" name="set_system_label">
-          <property name="font">
-           <font>
-            <pointsize>15</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-            <underline>true</underline>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>System variables:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="11" column="0">
-         <widget class="QPushButton" name="set_loaddef_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-          <property name="text">
-           <string>Load Defaults</string>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="1" colspan="2">
-         <widget class="QLineEdit" name="set_Vcodec_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="1">
-         <widget class="QLineEdit" name="set_py_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="set_audio_label">
-          <property name="font">
-           <font>
-            <pointsize>8</pointsize>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Audio</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0" colspan="6">
-         <widget class="QLabel" name="set_reencode_label">
-          <property name="font">
-           <font>
-            <pointsize>15</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
-            <underline>true</underline>
-           </font>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Re-encode custom settings:</string>
+           <string>Append:</string>
           </property>
          </widget>
         </item>
@@ -973,6 +851,23 @@
           </property>
          </widget>
         </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="set_py_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="5">
+         <widget class="QCheckBox" name="set_aup_checkbox">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>AutoUpdate on starup</string>
+          </property>
+         </widget>
+        </item>
         <item row="7" column="3">
          <widget class="QLabel" name="set_Vqual_label">
           <property name="styleSheet">
@@ -983,61 +878,66 @@
           </property>
          </widget>
         </item>
-        <item row="11" column="5">
-         <widget class="QPushButton" name="set_save_button">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+        <item row="4" column="0" colspan="6">
+         <widget class="QLabel" name="set_system_label">
+          <property name="font">
+           <font>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+            <underline>true</underline>
+           </font>
           </property>
-          <property name="text">
-           <string>save</string>
-          </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>gui/save-solid.svg</normaloff>gui/save-solid.svg</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="set_py_label">
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>Python:</string>
+           <string>System variables:</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
-         <widget class="QLabel" name="set_Vcodec_label">
+        <item row="5" column="2">
+         <widget class="QLabel" name="set_pip_label">
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>Video codec:</string>
+           <string>Pip:</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="3">
-         <widget class="QLabel" name="set_Abit_label">
+        <item row="11" column="3">
+         <widget class="QPushButton" name="set_launch_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Make Lauch script</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="set_audio_label">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>Audio bitrate:</string>
+           <string>Audio</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="4" colspan="2">
-         <widget class="QLineEdit" name="set_Abit_bar">
+        <item row="9" column="0">
+         <widget class="QLabel" name="set_Tab_label">
           <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+           <string notr="true">Color: #FFFFFF;</string>
           </property>
-         </widget>
-        </item>
-        <item row="8" column="1" colspan="2">
-         <widget class="QLineEdit" name="set_Acodec_bar">
-          <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+          <property name="text">
+           <string>Default Tab:</string>
           </property>
          </widget>
         </item>
@@ -1055,6 +955,155 @@
           </property>
          </widget>
         </item>
+        <item row="9" column="1" colspan="2">
+         <widget class="QComboBox" name="set_Tab_combobox">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="set_videos_label">
+          <property name="font">
+           <font>
+            <pointsize>8</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Video</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="set_Acodec_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Audio codec:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="4">
+         <widget class="QCheckBox" name="set_ydpip_checkbox">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>youtube-dl from pip</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1" colspan="2">
+         <widget class="QLineEdit" name="set_Acodec_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="set_Vcodec_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Video codec:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="set_py_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Python:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="0" colspan="6">
+         <widget class="QLabel" name="set_reencode_label">
+          <property name="font">
+           <font>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+            <underline>true</underline>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Re-encode custom settings:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="5">
+         <widget class="QPushButton" name="set_save_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>save</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>gui/save-solid.svg</normaloff>gui/save-solid.svg</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="4" colspan="2">
+         <widget class="QLineEdit" name="set_Abit_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="0">
+         <widget class="QPushButton" name="set_loaddef_button">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+          <property name="text">
+           <string>Load Defaults</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1" colspan="2">
+         <widget class="QLineEdit" name="set_Vcodec_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="4" colspan="2">
+         <widget class="QLineEdit" name="set_Vqual_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="3">
+         <widget class="QLineEdit" name="set_pip_bar">
+          <property name="styleSheet">
+           <string notr="true">background-color: #909090;</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="3">
+         <widget class="QLabel" name="set_Abit_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Audio bitrate:</string>
+          </property>
+         </widget>
+        </item>
         <item row="11" column="1" colspan="2">
          <widget class="QPushButton" name="set_loadcur_button">
           <property name="styleSheet">
@@ -1065,26 +1114,6 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="5">
-         <widget class="QCheckBox" name="set_aup_checkbox">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>AutoUpdate on starup</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="3">
-         <widget class="QLabel" name="set_Append_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Append:</string>
-          </property>
-         </widget>
-        </item>
         <item row="9" column="4" colspan="2">
          <widget class="QLineEdit" name="set_Append_bar">
           <property name="styleSheet">
@@ -1092,10 +1121,21 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1" colspan="5">
-         <widget class="QLineEdit" name="set_audio_bar">
+        <item row="0" column="0" colspan="6">
+         <widget class="QLabel" name="set_download_label">
+          <property name="font">
+           <font>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+            <underline>true</underline>
+           </font>
+          </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #909090;</string>
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Download paths:</string>
           </property>
          </widget>
         </item>
@@ -1106,18 +1146,8 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="0">
-         <widget class="QLabel" name="set_Tab_label">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Default Tab:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="1" colspan="2">
-         <widget class="QComboBox" name="set_Tab_combobox">
+        <item row="1" column="1" colspan="5">
+         <widget class="QLineEdit" name="set_audio_bar">
           <property name="styleSheet">
            <string notr="true">background-color: #909090;</string>
           </property>
