@@ -17,6 +17,7 @@ if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
 
 global running
 
+
 class MainWindow(QtWidgets.QMainWindow):
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
@@ -150,6 +151,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+cmd[1]
 
+                if self.aud_cookie_checkbox.isChecked():
+                    if os.path.exists(spath+"cookies.txt"):
+                        cmd = cmd+["--cookies", spath+"cookies.txt"]
+
                 self.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
                 process_start(cmd, self.aud_output_console)
@@ -214,6 +219,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     cmd = cmd[0]+qual+cmd[1]
 
+                if self.vid_cookie_checkbox.isChecked():
+                    if os.path.exists(spath+"cookies.txt"):
+                        cmd = cmd+["--cookies", spath+"cookies.txt"]
+
                 self.vid_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
                 process_start(cmd, self.vid_output_console)
@@ -234,6 +243,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 url = self.vid_url_bar.text()
                 cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
+
+                if self.vid_cookie_checkbox.isChecked():
+                    if os.path.exists(spath+"cookies.txt"):
+                        cmd = cmd+["--cookies", spath+"cookies.txt"]
 
                 self.vid_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
@@ -315,6 +328,10 @@ class MainWindow(QtWidgets.QMainWindow):
                     else:
                         cmd = cmd[0]+cmd[1]
 
+                if self.vid_cookie_checkbox.isChecked():
+                    if os.path.exists(spath+"cookies.txt"):
+                        cmd = cmd+["--cookies", spath+"cookies.txt"]
+
                 self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
                 process_start(cmd, self.sub_output_console)
@@ -337,6 +354,10 @@ class MainWindow(QtWidgets.QMainWindow):
                         else:
                             cmd = ["ffmpeg", "-hide_banner"]+cmd
 
+                        if self.vid_cookie_checkbox.isChecked():
+                            if os.path.exists(spath + "cookies.txt"):
+                                cmd = cmd + ["--cookies", spath + "cookies.txt"]
+
                         self.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
 
                         process_start(cmd, self.sub_output_console)
@@ -357,6 +378,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 url = self.sub_url_bar.text()
                 cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
+
+                if self.vid_cookie_checkbox.isChecked():
+                    if os.path.exists(spath+"cookies.txt"):
+                        cmd = cmd+["--cookies", spath+"cookies.txt"]
+
+                self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
                 process_start(cmd, self.sub_output_console)
 
@@ -470,7 +497,6 @@ class MainWindow(QtWidgets.QMainWindow):
                             cmd = ["ffmpeg", "-hide_banner"]+cmd
 
                         process_start(cmd, self.ree_output_console)
-                        # print(cmd)
 
                 running = False
                 status("Ready.")
