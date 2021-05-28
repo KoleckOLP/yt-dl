@@ -15,10 +15,12 @@ class PythonSettings:
 
 
 class YoutubedlSettings:
-    def __init__(self, audioDir: str, videoDir: str, fromPip: bool):
+    def __init__(self, audioDir: str, videoDir: str, fromPip: bool, youtubeLogin: str, youtubePassword: str):
         self.audioDir = audioDir
         self.videoDir = videoDir
         self.fromPip = fromPip
+        self.youtubeLogin = youtubeLogin
+        self.youtubePassword = youtubePassword
 
 
 class FfmpegSettings:
@@ -52,7 +54,9 @@ class Settings:
                                        x["Python"]["pip"]),
                         YoutubedlSettings(x["Youtubedl"]["audioDir"],
                                           x["Youtubedl"]["videoDir"],
-                                          x["Youtubedl"]["fromPip"]),
+                                          x["Youtubedl"]["fromPip"],
+                                          x["Youtubedl"]["youtubeLogin"],
+                                          x["Youtubedl"]["youtubePassword"]),
                         FfmpegSettings(x["Ffmpeg"]["videoCodec"],
                                        x["Ffmpeg"]["audioCodec"],
                                        x["Ffmpeg"]["videoQuality"],
@@ -68,7 +72,9 @@ class Settings:
                                        "pip"),  # some systems might have pip3.x here
                         YoutubedlSettings(audioDirDefault,  # audio folder inside of yt-dl
                                           videoDirDefault,  # video folder inside of yt-dl
-                                          True),  # only true if youtube-dl is from pip which this just assumes
+                                          True,  # only true if youtube-dl is from pip which this just assumes
+                                          "",
+                                          ""),
                         FfmpegSettings("libx265",  # This is just fine
                                        "opus",  # same as above
                                        "24,24,24",  # same as above

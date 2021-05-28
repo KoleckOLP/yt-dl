@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
+from Crypt import encrypt, decrypt
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -16,6 +17,35 @@ if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 global running
+
+
+class LoginDialog(QtWidgets.QDialog):  # this should be another file
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        uic.loadUi(f"gui{os.path.sep}Login.ui", self)
+
+        def accept():
+            print("hit!")
+            loginSave = self.dlg_login_bar.text()
+            passwordSave = self.dlg_password_bar.text()
+            pin = self.dlg_pin_bar.text()
+            print(f"login: {loginSave}\npassword: {passwordSave}\npin: {pin}")
+
+            encLogin = encrypt(loginSave, pin)
+            encPassword = encrypt(passwordSave, pin)
+            print(f"Login: {encLogin}, {type(encLogin)}\nPassword: {encPassword}, {type(encPassword)}")
+
+            encLogin = encLogin.hex()
+            encPassword = encPassword.hex()
+
+            settings = Settings.fromJson(settingsPath)
+            settings.Youtubedl.youtubeLogin = encLogin
+            settings.Youtubedl.youtubePassword = encPassword
+            settings.toJson(settingsPath)
+
+        # =====dialog_controls===== #
+        self.dlg_buttons.accepted.connect(accept)  # runs code when ok is hit, cancel just closes dialog.
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def dragEnterEvent(self, e):
@@ -33,7 +63,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi("gui5.ui", self)
+        uic.loadUi(f"gui{os.path.sep}gui5.ui", self)
 
         self.show()
 
@@ -50,7 +80,10 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.exec_()
 
         def SaveDefaultConfig(i):
-            text: str = i.text().lower()
+            try:
+                text: str = i.text().lower()
+            except AttributeError:
+                text = "ok"
             if "ok" in text:
                 nonlocal settings
                 settings = Settings.loadDefault()
@@ -106,7 +139,10 @@ class MainWindow(QtWidgets.QMainWindow):
             fdir = True
 
         if (os.path.exists(settingsPath)):
-            settings = Settings.fromJson(settingsPath)
+            try:
+                settings = Settings.fromJson(settingsPath)
+            except KeyError:
+                SaveDefaultConfig("ok")
         else:
             messagePopup("Settings error", QMessageBox.Critical,
                          "You are missing a config file,\nPress OK to load default config.",
@@ -137,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 else:
                     numb = None
 
-                if(numb is None):
+                if not numb:
                     cmd = [["youtube-dl", "-o", f"{settings.Youtubedl.audioDir}%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
                 elif(numb == ""):
                     cmd = [["youtube-dl", "-o", f"{settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
@@ -149,6 +185,15 @@ class MainWindow(QtWidgets.QMainWindow):
                     cmd = cmd[0]+floc+cmd[1]
                 else:
                     cmd = cmd[0]+cmd[1]
+
+                global login, password
+                if self.aud_login_checkbox.isChecked():
+                    print("huh")
+                    if ("login" in globals() and "password" in globals()):
+                        print("yap pepega")
+                        cmd = cmd+["-u", login, "-p", password]
+
+                print(cmd)
 
                 self.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
@@ -170,11 +215,31 @@ class MainWindow(QtWidgets.QMainWindow):
         def aud_open():
             openFolder(settings.Youtubedl.audioDir)
 
+        def aud_login():
+            global login, password
+            nonlocal settings
+            settings = Settings.fromJson(settingsPath)
+            if self.aud_login_checkbox.isChecked():
+                if (settings.Youtubedl.youtubeLogin == "" and settings.Youtubedl.youtubePassword == ""):
+                    dlg = LoginDialog()
+                    dlg.exec_()
+                else:
+                    try:
+                        enclogin = bytes.fromhex(settings.Youtubedl.youtubeLogin)
+                        encpassword = bytes.fromhex(settings.Youtubedl.youtubePassword)
+                        login = decrypt(enclogin, os.environ["YT_DL_PIN"])
+                        password = decrypt(encpassword, os.environ["YT_DL_PIN"])
+                        print(f"{login}\n{password}")
+                    except KeyError:
+                        print("got oofed son")
+                        pass  # will be pip popup, and will suck to implement.
+
         # =====aud_controls=====#
         self.aud_folder_button.clicked.connect(aud_open)
         self.aud_download_button.clicked.connect(Audio)
         self.aud_playlist_checkbox.clicked.connect(aud_playlist_bar_toggle)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
+        self.aud_login_checkbox.clicked.connect(aud_login)
         # endregion
 
         # region ==========📼VIDEO📼==========
@@ -664,7 +729,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def set_open():
             openFolder(spath)
 
-        # =====set_controls=====#
+        # =====set_controls===== #
         self.set_loadcur_button.clicked.connect(lambda: set_load(settings.Youtubedl.audioDir, settings.Youtubedl.videoDir, settings.Python.python, settings.Python.pip, settings.Youtubedl.fromPip, settings.autoUpdate, settings.Ffmpeg.audioCodec, settings.Ffmpeg.videoCodec, settings.Ffmpeg.audioBitrate, settings.Ffmpeg.videoQuality, settings.Ffmpeg.append, settings.defaultTab))
         self.set_loaddef_button.clicked.connect(lambda: set_load(audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(set_open)
