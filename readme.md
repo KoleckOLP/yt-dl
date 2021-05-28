@@ -1,10 +1,10 @@
 # yt-dl
 Multiplatform CLI and GUI youtube-dl simplifier
 
-### Rewriten in Python 3.
+### Rewritten in Python 3.
 
 runs on any OS if you can get these
-Requrements:
+Requirements:
 + python3
 + PyQt5 (for GUI)
 + youtube-dl
@@ -12,9 +12,11 @@ Requrements:
 + py-getch (for CLI)
 + colorama (for CLI)
 
+#### To download private or age restricted videos use a browser extension to download your youtube.com cookies in netscape cookie file format and put the file into yt-dl directory as cookies.txt
+
 <details>
     <summary>Windows</summary>
-1. intall git: https://git-scm.com/download/win
+1. install git: https://git-scm.com/download/win
 2. install python3: https://www.python.org/downloads/
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
     1. \(optional) update pip: `py -m pip install -U pip`
@@ -76,7 +78,7 @@ Requrements:
 
 <details>
     <summary>Cli (win,mac,lin,android)</summary>
-1. intall git
+1. install git
 2. install python3
 3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
     1. \(optional) update pip: `py -m pip install -U pip`
