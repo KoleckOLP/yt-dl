@@ -328,7 +328,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     else:
                         cmd = cmd[0]+cmd[1]
 
-                if self.vid_cookie_checkbox.isChecked():
+                if self.sub_cookie_checkbox.isChecked():
                     if os.path.exists(spath+"cookies.txt"):
                         cmd = cmd+["--cookies", spath+"cookies.txt"]
 
@@ -354,7 +354,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         else:
                             cmd = ["ffmpeg", "-hide_banner"]+cmd
 
-                        if self.vid_cookie_checkbox.isChecked():
+                        if self.sub_cookie_checkbox.isChecked():
                             if os.path.exists(spath + "cookies.txt"):
                                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
 
@@ -379,7 +379,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 url = self.sub_url_bar.text()
                 cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
 
-                if self.vid_cookie_checkbox.isChecked():
+                if self.sub_cookie_checkbox.isChecked():
                     if os.path.exists(spath+"cookies.txt"):
                         cmd = cmd+["--cookies", spath+"cookies.txt"]
 
