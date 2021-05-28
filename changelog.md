@@ -1,5 +1,6 @@
-## New in X.XX.X.X:
-updater now shows you python version (along with package updates)
+## New in 2.1.11.0:
+Updater now shows you python version (along with package updates)<br>
+Added support for cookies, this let's download private videos and age restricted videos.
 
 ## New in 2.1.10.1:
 Fixed an issue that resulted in yt-dl crashing on Python3.8<br>
