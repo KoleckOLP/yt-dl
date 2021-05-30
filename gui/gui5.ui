@@ -164,7 +164,7 @@
        <string notr="true">background-color: #636363;  border-color: #000000;</string>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -246,7 +246,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
+            <normaloff>folder-open-solid.svg</normaloff>folder-open-solid.svg</iconset>
           </property>
          </widget>
         </item>
@@ -416,7 +416,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
+            <normaloff>folder-open-solid.svg</normaloff>folder-open-solid.svg</iconset>
           </property>
          </widget>
         </item>
@@ -507,7 +507,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
+            <normaloff>folder-open-solid.svg</normaloff>folder-open-solid.svg</iconset>
           </property>
          </widget>
         </item>
@@ -587,7 +587,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>gui/folder-open-solid.svg</normaloff>gui/folder-open-solid.svg</iconset>
+            <normaloff>folder-open-solid.svg</normaloff>folder-open-solid.svg</iconset>
           </property>
          </widget>
         </item>
@@ -716,7 +716,7 @@
           </property>
           <property name="icon">
            <iconset>
-            <normaloff>gui/save-solid.svg</normaloff>gui/save-solid.svg</iconset>
+            <normaloff>save-solid.svg</normaloff>save-solid.svg</iconset>
           </property>
          </widget>
         </item>
