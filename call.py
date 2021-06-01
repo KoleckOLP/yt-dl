@@ -12,6 +12,7 @@ init()  # initialises colorama
 
 global settings, fdir
 
+
 def is_venv():  # reports if user is in Virtual Environment or not
     return (hasattr(sys, 'real_prefix') or
             (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
@@ -19,7 +20,11 @@ def is_venv():  # reports if user is in Virtual Environment or not
 
 # ==========NAME========== #
 def name(newline=True):
-    BC("yt-dl {ver} cli ({curb} branch) by KoleckOLP (C){year}\n", newline) 
+    if newline:
+        endWith = "\n"
+    else:
+        endWith = ""
+    print(f"yt-dl {ver} cli ({curb} branch) by KoleckOLP (C){year}\n", end=endWith)
 
 
 # ==========FIRST TIME SETUP MENU========== #
@@ -212,8 +217,6 @@ def update():
     if settings.Youtubedl.fromPip:
         print(Style.BRIGHT + f"What do you want to update?" + Style.RESET_ALL + "\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=", end="")
         TF(settings.autoUpdate, False)
-        print(f"\n5. change branch=", end="")
-        BC(curb)
         print("\n0. GoBack")
         cmd = readchar("#")
         if(cmd == "1"):  # All
@@ -235,24 +238,6 @@ def update():
             loadpath("hid")
             clear()
             print(f"autoupdate={settings.autoUpdate}\n")
-        elif(cmd == '5'):
-            clear()
-            print(f"What branch do you wat to change to? You are in a {curb}")
-            if (curb == "master"):
-                otherb = "testing"
-            else:
-                otherb = "master"
-            print(f"do you want to switch to ")
-            BC(otherb, False, True)
-            print(" [Y/n]")
-            cmd = readchar("#")
-            if (cmd == "y"):
-                os.system("git pull --recurse-submodules")
-                os.system(f"git checkout {otherb}")
-                print(Fore.RED, "\n!!!restart for changes to take effect!!!\n", Style.RESET_ALL)
-            else:
-                clear()
-                name()
         else:
             clear()
             name()
@@ -643,7 +628,6 @@ def debug():
             break
 
 
-# region ==========COLOR FUNCTIONS==========
 def TF(var, newline=True):
     if newline:
         end = "\n"
@@ -656,24 +640,3 @@ def TF(var, newline=True):
         print(Fore.RED + str(var) + Style.RESET_ALL, end=end)
     else:
         print("Not a boolean", end=end)
-
-
-def BC(stri="no input", newline=True, reverse=False):
-    if newline is True:
-        end = "\n"
-    else:
-        end = ""
-
-    if reverse:
-        if(curb == "master"):
-            branch = "testing"
-        else:
-            branch = "master"
-    else:
-        branch = curb  
-
-    if(branch == "master"):
-        print(Fore.CYAN + eval(f'f"""{stri}"""') + Style.RESET_ALL, end=end)
-    else:
-        print(Fore.MAGENTA + eval(f'f"""{stri}"""') + Style.RESET_ALL, end=end)
-# endregion
