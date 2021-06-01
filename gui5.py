@@ -51,9 +51,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if (os.path.exists(settingsPath)):
             self.settings = Settings.fromJson(settingsPath)
         else:
-            self.messagePopup("Settings error", QMessageBox.Critical,
-                         "You are missing a config file,\nPress OK to load default config.",
-                         self.SaveDefaultConfig)
+            self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
 
         self.setWindowTitle(f"yt-dl {ver}")
 
@@ -65,14 +63,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # =====aud_controls=====#
-        self.aud_folder_button.clicked.connect(self.aud_open)
+        self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.audioDir))
         self.aud_download_button.clicked.connect(self.Audio)
         self.aud_playlist_checkbox.clicked.connect(self.aud_playlist_bar_toggle)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
         # =====vid_controls=====#
-        self.vid_folder_button.clicked.connect(self.vid_open)
+        self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
         self.vid_download_button.clicked.connect(self.Video)
         self.vid_quality_button.clicked.connect(self.vid_quality)
         self.vid_playlist_checkbox.clicked.connect(self.vid_playlist_bar_toggle)
@@ -81,7 +79,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # =====sub_controls=====#
-        self.sub_folder_button.clicked.connect(self.vid_open)
+        self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
         self.sub_download_button.clicked.connect(self.Subs)
         self.sub_lang_button.clicked.connect(self.sub_lang)
         self.sub_playlist_checkbox.toggled.connect(self.sub_playlist_bar_toggle)
@@ -99,7 +97,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings()  # load option on startup
         self.ree_choose_button.clicked.connect(self.ree_choose)
         self.ree_reencode_button.clicked.connect(self.Reencode)
-        self.ree_folder_button.clicked.connect(self.ree_open)
+        self.ree_folder_button.clicked.connect(lambda: self.openFolder(self.ree_location_bar.text()))
         self.ree_settings_combobox.activated.connect(self.ree_settings)
         self.ree_settings_button.clicked.connect(self.ree_settings_save)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
@@ -140,7 +138,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # =====set_controls=====#
         self.set_loadcur_button.clicked.connect(lambda: self.set_load(self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab))
         self.set_loaddef_button.clicked.connect(lambda: self.set_load(audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
-        self.set_folder_button.clicked.connect(self.set_open)
+        self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
         self.set_launch_button.clicked.connect(self.set_makeScript)
         self.set_save_button.clicked.connect(self.set_save)
         self.set_Tab_combobox.addItem("Audio")  # setting up items in combo list
@@ -150,10 +148,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
-        self.set_load(self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip,
-                 self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec,
-                 self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality,
-                 self.settings.Ffmpeg.append, self.settings.defaultTab)
+        self.set_load(self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab)
         # endregion
 
         # region ==========🎓ABOUT🎓==========
@@ -172,7 +167,8 @@ class MainWindow(QtWidgets.QMainWindow):
                                f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/changelog.md\">here</a></pre></p>")
         # endregion
 
-    def messagePopup(self, title, icon, text, callf=None):
+    @staticmethod
+    def messagePopup(title, icon, text, callf=None):
         msg = QMessageBox()  # Pylance is being stupid, I had to disable Type checking.
         msg.setWindowTitle(title)
         msg.setIcon(icon)
@@ -199,7 +195,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
-    def process_start(self, cmd: List[str], output_console):
+    @staticmethod
+    def process_start(cmd: List[str], output_console):
         if (sys.platform.startswith("win")):  # (os.name == "nt"):
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
         else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
@@ -212,22 +209,32 @@ class MainWindow(QtWidgets.QMainWindow):
             if "\\n" in test:
                 test = test.replace("\\n", "\n")
             output_console.insertPlainText(test)
-            self.scrollbar = output_console.verticalScrollBar()
-            self.scrollbar.setValue(self.scrollbar.maximum())
+            scrollbar = output_console.verticalScrollBar()
+            scrollbar.setValue(scrollbar.maximum())
             QtWidgets.QApplication.processEvents()
         print("\a")
         output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
         QtWidgets.QApplication.processEvents()
-        self.scrollbar = output_console.verticalScrollBar()
-        self.scrollbar.setValue(self.scrollbar.maximum())
+        scrollbar = output_console.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
 
-    def openFolder(self, loc=""):
+    @staticmethod
+    def openFolder(loc: str):
+        if not os.path.exists(loc):
+            os.makedirs(loc)
         if (sys.platform.startswith("win")):
             os.system(f"start {loc}")
         elif (sys.platform.startswith(("darwin", "haiku"))):  # haiku support :3
             os.system(f"open {loc}")
         else:  # (sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
             os.system(f"xdg-open {loc}")
+
+    @staticmethod
+    def hasCookie(checkbox: bool, cmd: list):
+        if checkbox:
+            if os.path.exists(spath + "cookies.txt"):
+                cmd = cmd + ["--cookies", spath + "cookies.txt"]
+                return cmd
 
     # region ==========🎶AUDIO🎶==========
     def Audio(self):
@@ -258,9 +265,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 cmd = cmd[0]+cmd[1]
 
-            if self.aud_cookie_checkbox.isChecked():
-                if os.path.exists(spath+"cookies.txt"):
-                    cmd = cmd+["--cookies", spath+"cookies.txt"]
+            self.hasCookie(self.aud_cookie_checkbox.isChecked(), cmd)
 
             self.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
@@ -278,9 +283,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.aud_playlist_bar.setStyleSheet("background-color: #909090;")
         else:
             self.aud_playlist_bar.setStyleSheet("background-color: #707070;")
-
-    def aud_open(self):
-        self.openFolder(self.settings.Youtubedl.audioDir)
 
     # region ==========📼VIDEO📼==========
     def Video(self):
@@ -319,11 +321,7 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 cmd = cmd[0]+qual+cmd[1]
 
-            if self.vid_cookie_checkbox.isChecked():
-                if os.path.exists(spath+"cookies.txt"):
-                    cmd = cmd+["--cookies", spath+"cookies.txt"]
-
-            self.vid_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
+            self.hasCookie(self.vid_cookie_checkbox.isChecked(), cmd)
 
             self.process_start(cmd, self.vid_output_console)
 
@@ -344,9 +342,7 @@ class MainWindow(QtWidgets.QMainWindow):
             url = self.vid_url_bar.text()
             cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
 
-            if self.vid_cookie_checkbox.isChecked():
-                if os.path.exists(spath+"cookies.txt"):
-                    cmd = cmd+["--cookies", spath+"cookies.txt"]
+            self.hasCookie(self.vid_cookie_checkbox.isChecked(), cmd)
 
             self.vid_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
@@ -370,9 +366,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.vid_quality_bar.setStyleSheet("background-color: #909090;")
         else:
             self.vid_quality_bar.setStyleSheet("background-color: #707070;")
-
-    def vid_open(self):
-        self.openFolder(self.settings.Youtubedl.videoDir)
 
     # region ==========📑SUBS📑==========
     def Subs(self):
@@ -630,10 +623,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def ree_choose(self):
         self.ree_location_bar.setText(QFileDialog.getOpenFileName()[0])
 
-    def ree_open(self):
-        location = self.ree_location_bar.text()
-        self.openFolder(os.path.dirname(location))
-
     # region ==========🔄UPDATE🔄==========
     def update_yt_dl(self):
         cmd = ["git", "pull", "--recurse-submodules"]
@@ -685,14 +674,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.settings.Python.pip = self.set_pip_bar.text()
         self.settings.Youtubedl.fromPip = self.set_ydpip_checkbox.isChecked()
         self.settings.autoUpdate = self.set_aup_checkbox.isChecked()
-        self.settings.Ffmpeg.audioCodec = self.set_Acodec_bar.text()
-        self.settings.Ffmpeg.videoCodec = self.set_Vcodec_bar.text()
-        self.settings.Ffmpeg.audioBitrate = self.set_Abit_bar.text()
-        self.settings.Ffmpeg.videoQuality = self.set_Vqual_bar.text()
-        self.settings.Ffmpeg.append = self.set_Append_bar.text()
-        self.settings.defaultTab = self.set_Tab_combobox.currentIndex()
-
-        self.settings.toJson(settingsPath)
+        self.ree_settings_save()
 
     def set_load(self, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vqual, append, tab):
         self.set_audio_bar.setText(audio)
@@ -720,9 +702,6 @@ class MainWindow(QtWidgets.QMainWindow):
             f = open("yt-dl", "w")
             f.write(f"#!/bin/sh\n\ncd {spath} && {self.settings.Python.python} gui5.py")
             f.close()
-
-    def set_open(self):
-        self.openFolder(spath)
 
 
 app = QtWidgets.QApplication(sys.argv)
