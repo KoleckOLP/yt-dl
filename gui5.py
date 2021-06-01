@@ -15,8 +15,6 @@ if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     myappid = 'HorseArmored.yt-dl.gui5.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
-global running
-
 
 class MainWindow(QtWidgets.QMainWindow):
     def dragEnterEvent(self, e):
@@ -57,8 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.tabWidget.setCurrentIndex(self.settings.defaultTab)  # the code will not get here if settings is undefined.
 
-        global running
-        running = False
+        self.running = False
         self.status("Ready.")
         # endregion
 
@@ -226,9 +223,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # region ==========🎶AUDIO🎶==========
     def Audio(self):
-        global running
-        if not running:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
             self.tabWidget.setTabText(0, "*Audio")
 
@@ -259,7 +255,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.process_start(cmd, self.aud_output_console)
 
-            running = False
+            self.running = False
             self.status("Ready.")
             self.tabWidget.setTabText(0, "Audio")
         else:
@@ -274,9 +270,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # region ==========📼VIDEO📼==========
     def Video(self):
-        global running
-        if running is False:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
 
             self.tabWidget.setTabText(1, "*Video")
@@ -313,16 +308,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.process_start(cmd, self.vid_output_console)
 
-            running = False
+            self.running = False
             self.status("Ready.")
             self.tabWidget.setTabText(1, "Video")
         else:
             self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
     def vid_quality(self):
-        global running
-        if running is False:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
 
             self.vid_output_console.setHtml("")  # clearing the output_console
@@ -336,7 +330,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.process_start(cmd, self.vid_output_console)
 
-            running = False
+            self.running = False
             self.status("Ready.")
         else:
             self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
@@ -357,9 +351,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # region ==========📑SUBS📑==========
     def Subs(self):
-        global running
-        if running is False:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
 
             self.tabWidget.setTabText(2, "*Subs")
@@ -434,16 +427,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
                     self.process_start(cmd, self.sub_output_console)
 
-            running = False
+            self.running = False
             self.status("Ready.")
             self.tabWidget.setTabText(2, "Subs")
         else:
             self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
 
     def sub_lang(self):
-        global running
-        if running is False:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
 
             self.sub_output_console.setHtml("")  # clearing the output_console
@@ -459,7 +451,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             self.process_start(cmd, self.sub_output_console)
 
-            running = False
+            self.running = False
             self.status("Ready.")
         else:
             self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
@@ -481,9 +473,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     # region ==========💿RE-ENCODE💿==========
     def Reencode(self):
-        global running
-        if running is False:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
 
             self.tabWidget.setTabText(3, "*Re-encode")
@@ -561,7 +552,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
                     self.process_start(cmd, self.ree_output_console)
 
-            running = False
+            self.running = False
             self.status("Ready.")
             self.tabWidget.setTabText(3, "Re-encode")
         else:
@@ -626,9 +617,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.process_start(cmd, self.upd_output_console)
 
     def Update(self):
-        global running
-        if running is False:
-            running = True
+        if not self.running:
+            self.running = True
             self.status("Busy.")
 
             self.tabWidget.setTabText(4, "*Update")
@@ -643,7 +633,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.update_yt_dl()
                 self.update_depend()
 
-            running = False
+            self.running = False
             self.status("Ready.")
             self.tabWidget.setTabText(4, "Update")
         else:
