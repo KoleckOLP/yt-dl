@@ -111,18 +111,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_combobox.addItem("dependencies")
         if (sys.platform.startswith("haiku")):
             self.upd_update_combobox.setCurrentIndex(1)
-        '''
-        #region (branch switching code)
-        branches = os.listdir(spath+".git/refs/heads")
-        for branch in branches:
-            self.upd_branch_combobox.addItem(branch)
-
-        process = subprocess.Popen(["git", "rev-parse", "--abbrev-ref", "HEAD"], stdout=subprocess.PIPE)
-        gcurb = str(process.stdout.read())
-        curb = "Current branch: "+curb[2:-3]
-        self.upd_branch_label.setText(curb)
-        #endregion
-        '''
 
         QtWidgets.QApplication.processEvents()
         if self.settings.autoUpdate:
