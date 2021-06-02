@@ -2,7 +2,6 @@ import os
 import sys
 import glob
 import subprocess
-import tempfile
 from typing import List
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
@@ -10,6 +9,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from Audio import Audio, aud_playlist_bar_toggle
 from Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
+from Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -79,10 +79,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # =====sub_controls=====#
         self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
-        self.sub_download_button.clicked.connect(self.Subs)
-        self.sub_lang_button.clicked.connect(self.sub_lang)
-        self.sub_playlist_checkbox.toggled.connect(self.sub_playlist_bar_toggle)
-        self.sub_lang_checkbox.toggled.connect(self.sub_lang_bar_toggle)
+        self.sub_download_button.clicked.connect(lambda: Subs(self))
+        self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
+        self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
+        self.sub_lang_checkbox.toggled.connect(lambda: sub_lang_bar_toggle(self))
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
@@ -222,128 +222,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
-
-    # region ==========📑SUBS📑==========
-    def Subs(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-
-            self.tabWidget.setTabText(2, "*Subs")
-
-            temp = tempfile.mkdtemp()+os.path.sep
-
-            self.sub_output_console.setHtml("")  # clearing the output_console.
-
-            url = self.sub_url_bar.text()
-
-            cmd = [[], []]
-
-            if self.sub_playlist_checkbox.isChecked():
-                if self.sub_playlist_bar.text() == "":
-                    cmd[0] = ["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--yes-playlist", "--write-sub", "--write-auto-sub"]
-                else:
-                    numb = self.sub_playlist_bar.text()
-                    cmd[0] = ["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--yes-playlist", "--playlist-items", f"{numb}", "--write-sub", "--write-auto-sub"]
-            else:
-                cmd[0] = ["youtube-dl", "-o", f"{temp}%(title)s.%(ext)s", "--no-playlist", "--write-sub", "--write-auto-sub"]
-
-            cmd[1] = ["--sub-format", "vtt", "--skip-download", f"{url}"]
-
-            lang = None
-
-            if self.sub_lang_checkbox.isChecked():
-                lang = self.sub_lang_bar.text()
-
-            floc = [f"--ffmpeg-location", f"{spath}"]
-            if self.fdir:
-                if lang is not None:
-                    cmd = cmd[0]+lang+floc+cmd[1]
-                else:
-                    cmd = cmd[0]+floc+cmd[1]
-            else:
-                if lang is not None:
-                    cmd = cmd[0]+lang+cmd[1]
-                else:
-                    cmd = cmd[0]+cmd[1]
-
-            if self.sub_cookie_checkbox.isChecked():
-                if os.path.exists(spath+"cookies.txt"):
-                    cmd = cmd+["--cookies", spath+"cookies.txt"]
-
-            self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
-
-            self.process_start(cmd, self.sub_output_console)
-
-            subpath = glob.glob(f"{temp}*.vtt")
-            os.makedirs(self.settings.Youtubedl.videoDir, exist_ok=True)
-
-            for item in subpath:
-                namei = os.path.basename(item)
-                namei = namei[:-3]
-                newsubpath = f"{self.settings.Youtubedl.videoDir}{namei}srt"  # I don't like this fix to a complain about var type
-                if os.path.isfile(newsubpath):
-                    self.sub_output_console.insertPlainText(f"#yt-dl# file {item} already exists skipping...\n")
-                else:
-                    cmd = ["-i", f"{item}", f"{newsubpath}"]
-
-                    floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
-                    if self.fdir:
-                        cmd = floc+cmd
-                    else:
-                        cmd = ["ffmpeg", "-hide_banner"]+cmd
-
-                    if self.sub_cookie_checkbox.isChecked():
-                        if os.path.exists(spath + "cookies.txt"):
-                            cmd = cmd + ["--cookies", spath + "cookies.txt"]
-
-                    self.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
-
-                    self.process_start(cmd, self.sub_output_console)
-
-            self.running = False
-            self.status("Ready.")
-            self.tabWidget.setTabText(2, "Subs")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def sub_lang(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-
-            self.sub_output_console.setHtml("")  # clearing the output_console
-
-            url = self.sub_url_bar.text()
-            cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
-
-            if self.sub_cookie_checkbox.isChecked():
-                if os.path.exists(spath+"cookies.txt"):
-                    cmd = cmd+["--cookies", spath+"cookies.txt"]
-
-            self.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
-
-            self.process_start(cmd, self.sub_output_console)
-
-            self.running = False
-            self.status("Ready.")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def sub_playlist_bar_toggle(self):
-        self.sub_lang_button.setEnabled(not self.sub_playlist_checkbox.isChecked())
-        self.sub_playlist_bar.setEnabled(self.sub_playlist_checkbox.isChecked())
-        if(self.sub_playlist_checkbox.isChecked()):
-            self.sub_playlist_bar.setStyleSheet("background-color: #909090;")
-        else:
-            self.sub_playlist_bar.setStyleSheet("background-color: #707070;")
-
-    def sub_lang_bar_toggle(self):
-        self.sub_lang_bar.setEnabled(self.sub_lang_checkbox.isChecked())
-        if(self.sub_lang_checkbox.isChecked()):
-            self.sub_lang_bar.setStyleSheet("background-color: #909090;")
-        else:
-            self.sub_lang_bar.setStyleSheet("background-color: #707070;")
 
     # region ==========💿RE-ENCODE💿==========
     def Reencode(self):
