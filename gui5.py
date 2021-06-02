@@ -8,6 +8,7 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QFileDialog, QMessageBox
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
+from Audio import Audio, aud_playlist_bar_toggle
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -61,8 +62,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # =====aud_controls=====#
         self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.audioDir))
-        self.aud_download_button.clicked.connect(self.Audio)
-        self.aud_playlist_checkbox.clicked.connect(self.aud_playlist_bar_toggle)
+        self.aud_download_button.clicked.connect(lambda: Audio(self))
+        self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
@@ -220,53 +221,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
-
-    # region ==========🎶AUDIO🎶==========
-    def Audio(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-            self.tabWidget.setTabText(0, "*Audio")
-
-            self.aud_output_console.setHtml("")  # clearing the output_console
-
-            url = self.aud_url_bar.text()
-            if self.aud_playlist_checkbox.isChecked():
-                numb = self.aud_playlist_bar.text()
-            else:
-                numb = None
-
-            if(numb is None):
-                cmd = [["youtube-dl", "-o", f"{self.settings.Youtubedl.audioDir}%(title)s.%(ext)s", "--no-playlist", "-x", "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
-            elif(numb == ""):
-                cmd = [["youtube-dl", "-o", f"{self.settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s", "--yes-playlist", "-i", "-x", "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
-            else:
-                cmd = [["youtube-dl", "-o", f"{self.settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s", "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
-
-            floc = [f"--ffmpeg-location", f"{spath}"]
-            if self.fdir:
-                cmd = cmd[0]+floc+cmd[1]
-            else:
-                cmd = cmd[0]+cmd[1]
-
-            self.hasCookie(self.aud_cookie_checkbox.isChecked(), cmd)
-
-            self.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
-
-            self.process_start(cmd, self.aud_output_console)
-
-            self.running = False
-            self.status("Ready.")
-            self.tabWidget.setTabText(0, "Audio")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def aud_playlist_bar_toggle(self):
-        self.aud_playlist_bar.setEnabled(self.aud_playlist_checkbox.isChecked())
-        if(self.aud_playlist_checkbox.isChecked()):
-            self.aud_playlist_bar.setStyleSheet("background-color: #909090;")
-        else:
-            self.aud_playlist_bar.setStyleSheet("background-color: #707070;")
 
     # region ==========📼VIDEO📼==========
     def Video(self):
