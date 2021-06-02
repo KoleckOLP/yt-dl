@@ -4,12 +4,13 @@ import glob
 import subprocess
 from typing import List
 from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QFileDialog, QMessageBox
+from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from Audio import Audio, aud_playlist_bar_toggle
 from Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
+from ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -93,12 +94,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("mp3")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
-        self.ree_settings()  # load option on startup
-        self.ree_choose_button.clicked.connect(self.ree_choose)
-        self.ree_reencode_button.clicked.connect(self.Reencode)
+        ree_settings(self)  # load option on startup
+        self.ree_choose_button.clicked.connect(lambda: ree_choose(self))
+        self.ree_reencode_button.clicked.connect(lambda: Reencode(self))
         self.ree_folder_button.clicked.connect(lambda: self.openFolder(self.ree_location_bar.text()))
-        self.ree_settings_combobox.activated.connect(self.ree_settings)
-        self.ree_settings_button.clicked.connect(self.ree_settings_save)
+        self.ree_settings_combobox.activated.connect(lambda: ree_settings(self))
+        self.ree_settings_button.clicked.connect(lambda: ree_settings_save(self))
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
         # self.ree_location_bar.setDragEnabled(True)
         self.ree_location_bar.setAcceptDrops(True)
@@ -222,137 +223,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
-
-    # region ==========💿RE-ENCODE💿==========
-    def Reencode(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-
-            self.tabWidget.setTabText(3, "*Re-encode")
-
-            self.ree_output_console.setHtml("")  # clearing the output_console
-
-            location = self.ree_location_bar.text()
-            videoc = self.ree_videoc_bar.text()
-            videoq = self.ree_videoq_bar.text()
-            audioc = self.ree_audioc_bar.text()
-            audiob = self.ree_audiob_bar.text()
-            append = self.ree_append_bar.text()
-
-            if location[-2:] == os.path.sep+"*":  # whole folder
-                VidsToRender = glob.glob(location)
-            else:
-                VidsToRender = [f"{location}"]
-            for video in VidsToRender:
-                if os.path.isfile(os.path.splitext(video)[0]+append):
-                    self.ree_output_console.insertPlainText(f"#yt-dl# file {video} already exists skipping...\n")
-                else:
-                    cmd = [["-hwaccel", "auto", "-i", f"{video}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"], ["-max_muxing_queue_size", "9999", "-b:v", "0K"], [f"{os.path.splitext(video)[0]+append}"]]
-
-                    # //Video Quality\\#
-                    if "," in videoq:
-                        VQsplit = videoq.split(",")
-                    else:
-                        VQsplit = [videoq, videoq, videoq]
-                    # //Video Codec\\#
-                    if(videoc == "libx265"):
-                        VideoCodec = ["-c:v", f"{videoc}"]
-                        quality = ["-crf", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
-                        Vformat = ["-vf", "format=yuv420p"]
-                        cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat, cmd[2]]
-                    elif(videoc == "copy"):
-                        VideoCodec = [f"-c:v", f"{videoc}"]
-                        cmd = [cmd[0]+VideoCodec+cmd[1], cmd[2]]
-                    elif(videoc == "remove"):
-                        VideoCodec = ["-vn"]
-                        cmd = [cmd[0]+VideoCodec+cmd[1], cmd[2]]
-                    elif(videoc == "hevc_nvenc"):
-                        VideoCodec = ["-c:v", f"{videoc}"]
-                        quality = ["-rc:v", "vbr", "-qmin", f"{int(VQsplit[1])}", "-qmax", f"{int(VQsplit[2])}", "-bf", "1"]
-                        Vformat = ["-vf", "format=yuv420p"]
-                        cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat, cmd[2]]
-                    elif(videoc == "h264_nvenc"):
-                        VideoCodec = ["-c:v", f"{videoc}"]
-                        quality = ["-rc:v", "vbr", "-qmin", f"{int(VQsplit[1])}", "-qmax", f"{int(VQsplit[2])}"]
-                        Vformat = ["-vf", "format=yuv420p"]
-                        cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat, cmd[2]]
-                    else:
-                        VideoCodec = ["-c:v", f"{videoc}"]
-                        quality = ["-cq", f"{int(VQsplit[0])-1}", "-qmin", f"{int(VQsplit[1])-1}", "-qmax", f"{int(VQsplit[2])-1}"]
-                        Vformat = ["-vf", "format=yuv420p"]
-                        cmd = [cmd[0]+VideoCodec+quality+cmd[1]+Vformat, cmd[2]]
-                    # //Audio\\#
-                    if(audioc == "remove"):
-                        AudioEverything = ["-an"]
-                        cmd = [cmd[0]+AudioEverything, cmd[1]]
-                    else:
-                        AudioEverything = ["-c:a", f"{audioc}", "-strict", "-2", "-b:a", f"{audiob}"]
-                        cmd = [cmd[0]+AudioEverything, cmd[1]]
-                    # //Subtitles\\#
-                    if(videoc == "remove"):
-                        cmd = cmd[0]+cmd[1]
-                    else:
-                        SubsC = ["-c:s", "copy"]
-                        cmd = cmd[0]+SubsC+cmd[1]
-
-                    floc = [f"{spath+os.path.sep+'ffmpeg'}", "-hide_banner"]
-                    if self.fdir:
-                        cmd = floc+cmd
-                    else:
-                        cmd = ["ffmpeg", "-hide_banner"]+cmd
-
-                    self.process_start(cmd, self.ree_output_console)
-
-            self.running = False
-            self.status("Ready.")
-            self.tabWidget.setTabText(3, "Re-encode")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def ree_settings(self):
-        if self.ree_settings_combobox.currentIndex() == 4:  # custom
-            self.ree_videoc_bar.setText(self.settings.Ffmpeg.videoCodec)
-            self.ree_videoq_bar.setText(self.settings.Ffmpeg.videoQuality)
-            self.ree_audioc_bar.setText(self.settings.Ffmpeg.audioCodec)
-            self.ree_audiob_bar.setText(self.settings.Ffmpeg.audioBitrate)
-            self.ree_append_bar.setText(self.settings.Ffmpeg.append)
-        elif self.ree_settings_combobox.currentIndex() == 0:  # hevc_opus
-            self.ree_videoc_bar.setText("libx265")
-            self.ree_videoq_bar.setText("24,24,24")
-            self.ree_audioc_bar.setText("opus")
-            self.ree_audiob_bar.setText("190k")
-            self.ree_append_bar.setText("_hevcopus.mkv")
-        elif self.ree_settings_combobox.currentIndex() == 1:  # h264_nvenc
-            self.ree_videoc_bar.setText("h264_nvenc")
-            self.ree_videoq_bar.setText("24,24,24")
-            self.ree_audioc_bar.setText("aac")
-            self.ree_audiob_bar.setText("190k")
-            self.ree_append_bar.setText("_nvenc.mov")
-        elif self.ree_settings_combobox.currentIndex() == 2:  # hevc_nvenc
-            self.ree_videoc_bar.setText("hevc_nvenc")
-            self.ree_videoq_bar.setText("24,24,24")
-            self.ree_audioc_bar.setText("opus")
-            self.ree_audiob_bar.setText("190k")
-            self.ree_append_bar.setText("_henc.mkv")
-        elif self.ree_settings_combobox.currentIndex() == 3:  # mp3
-            self.ree_videoc_bar.setText("remove")
-            self.ree_videoq_bar.setText("none")
-            self.ree_audioc_bar.setText("mp3")
-            self.ree_audiob_bar.setText("190k")
-            self.ree_append_bar.setText(".mp3")
-
-    def ree_settings_save(self):
-        self.settings.Ffmpeg.videoCodec = self.ree_videoc_bar.text()
-        self.settings.Ffmpeg.audioCodec = self.ree_audioc_bar.text()
-        self.settings.Ffmpeg.videoQuality = self.ree_videoq_bar.text()
-        self.settings.Ffmpeg.audioBitrate = self.ree_audiob_bar.text()
-        self.settings.Ffmpeg.append = self.ree_append_bar.text()
-        self.settings.defaultCodec = self.ree_settings_combobox.currentIndex()
-        self.settings.toJson(settingsPath)
-
-    def ree_choose(self):
-        self.ree_location_bar.setText(QFileDialog.getOpenFileName()[0])
 
     # region ==========🔄UPDATE🔄==========
     def update_yt_dl(self):
