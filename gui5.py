@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import QFileDialog, QMessageBox
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from Audio import Audio, aud_playlist_bar_toggle
+from Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -69,10 +70,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # =====vid_controls=====#
         self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
-        self.vid_download_button.clicked.connect(self.Video)
-        self.vid_quality_button.clicked.connect(self.vid_quality)
-        self.vid_playlist_checkbox.clicked.connect(self.vid_playlist_bar_toggle)
-        self.vid_custom_radio.toggled.connect(self.vid_quality_bar_toggle)
+        self.vid_download_button.clicked.connect(lambda: Video(self))
+        self.vid_quality_button.clicked.connect(lambda: vid_quality(self))
+        self.vid_playlist_checkbox.clicked.connect(lambda: vid_playlist_bar_toggle(self))
+        self.vid_custom_radio.toggled.connect(lambda: vid_quality_bar_toggle(self))
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
@@ -221,87 +222,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
-
-    # region ==========📼VIDEO📼==========
-    def Video(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-
-            self.tabWidget.setTabText(1, "*Video")
-
-            self.vid_output_console.setHtml("")  # clearing the output_console.
-
-            url = self.vid_url_bar.text()
-            if self.vid_playlist_checkbox.isChecked():
-                numb = self.vid_playlist_bar.text()
-            else:
-                numb = None
-
-            if(numb is None):
-                cmd = [["youtube-dl", "-o", f"{self.settings.Youtubedl.videoDir}%(title)s.%(ext)s", "-f"], ["--no-playlist", f"{url}"]]
-            elif(numb == ""):
-                cmd = [["youtube-dl", "-o", f"{self.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s", "-f"], ["--yes-playlist", f"{url}"]]
-            else:
-                cmd = [["youtube-dl", "-o", f"{self.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s", "-f"], ["--yes-playlist", "--playlist-items", f"{numb}", f"{url}"]]
-
-            if self.vid_best_radio.isChecked():
-                qual = ["bestvideo+bestaudio"]
-            elif self.vid_custom_radio.isChecked():
-                qual = [self.vid_quality_bar.text()]
-            else:
-                qual = ["best"]
-
-            floc = [f"--ffmpeg-location", f"{spath}"]
-            if self.fdir:
-                cmd = cmd[0]+qual+floc+cmd[1]
-            else:
-                cmd = cmd[0]+qual+cmd[1]
-
-            self.hasCookie(self.vid_cookie_checkbox.isChecked(), cmd)
-
-            self.process_start(cmd, self.vid_output_console)
-
-            self.running = False
-            self.status("Ready.")
-            self.tabWidget.setTabText(1, "Video")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def vid_quality(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-
-            self.vid_output_console.setHtml("")  # clearing the output_console
-
-            url = self.vid_url_bar.text()
-            cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
-
-            self.hasCookie(self.vid_cookie_checkbox.isChecked(), cmd)
-
-            self.vid_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
-
-            self.process_start(cmd, self.vid_output_console)
-
-            self.running = False
-            self.status("Ready.")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def vid_playlist_bar_toggle(self):
-        self.vid_playlist_bar.setEnabled(self.vid_playlist_checkbox.isChecked())
-        if(self.vid_playlist_checkbox.isChecked()):
-            self.vid_playlist_bar.setStyleSheet("background-color: #909090;")
-        else:
-            self.vid_playlist_bar.setStyleSheet("background-color: #707070;")
-
-    def vid_quality_bar_toggle(self):
-        self.vid_quality_bar.setEnabled(self.vid_custom_radio.isChecked())
-        if(self.vid_custom_radio.isChecked()):
-            self.vid_quality_bar.setStyleSheet("background-color: #909090;")
-        else:
-            self.vid_quality_bar.setStyleSheet("background-color: #707070;")
 
     # region ==========📑SUBS📑==========
     def Subs(self):
