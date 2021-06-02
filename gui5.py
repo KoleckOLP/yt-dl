@@ -11,6 +11,7 @@ from Audio import Audio, aud_playlist_bar_toggle
 from Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
 from ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
+from Update import Update, update_yt_dl, update_depend, upd_auto_toggle
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -115,12 +116,12 @@ class MainWindow(QtWidgets.QMainWindow):
         QtWidgets.QApplication.processEvents()
         if self.settings.autoUpdate:
             self.tabWidget.setCurrentIndex(4)
-            self.Update()
+            Update(self)
 
-        self.upd_update_button.clicked.connect(self.Update)
+        self.upd_update_button.clicked.connect(lambda: Update(self))
         # self.upd_branch_button.clicked.connect(upd_branch)
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
-        self.upd_auto_button.clicked.connect(self.upd_auto_toggle)
+        self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
         # endregion
 
         # =====set_controls=====#
@@ -223,48 +224,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
-
-    # region ==========🔄UPDATE🔄==========
-    def update_yt_dl(self):
-        cmd = ["git", "pull", "--recurse-submodules"]
-        self.process_start(cmd, self.upd_output_console)
-
-    def update_depend(self):
-        cmd = [self.settings.Python.python, "-V"]
-        self.process_start(cmd, self.upd_output_console)
-        pips = self.settings.Python.pip.split(" ")
-        cmd = [f"{self.settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
-        self.process_start(cmd, self.upd_output_console)
-        cmd = pips+["install", "-U", "-r", "req-gui5.txt"]
-        self.process_start(cmd, self.upd_output_console)
-
-    def Update(self):
-        if not self.running:
-            self.running = True
-            self.status("Busy.")
-
-            self.tabWidget.setTabText(4, "*Update")
-
-            self.upd_output_console.setHtml("")  # clearing the output_console
-
-            if self.upd_update_combobox.currentIndex() == 1:
-                self.update_yt_dl()
-            elif self.upd_update_combobox.currentIndex() == 2:
-                self.update_depend()
-            else:
-                self.update_yt_dl()
-                self.update_depend()
-
-            self.running = False
-            self.status("Ready.")
-            self.tabWidget.setTabText(4, "Update")
-        else:
-            self.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
-
-    def upd_auto_toggle(self):  # autoupdate is not a thing tho
-        self.settings.autoUpdate = not self.settings.autoUpdate
-        self.settings.toJson(settingsPath)
-        self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
 
     # region ==========📈SETTINGS📈==========
     def set_save(self):
