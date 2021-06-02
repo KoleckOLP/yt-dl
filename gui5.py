@@ -11,7 +11,8 @@ from Audio import Audio, aud_playlist_bar_toggle
 from Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
 from ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
-from Update import Update, update_yt_dl, update_depend, upd_auto_toggle
+from Update import Update, upd_auto_toggle
+from Settings import set_save, set_load, set_makeScript
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -125,11 +126,11 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # =====set_controls=====#
-        self.set_loadcur_button.clicked.connect(lambda: self.set_load(self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab))
-        self.set_loaddef_button.clicked.connect(lambda: self.set_load(audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
+        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab))
+        self.set_loaddef_button.clicked.connect(lambda: set_load(self, audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
-        self.set_launch_button.clicked.connect(self.set_makeScript)
-        self.set_save_button.clicked.connect(self.set_save)
+        self.set_launch_button.clicked.connect(lambda: set_makeScript(self))
+        self.set_save_button.clicked.connect(lambda: set_save(self))
         self.set_Tab_combobox.addItem("Audio")  # setting up items in combo list
         self.set_Tab_combobox.addItem("Video")
         self.set_Tab_combobox.addItem("Subs")
@@ -137,7 +138,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
-        self.set_load(self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab)
+        set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab)
         # endregion
 
         # region ==========🎓ABOUT🎓==========
@@ -224,43 +225,6 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
-
-    # region ==========📈SETTINGS📈==========
-    def set_save(self):
-        self.settings.Youtubedl.audioDir = self.set_audio_bar.text()
-        self.settings.Youtubedl.videoDir = self.set_videos_bar.text()
-        self.settings.Python.python = self.set_py_bar.text()
-        self.settings.Python.pip = self.set_pip_bar.text()
-        self.settings.Youtubedl.fromPip = self.set_ydpip_checkbox.isChecked()
-        self.settings.autoUpdate = self.set_aup_checkbox.isChecked()
-        self.ree_settings_save()
-
-    def set_load(self, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vqual, append, tab):
-        self.set_audio_bar.setText(audio)
-        self.set_videos_bar.setText(video)
-        self.set_py_bar.setText(py)
-        self.set_pip_bar.setText(pip)
-        self.set_ydpip_checkbox.setChecked(ydpip)
-        self.set_aup_checkbox.setChecked(aup)
-        self.set_Acodec_bar.setText(acodec)
-        self.set_Vcodec_bar.setText(vcodec)
-        self.set_Abit_bar.setText(abit)
-        self.set_Vqual_bar.setText(vqual)
-        self.set_Append_bar.setText(append)
-        self.set_Tab_combobox.setCurrentIndex(tab)
-
-    def set_makeScript(self):  # I had an issue getting the venv working with gui
-        if(sys.platform.startswith("win")):
-            f = open("yt-dl_gui.vbs", "w")
-            f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
-            f.close()
-            f = open("yt-dl_gui.bat", "w")
-            f.write(f"@echo off\n\nstart /b pythonw.exe gui5.py")
-            f.close()
-        else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))):
-            f = open("yt-dl", "w")
-            f.write(f"#!/bin/sh\n\ncd {spath} && {self.settings.Python.python} gui5.py")
-            f.close()
 
 
 app = QtWidgets.QApplication(sys.argv)
