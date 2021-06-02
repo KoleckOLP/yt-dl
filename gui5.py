@@ -22,6 +22,7 @@ if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
 
 
 class MainWindow(QtWidgets.QMainWindow):
+    # region ===== drag & drop =====
     def dragEnterEvent(self, e):
         if e.mimeData().hasText():
             e.accept()
@@ -34,6 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
             drag = e.mimeData().text().replace("file:///", "")
 
         self.ree_location_bar.setText(drag)  # dropping anywhere on the main window drops into ree_location_bar
+    # endregion
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -64,14 +66,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.status("Ready.")
         # endregion
 
-        # =====aud_controls=====#
+        # region =====aud_controls=====
         self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.audioDir))
         self.aud_download_button.clicked.connect(lambda: Audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
-        # =====vid_controls=====#
+        # region =====vid_controls=====
         self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
         self.vid_download_button.clicked.connect(lambda: Video(self))
         self.vid_quality_button.clicked.connect(lambda: vid_quality(self))
@@ -80,7 +82,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
-        # =====sub_controls=====#
+        # region =====sub_controls=====
         self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
         self.sub_download_button.clicked.connect(lambda: Subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
@@ -89,7 +91,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
-        # =====ree_controls=====#
+        # region =====ree_controls=====
         self.ree_settings_combobox.addItem("hevc_opus")  # setting up items in combo list
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
@@ -107,7 +109,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_location_bar.setAcceptDrops(True)
         # endregion
 
-        # ======upd_controls======#
+        # region ======upd_controls======
         self.upd_update_combobox.addItem("All")  # setting up items in combo list
         self.upd_update_combobox.addItem("yt-dl")
         self.upd_update_combobox.addItem("dependencies")
@@ -120,12 +122,11 @@ class MainWindow(QtWidgets.QMainWindow):
             Update(self)
 
         self.upd_update_button.clicked.connect(lambda: Update(self))
-        # self.upd_branch_button.clicked.connect(upd_branch)
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
         # endregion
 
-        # =====set_controls=====#
+        # region =====set_controls=====
         self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab))
         self.set_loaddef_button.clicked.connect(lambda: set_load(self, audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
@@ -157,6 +158,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/changelog.md\">here</a></pre></p>")
         # endregion
 
+    # region ===== startup =====
     @staticmethod
     def messagePopup(title, icon, text, callf=None):
         msg = QMessageBox()  # Pylance is being stupid, I had to disable Type checking.
@@ -175,7 +177,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.settings.toJson(settingsPath)
         else:
             exit()
+    # endregion
 
+    # region ===== used by most =====
     def status(self, s=""):  # shows status message and changes color of the status bar.
         self.statusBar().showMessage(s)
         if s == "Ready.":
@@ -225,6 +229,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
                 return cmd
+    # endregion
 
 
 app = QtWidgets.QApplication(sys.argv)
