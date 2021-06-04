@@ -215,7 +215,7 @@ class MainWindow(QtWidgets.QMainWindow):
     @staticmethod
     def openFolder(loc: str):
         if not os.path.exists(loc):
-            os.makedirs(loc)
+            os.makedirs(loc, exist_ok=True)
         if (sys.platform.startswith("win")):
             os.system(f"start {loc}")
         elif (sys.platform.startswith(("darwin", "haiku"))):  # haiku support :3

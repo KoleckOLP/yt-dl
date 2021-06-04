@@ -25,41 +25,51 @@ except ModuleNotFoundError:
     input("press any key to continue")
     exit()
 
-from cli.call import settingsPath, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
+from release import settingsPath
+from cli.call import main
+from cli.Audio import Audio
+from cli.Video import Video
+from cli.Subs import Subs
+from cli.ReEncode import ReEncode
+from cli.Debug import Debug
+from cli.Update import Update, AutoUpdate
+from cli.Settings import Load, Save
 
 clear()
 
+call = main()
+
 if(os.path.exists(settingsPath)):
-    name()
-    loadpath()
-    autoupdt()
+    call.name()
+    Load(call)
+    AutoUpdate(call)
 else:
-    firstrun()
+    call.firstrun()
 
 while(True):
     print("1. Audio\t5. Re-encode\n2. Video\t6. Update\n3. Exit\t\t7. Download path\n4. Subtitles\t8. About, Changelog")
     cmd = readchar("#")
 
     if(cmd == "1"):  # audio
-        audiod()
+        Audio(call)
     elif(cmd == "2"):  # video
-        videod()
+        Video(call)
     elif(cmd == "3"):  # exit
         print("See you later alligator.")
         break
     elif(cmd == "4"):  # subtitles
-        subd()
+        Subs(call)
     elif(cmd == "5"):  # re-encode
-        reencode()
+        ReEncode(call)
     elif(cmd == "6"):  # update
-        update()
+        Update(call)
     elif(cmd == "7"):  # save load path
         clear()
-        slpath()
+        Save(call)
     elif(cmd == "8"):  # about
-        about()
+        call.about()
     elif(cmd == ";"):  # debug (usually '`' but I don't have that key on my czech work laptop keyboard)
-        debug()
+        Debug(call)
     else:
         clear()
         print(f"\"{cmd}\" is not an option.")

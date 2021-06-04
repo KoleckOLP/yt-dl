@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
 from release import spath
+from shared.Audio import audio_shared
 
 
 def Audio(window):
@@ -11,28 +12,7 @@ def Audio(window):
 
         window.aud_output_console.setHtml("")  # clearing the output_console
 
-        url = window.aud_url_bar.text()
-        if window.aud_playlist_checkbox.isChecked():
-            numb = window.aud_playlist_bar.text()
-        else:
-            numb = None
-
-        if (numb is None):
-            cmd = [["youtube-dl", "-o", f"{window.settings.Youtubedl.audioDir}%(title)s.%(ext)s", "--no-playlist", "-x",
-                    "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
-        elif (numb == ""):
-            cmd = [["youtube-dl", "-o", f"{window.settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s",
-                    "--yes-playlist", "-i", "-x", "--prefer-ffmpeg"], ["--audio-format", "mp3", f"{url}"]]
-        else:
-            cmd = [["youtube-dl", "-o", f"{window.settings.Youtubedl.audioDir}%(playlist_index)s. %(title)s.%(ext)s",
-                    "--yes-playlist", "-i", "--playlist-items", f"{numb}", "-x", "--prefer-ffmpeg"],
-                   ["--audio-format", "mp3", f"{url}"]]
-
-        floc = [f"--ffmpeg-location", f"{spath}"]
-        if window.fdir:
-            cmd = cmd[0] + floc + cmd[1]
-        else:
-            cmd = cmd[0] + cmd[1]
+        cmd = audio_shared(window.aud_url_bar.text(), window.aud_playlist_checkbox.isChecked(), window.aud_playlist_bar.text(), spath, window.settings.Youtubedl.audioDir)
 
         window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
 
