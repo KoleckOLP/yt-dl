@@ -1,7 +1,7 @@
 import sys
 # Imports from this project
 from release import spath
-from ReEncode import ree_settings_save
+from gui.ReEncode import ree_settings_save
 
 
 def set_save(window):

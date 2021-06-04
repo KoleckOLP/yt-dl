@@ -25,7 +25,7 @@ except ModuleNotFoundError:
     input("press any key to continue")
     exit()
 
-from call import settingsPath, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
+from cli.call import settingsPath, name, loadpath, autoupdt, firstrun, audiod, videod, subd, reencode, update, slpath, about, debug
 
 clear()
 

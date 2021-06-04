@@ -7,12 +7,12 @@ from PyQt5 import QtWidgets, uic
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
-from Audio import Audio, aud_playlist_bar_toggle
-from Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
-from Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
-from ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
-from Update import Update, upd_auto_toggle
-from Settings import set_save, set_load, set_makeScript
+from gui.Audio import Audio, aud_playlist_bar_toggle
+from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
+from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
+from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
+from gui.Update import Update, upd_auto_toggle
+from gui.Settings import set_save, set_load, set_makeScript
 from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd

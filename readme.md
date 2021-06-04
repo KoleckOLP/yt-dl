@@ -27,7 +27,7 @@ Requirements:
     2. than you can make a desktop shortcut from `yt-dl_gui.bat` or `yt-dl_gui.vbs` (which ever you like)
 </details>
 
-![GUI on Windows 10](gui/Windows10.png)
+![GUI on Windows 10](promo/Windows10.png)
 
 <details>
     <summary>Mac</summary>
@@ -44,7 +44,7 @@ Requirements:
 (icon does not work and nav bar is centered might fix might not)
 </details>
 
-![GUI on MacOS 11](gui/MacOS11.png)
+![GUI on MacOS 11](promo/MacOS11.png)
 
 <details>
     <summary>Linux</summary>
@@ -59,7 +59,7 @@ Requirements:
     2. than you can make a desktop shortcut from `yt-dl`
 </details>
 
-![GUI on Xubuntu 20.04](gui/Xubuntu20.04.png)
+![GUI on Xubuntu 20.04](promo/Xubuntu20.04.png)
 
 <details>
     <summary>Haiku</summary>
@@ -73,7 +73,7 @@ Requirements:
     2. than you can make a desktop shortcut from `yt-dl`
 </details>
 
-![GUI on Haiku](gui/HaikuOS.png)
+![GUI on Haiku](promo/HaikuOS.png)
 
 
 <details>
@@ -89,4 +89,4 @@ Requirements:
     2. than you can make a desktop shortcut from `yt-dl.bat` or `yt-dl` (which ever you get, don't forget to chmod +x on posix systems)
 </details>
 
-![CLI on Windows 10 in Powershell 7](gui/cli_win_pwsh.png)
+![CLI on Windows 10 in Powershell 7](promo/cli_win_pwsh.png)
