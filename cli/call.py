@@ -1,7 +1,4 @@
-import os
 import sys
-import glob
-import tempfile
 import subprocess
 from typing import List
 from colorama import init, Fore, Style  # Back
@@ -9,6 +6,7 @@ from colorama import init, Fore, Style  # Back
 from kolreq.kolreq import clear, readchar
 from release import year, lstupdt, curb, ver, settingsPath
 from Config import Settings
+from cli.Settings import Load, MakeScript
 
 init()  # initialises colorama
 
@@ -59,16 +57,16 @@ class main:
         self.settings.Ffmpeg.videoQuality = "24,24,24"  # 24
         self.settings.Ffmpeg.audioBitrate = "190k"  # 190
         self.settings.toJson(settingsPath)
-        self.loadpath()
+        Load(self)
         print("Do you want a Launch script? [Y/n] or p=" + Fore.BLUE + "Powershell" + Style.RESET_ALL)
         cmd = readchar("#")
         if (cmd == "y"):
-            self.launchs()
+            MakeScript(self)
         elif(cmd == "p"):
-            self.launchs(True)
+            MakeScript(self, True)
         else:
             pass
-        self.loadpath("hid")
+        Load(self, "hid")
         self.about()
 
     # ==========ABOUT========== #
