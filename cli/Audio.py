@@ -14,8 +14,12 @@ def Audio(call):
         print("<Enter> a single audio, \n" +
               "1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
+        if numb == "1":
+            items = ""
+        else:
+            items = numb
 
-        cmd = audio_shared(url, bool(numb), numb, call.floc, call.settings.Youtubedl.audioDir)
+        cmd = audio_shared(url, bool(numb), items, call.floc, call.settings.Youtubedl.audioDir)
 
         print("starting youtube-dl please wait...")
 

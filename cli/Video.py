@@ -16,6 +16,10 @@ def Video(call):
         print("<Enter> a single video, \n" +
               "1. to download full playlist or follow example 1-3,7,9")
         numb = input("#")
+        if numb == "1":
+            items = ""
+        else:
+            items = numb
         if(numb == ""):  # no playlist
             print("<Enter> for best quality 1080p + if available (\"bestvideo+bestaudio\"),\n" +
                   "1 for 720 or lower (\"best\")\n" +
@@ -28,7 +32,7 @@ def Video(call):
                   "1 for 720p or lower")
             qualityChoice = input("#")
 
-        cmd = video_shared(url, bool(numb), numb, qualityChoice, qual, call.floc, call.settings.Youtubedl.videoDir)
+        cmd = video_shared(url, bool(numb), items, qualityChoice, qual, call.floc, call.settings.Youtubedl.videoDir)
 
         print("starting youtube-dl please wait...")
 
