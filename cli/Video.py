@@ -1,14 +1,10 @@
-import os
 # Imports from this project
-from release import spath
 from kolreq.kolreq import clear
+from shared.Video import video_shared
 
 
 def Video(call):
-    if call.fdir:
-        floc = f"--ffmpeg-location {spath}"
-    else:
-        floc = ""
+    qual = ""
 
     clear()
     print("link to video, playlist, 0. GoBack")
@@ -24,31 +20,20 @@ def Video(call):
             print("<Enter> for best quality 1080p + if available (\"bestvideo+bestaudio\"),\n" +
                   "1 for 720 or lower (\"best\")\n" +
                   "2 to choose yourself")
-            qual = input("#")
-            if (qual == "1"):
-                lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(title)s.%(ext)s\" -f best --no-playlist --prefer-ffmpeg {floc} \"{url}\""
-            elif(qual == "2"):
-                print("starting youtube-dl please wait...")
-                os.system(f"youtube-dl -F --no-playlist {url}")
-                print("choose video and audio quality by typing numb+numb")
-                numb = input("#")
-                lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(title)s.%(ext)s\" -f \"{numb}\" --no-playlist --prefer-ffmpeg {floc} \"{url}\""
-            else:
-                lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(title)s.%(ext)s\" -f bestvideo+bestaudio --no-playlist --prefer-ffmpeg {floc} \"{url}\""
+            qualityChoice = input("#")
+            if qualityChoice == "2":
+                qual = input("#")
         else:  # playlist
             print("<Enter> for the best quality 1080p + if available, \n" +
                   "1 for 720p or lower")
-            qual = input("#")
-            if(qual == "1"):
-                if(numb == "1"):
-                    lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
-                else:
-                    lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f best --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
-            else:
-                if(numb == "1"):
-                    lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --prefer-ffmpeg {floc} \"{url}\""
-                else:
-                    lnk = f"-o \"{call.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s\" -f bestvideo+bestaudio --yes-playlist --playlist-items {numb} --prefer-ffmpeg {floc} \"{url}\""
+            qualityChoice = input("#")
+
+        cmd = video_shared(url, bool(numb), numb, qualityChoice, qual, call.floc, call.settings.Youtubedl.videoDir)
+
         print("starting youtube-dl please wait...")
-        os.system("youtube-dl  " + lnk)
+
+        call.process_start(cmd)
+
+        print(qualityChoice)
+
         print("\a")

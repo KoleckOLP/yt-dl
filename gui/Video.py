@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
-from release import spath
+from shared.Video import video_shared
 
 
 def Video(window):
@@ -12,38 +12,27 @@ def Video(window):
 
         window.vid_output_console.setHtml("")  # clearing the output_console.
 
-        url = window.vid_url_bar.text()
-        if window.vid_playlist_checkbox.isChecked():
-            numb = window.vid_playlist_bar.text()
-        else:
-            numb = None
-
-        if (numb is None):
-            cmd = [["youtube-dl", "-o", f"{window.settings.Youtubedl.videoDir}%(title)s.%(ext)s", "-f"],
-                   ["--no-playlist", f"{url}"]]
-        elif (numb == ""):
-            cmd = [
-                ["youtube-dl", "-o", f"{window.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s", "-f"],
-                ["--yes-playlist", f"{url}"]]
-        else:
-            cmd = [
-                ["youtube-dl", "-o", f"{window.settings.Youtubedl.videoDir}%(playlist_index)s. %(title)s.%(ext)s", "-f"],
-                ["--yes-playlist", "--playlist-items", f"{numb}", f"{url}"]]
-
-        if window.vid_best_radio.isChecked():
-            qual = ["bestvideo+bestaudio"]
+        if window.vid_normal_radio.isChecked():
+            qualityChose = "1"
+            qual = "best"  # these are useless
         elif window.vid_custom_radio.isChecked():
-            qual = [window.vid_quality_bar.text()]
+            qualityChose = "2"
+            qual = window.vid_quality_bar.text()
         else:
-            qual = ["best"]
+            qualityChose = ""
+            qual = "bestvideo+bestaudio"  # these are useless
 
-        floc = [f"--ffmpeg-location", f"{spath}"]
-        if window.fdir:
-            cmd = cmd[0] + qual + floc + cmd[1]
-        else:
-            cmd = cmd[0] + qual + cmd[1]
+        cmd = video_shared(window.vid_url_bar.text(),
+                           window.vid_playlist_checkbox.isChecked(),
+                           window.vid_playlist_bar.text(),
+                           qualityChose,
+                           qual,
+                           window.floc,
+                           window.settings.Youtubedl.videoDir)
 
         window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
+
+        window.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
         window.process_start(cmd, window.vid_output_console)
 
