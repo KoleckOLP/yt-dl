@@ -14,9 +14,9 @@ def Load(call, s="show"):
     pffmpeg = glob.glob(f"{spath}/ffmpeg*")
     pffprobe = glob.glob(f"{spath}/ffprobe*")
     if (not pffmpeg and not pffprobe):
-        call.fdir = False
+        call.floc = False
     else:
-        call.fdir = True
+        call.floc = spath
     # new stuff
     if (os.path.exists(settingsPath)):
         call.settings = Settings.fromJson(settingsPath)

@@ -1,6 +1,5 @@
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
-from release import spath
 from shared.Audio import audio_shared
 
 
@@ -12,12 +11,11 @@ def Audio(window):
 
         window.aud_output_console.setHtml("")  # clearing the output_console
 
-        if window.fdir:
-            floc = spath
-        else:
-            floc = False
-
-        cmd = audio_shared(window.aud_url_bar.text(), window.aud_playlist_checkbox.isChecked(), window.aud_playlist_bar.text(), floc, window.settings.Youtubedl.audioDir)
+        cmd = audio_shared(window.aud_url_bar.text(),
+                           window.aud_playlist_checkbox.isChecked(),
+                           window.aud_playlist_bar.text(),
+                           window.floc,
+                           window.settings.Youtubedl.audioDir)
 
         window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
 
