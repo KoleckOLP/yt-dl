@@ -3,6 +3,7 @@ import sys
 from colorama import init, Fore, Style  # Back
 # Imports from this project
 from kolreq.kolreq import clear, readchar
+from cli.Settings import Load
 
 init()  # initialises colorama
 
@@ -20,13 +21,12 @@ def Debug(call):
                 git = True
             else:
                 git = False
-            call.loadpath()
+            Load(call)
             print("Variables:")
             print(f"python executable name: {call.settings.Python.python}\npip executable name: {call.settings.Python.pip}")
             print("youtube-dl from pip: ", end="")
             call.TF(call.settings.Youtubedl.fromPip)
-            print("ffmpeg in yt-dl dir: ", end="")
-            call.TF(call.fdir)
+            print(f"ffmpeg in yt-dl dir: {call.floc}")
             print("yt-dl from git: ", end="")
             call.TF(git)
             print("autoupdate: ", end="")
