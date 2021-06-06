@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
-from shared.Video import video_shared
+from shared.Video import video_list_shared, video_shared
 
 
 def Video(window):
@@ -50,8 +50,7 @@ def vid_quality(window):
 
         window.vid_output_console.setHtml("")  # clearing the output_console
 
-        url = window.vid_url_bar.text()
-        cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
+        cmd = video_list_shared(window.vid_url_bar.text())
 
         window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 

@@ -1,6 +1,6 @@
 # Imports from this project
 from kolreq.kolreq import clear
-from shared.Video import video_shared
+from shared.Video import video_list_shared, video_shared
 
 
 def Video(call):
@@ -26,6 +26,13 @@ def Video(call):
                   "2 to choose yourself")
             qualityChoice = input("#")
             if qualityChoice == "2":
+                cmd = video_list_shared(url)
+
+                print("starting youtube-dl please wait...")
+
+                call.process_start(cmd)
+
+                print("choose video and audio quality by typing numb+numb")
                 qual = input("#")
         else:  # playlist
             print("<Enter> for the best quality 1080p + if available, \n" +
@@ -37,7 +44,5 @@ def Video(call):
         print("starting youtube-dl please wait...")
 
         call.process_start(cmd)
-
-        print(qualityChoice)
 
         print("\a")
