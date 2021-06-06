@@ -228,7 +228,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if checkbox:
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
-                return cmd
+        return cmd
     # endregion
 
 

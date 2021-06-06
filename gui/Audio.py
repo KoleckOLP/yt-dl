@@ -17,7 +17,7 @@ def Audio(window):
                            window.floc,
                            window.settings.Youtubedl.audioDir)
 
-        window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
+        cmd = window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
 
         window.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 

@@ -30,7 +30,7 @@ def Video(window):
                            window.floc,
                            window.settings.Youtubedl.videoDir)
 
-        window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
+        cmd = window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
         window.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
 
