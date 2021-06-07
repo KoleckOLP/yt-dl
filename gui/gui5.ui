@@ -444,16 +444,6 @@
         <string>Subs</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
-        <item row="2" column="1">
-         <widget class="QCheckBox" name="sub_lang_checkbox">
-          <property name="styleSheet">
-           <string notr="true">Color: #FFFFFF;</string>
-          </property>
-          <property name="text">
-           <string>Lang:</string>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="6">
          <widget class="QPushButton" name="sub_lang_button">
           <property name="styleSheet">
@@ -490,10 +480,10 @@
         <item row="2" column="3">
          <widget class="QLineEdit" name="sub_lang_bar">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #707070;</string>
+           <string notr="true">background-color: #909090</string>
           </property>
          </widget>
         </item>
@@ -532,7 +522,7 @@
          </widget>
         </item>
         <item row="2" column="4">
-         <widget class="QLabel" name="sub_lang_label">
+         <widget class="QLabel" name="sub_lang_label2">
           <property name="styleSheet">
            <string notr="true">Color: #FFFFFF</string>
           </property>
@@ -567,6 +557,16 @@
           </property>
           <property name="text">
            <string>use cookies</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLabel" name="sub_lang_label">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>Lang:</string>
           </property>
          </widget>
         </item>

@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QMessageBox
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
 from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
-from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
+from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
 from gui.Settings import set_save, set_load, set_makeScript
@@ -87,7 +87,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_download_button.clicked.connect(lambda: Subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
-        self.sub_lang_checkbox.toggled.connect(lambda: sub_lang_bar_toggle(self))
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 

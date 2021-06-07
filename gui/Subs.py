@@ -78,11 +78,3 @@ def sub_playlist_bar_toggle(window):
         window.sub_playlist_bar.setStyleSheet("background-color: #909090;")
     else:
         window.sub_playlist_bar.setStyleSheet("background-color: #707070;")
-
-
-def sub_lang_bar_toggle(window):
-    window.sub_lang_bar.setEnabled(window.sub_lang_checkbox.isChecked())
-    if (window.sub_lang_checkbox.isChecked()):
-        window.sub_lang_bar.setStyleSheet("background-color: #909090;")
-    else:
-        window.sub_lang_bar.setStyleSheet("background-color: #707070;")
