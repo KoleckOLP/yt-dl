@@ -1,8 +1,10 @@
 from shared.Shared import shared
 
+
 def video_list_shared(url):
     cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
     return cmd
+
 
 def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: str, floc: str, directory):
     cmd = shared(playlist, numb, floc, directory)

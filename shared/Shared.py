@@ -1,4 +1,4 @@
-def shared(playlist: bool, numb: str, floc: str, directory:str):
+def shared(playlist: bool, numb: str, floc: str, directory: str):
     cmd = ["youtube-dl"]
 
     if floc:

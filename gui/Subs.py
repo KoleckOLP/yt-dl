@@ -1,7 +1,7 @@
 import os
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
-from shared.Subs import subs_list_shared, subs_shared_part1, subs_shared_part2, subs_shared_part3
+from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_paths_for_ffmpeg, subs_shared_lines_for_ffmpeg
 
 
 def Subs(window):
@@ -13,11 +13,11 @@ def Subs(window):
 
         window.sub_output_console.setHtml("")  # clearing the output_console.
 
-        result = subs_shared_part1(window.sub_url_bar.text(),
-                                   window.sub_playlist_checkbox.isChecked(),
-                                   window.sub_playlist_bar.text(),
-                                   window.sub_lang_bar.text(),
-                                   window.floc)
+        result = subs_shared_download(window.sub_url_bar.text(),
+                                      window.sub_playlist_checkbox.isChecked(),
+                                      window.sub_playlist_bar.text(),
+                                      window.sub_lang_bar.text(),
+                                      window.floc)
 
         cmd, temp = result
 
@@ -27,9 +27,9 @@ def Subs(window):
 
         window.process_start(cmd, window.sub_output_console)
 
-        subpath, newsubpath = subs_shared_part2(temp.name+os.path.sep, window.settings.Youtubedl.videoDir)
+        subpath, newsubpath = subs_shared_paths_for_ffmpeg(temp.name + os.path.sep, window.settings.Youtubedl.videoDir)
 
-        FfmpegLines = subs_shared_part3(window, subpath, newsubpath)
+        FfmpegLines = subs_shared_lines_for_ffmpeg(window, subpath, newsubpath)
 
         if isinstance(FfmpegLines, str):
             if FfmpegLines == "error":
@@ -59,7 +59,7 @@ def sub_lang(window):
 
         window.sub_output_console.setHtml("")  # clearing the output_console
 
-        cmd = subs_list_shared(window.sub_url_bar.text())  # seems kinda unnecessary
+        cmd = subs_shared_list(window.sub_url_bar.text())  # seems kinda unnecessary
 
         window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 

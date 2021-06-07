@@ -6,12 +6,12 @@ from typing import List
 from shared.Shared import shared
 
 
-def subs_list_shared(url):
+def subs_shared_list(url):
     cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
     return cmd
 
 
-def subs_shared_part1(url: str, playlist: bool, numb: str, lang: str, floc: str):
+def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str):
     temp = tempfile.TemporaryDirectory()
 
     cmd = shared(playlist, numb, floc, temp.name+os.path.sep)
@@ -27,7 +27,7 @@ def subs_shared_part1(url: str, playlist: bool, numb: str, lang: str, floc: str)
     return (cmd, temp)
 
 
-def subs_shared_part2(temp, directory: str):
+def subs_shared_paths_for_ffmpeg(temp, directory: str):
     subpath = glob.glob(f"{temp}*.vtt")
 
     os.makedirs(directory, exist_ok=True)
@@ -43,7 +43,7 @@ def subs_shared_part2(temp, directory: str):
     return (subpath, retNewSubsPath)
 
 
-def subs_shared_part3(call_window, subpath: List[str], newsubpath: List[str]):
+def subs_shared_lines_for_ffmpeg(call_window, subpath: List[str], newsubpath: List[str]):
     retFfmpegLines = []
 
     if not subpath or not newsubpath:

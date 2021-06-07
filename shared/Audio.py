@@ -1,5 +1,6 @@
 from shared.Shared import shared
 
+
 def audio_shared(url: str, playlist: bool, numb: str, floc: str, directory: str):
     cmd = shared(playlist, numb, floc, directory)
 
