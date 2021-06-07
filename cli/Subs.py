@@ -1,10 +1,7 @@
 import os
-import glob
-import tempfile
 # Imports from this project
-from release import spath
 from kolreq.kolreq import clear
-from shared.Subs import subs_list_shared, subs_shared_part1, subs_shared_part2
+from shared.Subs import subs_list_shared, subs_shared_part1, subs_shared_part2, subs_shared_part3
 
 
 def Subs(call):
@@ -24,13 +21,41 @@ def Subs(call):
             items = ""
         else:
             items = numb
+
         if (numb == ""):  # no playlist
-
+            print("<Enter> default lang (probably en)\n" +
+                  "1. list languages")
+            use_custom_lang = input("#")
+            if use_custom_lang == "1":
+                cmd = subs_list_shared(url)
+                call.process_start(cmd)
+                print("choose language of the subtitles by typing it's code")
+                lang = input("#")
         else:  # playlist
+            pass
 
-        cmd = subs_shared_part1(url, bool(numb), items, lang, call.floc)
+        cmd, temp = subs_shared_part1(url, bool(numb), items, lang, call.floc)
 
         print("starting youtube-dl please wait...")
 
         call.process_start(cmd)
 
+        subpath, newsubpath = subs_shared_part2(temp.name+os.path.sep, call.settings.Youtubedl.videoDir)
+
+        FfmpegLines = subs_shared_part3(call, subpath, newsubpath)
+
+        if isinstance(FfmpegLines, str):
+            if FfmpegLines == "error":
+                print(f"#yt-dl# found an issue aborting...\n")
+            else:
+                print(f"#yt-dl# file {FfmpegLines} already exists aborting...\n")
+
+        else:
+            for line in FfmpegLines:
+                print("#yt-dl# starting ffmpeg please wait...\n")
+
+                call.process_start(line)
+
+                print("\a")
+
+        temp.cleanup()

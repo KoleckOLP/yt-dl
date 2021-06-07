@@ -5,41 +5,58 @@ from typing import List
 # Imports from this project
 from shared.Shared import shared
 
+
 def subs_list_shared(url):
     cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
     return cmd
 
-def subs_shared_part1(url: str, playlist: bool, numb: str, lang: str, floc: str):
-    temp = tempfile.mkdtemp() + os.path.sep
 
-    cmd =  shared(playlist, numb, floc, temp)
+def subs_shared_part1(url: str, playlist: bool, numb: str, lang: str, floc: str):
+    temp = tempfile.TemporaryDirectory()
+
+    cmd = shared(playlist, numb, floc, temp.name+os.path.sep)
 
     cmd = cmd + ["--write-sub", "--write-auto-sub", "--sub-format", "vtt", "--skip-download", f"{url}"]
 
     if lang:
-        '''  # going to implement all subs later
         if lang == "all":
             cmd = cmd + ["--all-subs"]
         else:
-        '''
-        cmd = cmd + ["--sub-lang", lang]
+            cmd = cmd + ["--sub-lang", lang]
 
     return (cmd, temp)
 
-def subs_shared_part2(call_window, temp: List[str], directory: str):
+
+def subs_shared_part2(temp, directory: str):
     subpath = glob.glob(f"{temp}*.vtt")
 
     os.makedirs(directory, exist_ok=True)
+
+    retNewSubsPath = []
 
     for item in subpath:  # ehh this does not work with all subs
         namei = os.path.basename(item)
         namei = namei[:-3]
         newsubpath = directory + namei + "srt"
-        if os.path.isfile(newsubpath):
-            return newsubpath
+        retNewSubsPath = retNewSubsPath + [newsubpath]
+
+    return (subpath, retNewSubsPath)
+
+
+def subs_shared_part3(call_window, subpath: List[str], newsubpath: List[str]):
+    retFfmpegLines = []
+
+    if not subpath or not newsubpath:
+        return "error"
+
+    for old, new in zip(subpath, newsubpath):
+        if os.path.exists(new):
+            return new
+
+        if call_window.floc:
+            ffmpeg = call_window.floc+"ffmpeg"
         else:
-            if call_window.floc:
-                ffmpeg = call_window.floc
-            else:
-                ffmpeg = "ffmpeg"
-            return [ffmpeg, "-i", f"{item}", f"{newsubpath}"]
+            ffmpeg = "ffmpeg"
+        retFfmpegLines = retFfmpegLines + [[ffmpeg, "-i", old, new]]
+
+    return retFfmpegLines

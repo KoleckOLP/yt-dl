@@ -1,6 +1,7 @@
+import os
 from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
-from shared.Subs import subs_list_shared, subs_shared_part1, subs_shared_part2
+from shared.Subs import subs_list_shared, subs_shared_part1, subs_shared_part2, subs_shared_part3
 
 
 def Subs(window):
@@ -26,17 +27,23 @@ def Subs(window):
 
         window.process_start(cmd, window.sub_output_console)
 
-        result = subs_shared_part2(window, temp, window.settings.Youtubedl.videoDir)
+        subpath, newsubpath = subs_shared_part2(temp.name+os.path.sep, window.settings.Youtubedl.videoDir)
 
-        if result:
-            if isinstance(result, list):
-                cmd = result
+        FfmpegLines = subs_shared_part3(window, subpath, newsubpath)
 
+        if isinstance(FfmpegLines, str):
+            if FfmpegLines == "error":
+                window.sub_output_console.insertPlainText(f"#yt-dl# found an issue aborting...\n")
+            else:
+                window.sub_output_console.insertPlainText(f"#yt-dl# file {FfmpegLines} already exists aborting...\n")
+
+        else:
+            for line in FfmpegLines:
                 window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
 
-                window.process_start(cmd, window.sub_output_console)
-            else:
-                window.sub_output_console.insertPlainText(f"#yt-dl# file \"{result}\" already exists skipping...\n")
+                window.process_start(line, window.sub_output_console)
+
+        temp.cleanup()
 
         window.running = False
         window.status("Ready.")
