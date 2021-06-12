@@ -213,6 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     @staticmethod
     def openFolder(loc: str):
+        loc = os.path.dirname(loc)
         if not os.path.exists(loc):
             os.makedirs(loc, exist_ok=True)
         if (sys.platform.startswith("win")):

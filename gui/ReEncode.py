@@ -81,7 +81,7 @@ def Reencode(window):
                     cmd = cmd[0] + SubsC + cmd[1]
 
                 floc = [f"{spath + os.path.sep + 'ffmpeg'}", "-hide_banner"]
-                if window.fdir:
+                if window.floc:
                     cmd = floc + cmd
                 else:
                     cmd = ["ffmpeg", "-hide_banner"] + cmd
