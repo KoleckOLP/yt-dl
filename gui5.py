@@ -95,6 +95,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("mp3")
+        self.ree_settings_combobox.addItem("mjpeg_pcm")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
         ree_settings(self)  # load option on startup
