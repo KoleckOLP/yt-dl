@@ -1,33 +1,19 @@
-from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
 from shared.Audio import audio_shared
 
 
 def Audio(window):
-    if not window.running:
-        window.running = True
-        window.status("Busy.")
-        window.tabWidget.setTabText(0, "*Audio")
+    cmd = audio_shared(window.aud_url_bar.text(),
+                       window.aud_playlist_checkbox.isChecked(),
+                       window.aud_playlist_bar.text(),
+                       window.floc,
+                       window.settings.Youtubedl.audioDir)
 
-        window.aud_output_console.setHtml("")  # clearing the output_console
+    cmd = window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
 
-        cmd = audio_shared(window.aud_url_bar.text(),
-                           window.aud_playlist_checkbox.isChecked(),
-                           window.aud_playlist_bar.text(),
-                           window.floc,
-                           window.settings.Youtubedl.audioDir)
+    window.process = window.process_start(cmd, window.aud_output_console, window.aud_download_button, window.process)
 
-        cmd = window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
-
-        window.aud_output_console.insertPlainText("#yt-dl# starting youtube-dl please wait...\n")
-
-        window.process_start(cmd, window.aud_output_console)
-
-        window.running = False
-        window.status("Ready.")
-        window.tabWidget.setTabText(0, "Audio")
-    else:
-        window.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+    window.process_output(window.aud_output_console, window.aud_download_button, window.process)
 
 
 def aud_playlist_bar_toggle(window):
