@@ -53,6 +53,6 @@ def sub_playlist_bar_toggle(window):
     window.sub_lang_button.setEnabled(not window.sub_playlist_checkbox.isChecked())
     window.sub_playlist_bar.setEnabled(window.sub_playlist_checkbox.isChecked())
     if (window.sub_playlist_checkbox.isChecked()):
-        window.sub_playlist_bar.setStyleSheet("background-color: #909090;")
+        window.sub_playlist_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
     else:
-        window.sub_playlist_bar.setStyleSheet("background-color: #707070;")
+        window.sub_playlist_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")

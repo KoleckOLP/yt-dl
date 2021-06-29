@@ -19,6 +19,6 @@ def Audio(window):
 def aud_playlist_bar_toggle(window):
     window.aud_playlist_bar.setEnabled(window.aud_playlist_checkbox.isChecked())
     if (window.aud_playlist_checkbox.isChecked()):
-        window.aud_playlist_bar.setStyleSheet("background-color: #909090;")
+        window.aud_playlist_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
     else:
-        window.aud_playlist_bar.setStyleSheet("background-color: #707070;")
+        window.aud_playlist_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")

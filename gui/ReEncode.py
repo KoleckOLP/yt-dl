@@ -97,54 +97,47 @@ def ree_settings(window):
         window.ree_append_bar.setText(window.settings.Ffmpeg.append)
     elif window.ree_settings_combobox.currentIndex() == 0:  # hevc_opus
         window.ree_videoc_bar.setText("libx265")
-        window.ree_videoc_bar.setEnabled(True)  # FIXME duplicate code, checking if is should be enable or not should be done somewhere else
-        window.ree_videoc_bar.setStyleSheet("background-color: #909090;")
         window.ree_videoq_bar.setText("24,24,24")
-        window.ree_videoq_bar.setEnabled(True)
-        window.ree_videoq_bar.setStyleSheet("background-color: #909090;")
         window.ree_audioc_bar.setText("opus")
         window.ree_audiob_bar.setText("190k")
         window.ree_append_bar.setText("_hevcopus.mkv")
     elif window.ree_settings_combobox.currentIndex() == 1:  # h264_nvenc
         window.ree_videoc_bar.setText("h264_nvenc")
-        window.ree_videoc_bar.setEnabled(True)
-        window.ree_videoc_bar.setStyleSheet("background-color: #909090;")
         window.ree_videoq_bar.setText("24,24,24")
-        window.ree_videoq_bar.setEnabled(True)
-        window.ree_videoq_bar.setStyleSheet("background-color: #909090;")
         window.ree_audioc_bar.setText("aac")
         window.ree_audiob_bar.setText("190k")
         window.ree_append_bar.setText("_nvenc.mov")
     elif window.ree_settings_combobox.currentIndex() == 2:  # hevc_nvenc
         window.ree_videoc_bar.setText("hevc_nvenc")
-        window.ree_videoc_bar.setEnabled(True)
-        window.ree_videoc_bar.setStyleSheet("background-color: #909090;")
         window.ree_videoq_bar.setText("24,24,24")
-        window.ree_videoq_bar.setEnabled(True)
-        window.ree_videoq_bar.setStyleSheet("background-color: #909090;")
         window.ree_audioc_bar.setText("opus")
         window.ree_audiob_bar.setText("190k")
         window.ree_append_bar.setText("_henc.mkv")
     elif window.ree_settings_combobox.currentIndex() == 3:  # mp3
         window.ree_videoc_bar.setText("remove")
-        window.ree_videoc_bar.setEnabled(False)
-        window.ree_videoc_bar.setStyleSheet("background-color: #707070;")
         window.ree_videoq_bar.setText("none")
-        window.ree_videoq_bar.setEnabled(False)
-        window.ree_videoq_bar.setStyleSheet("background-color: #707070;")
         window.ree_audioc_bar.setText("mp3")
         window.ree_audiob_bar.setText("190k")
         window.ree_append_bar.setText(".mp3")
     elif window.ree_settings_combobox.currentIndex() == 4:  # mjpeg_pcm
         window.ree_videoc_bar.setText("mjpeg")
-        window.ree_videoc_bar.setEnabled(True)
-        window.ree_videoc_bar.setStyleSheet("background-color: #909090;")
         window.ree_videoq_bar.setText("2")
-        window.ree_videoq_bar.setEnabled(True)
-        window.ree_videoq_bar.setStyleSheet("background-color: #909090;")
         window.ree_audioc_bar.setText("pcm_s16be")
         window.ree_audiob_bar.setText("190k")
         window.ree_append_bar.setText("_mjpgpcm.mov")
+
+
+def ree_color(window):
+    if window.ree_settings_combobox.currentText() == "mp3":
+        window.ree_videoc_bar.setEnabled(False)
+        window.ree_videoc_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")
+        window.ree_videoq_bar.setEnabled(False)
+        window.ree_videoq_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")
+    else:
+        window.ree_videoc_bar.setEnabled(True)
+        window.ree_videoc_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
+        window.ree_videoq_bar.setEnabled(True)
+        window.ree_videoq_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
 
 
 def ree_settings_save(window):

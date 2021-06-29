@@ -42,14 +42,14 @@ def vid_quality(window):
 def vid_playlist_bar_toggle(window):
     window.vid_playlist_bar.setEnabled(window.vid_playlist_checkbox.isChecked())
     if (window.vid_playlist_checkbox.isChecked()):
-        window.vid_playlist_bar.setStyleSheet("background-color: #909090;")
+        window.vid_playlist_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
     else:
-        window.vid_playlist_bar.setStyleSheet("background-color: #707070;")
+        window.vid_playlist_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")
 
 
 def vid_quality_bar_toggle(window):
     window.vid_quality_bar.setEnabled(window.vid_custom_radio.isChecked())
     if (window.vid_custom_radio.isChecked()):
-        window.vid_quality_bar.setStyleSheet("background-color: #909090;")
+        window.vid_quality_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
     else:
-        window.vid_quality_bar.setStyleSheet("background-color: #707070;")
+        window.vid_quality_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")
