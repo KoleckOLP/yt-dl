@@ -1,6 +1,9 @@
 import os
 import glob
-from PyQt5.QtWidgets import QFileDialog
+try:
+    from PyQt6.QtWidgets import QFileDialog
+except ModuleNotFoundError:
+    from PyQt5.QtWidgets import QFileDialog
 # Imports from this project
 from release import spath, settingsPath
 

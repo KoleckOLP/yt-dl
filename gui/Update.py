@@ -1,3 +1,7 @@
+try:
+    from PyQt6.QtCore import QT_VERSION_STR
+except ModuleNotFoundError:
+    from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import settingsPath
 
@@ -29,7 +33,7 @@ def update_depend(window):
     window.process = window.process_start(cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
 
     window.process_output(window.upd_output_console, window.upd_update_button, window.process)
-    cmd = pips + ["install", "-U", "-r", "req-gui5.txt"]
+    cmd = pips + ["install", "-U", "-r", f"req-gui{QT_VERSION_STR[:1]}.txt"]
     window.process = window.process_start(cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
 
     window.process_output(window.upd_output_console, window.upd_update_button, window.process)

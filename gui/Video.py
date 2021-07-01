@@ -1,4 +1,3 @@
-from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
 

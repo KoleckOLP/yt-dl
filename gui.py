@@ -3,8 +3,14 @@ import sys
 import glob
 import subprocess
 from typing import List
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QMessageBox
+try:
+    from PyQt6 import QtWidgets, uic
+    from PyQt6.QtWidgets import QMessageBox
+    from PyQt6.QtCore import QT_VERSION_STR
+except ModuleNotFoundError:
+    from PyQt5 import QtWidgets, uic
+    from PyQt5.QtWidgets import QMessageBox
+    from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
@@ -126,6 +132,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_button.clicked.connect(lambda: Update(self))
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
+        pyVer = f"{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}"
+        self.upd_output_console.setHtml(f"yt-dl {ver}, python {pyVer}, qt {QT_VERSION_STR}")
         # endregion
 
         # region =====set_controls=====
@@ -264,4 +272,4 @@ class MainWindow(QtWidgets.QMainWindow):
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
-app.exec_()
+app.exec()
