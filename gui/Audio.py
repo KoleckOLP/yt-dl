@@ -1,5 +1,6 @@
 # Imports from this project
 from shared.Audio import audio_shared
+from gui.Process import process_start, process_output
 
 
 def Audio(window):
@@ -11,9 +12,9 @@ def Audio(window):
 
     cmd = window.hasCookie(window.aud_cookie_checkbox.isChecked(), cmd)
 
-    window.process = window.process_start(cmd, window.aud_output_console, window.aud_download_button, window.process)
+    window.process = process_start(window, cmd, window.aud_output_console, window.aud_download_button, window.process)
 
-    window.process_output(window.aud_output_console, window.aud_download_button, window.process)
+    process_output(window, window.aud_output_console, window.aud_download_button, window.process)
 
 
 def aud_playlist_bar_toggle(window):

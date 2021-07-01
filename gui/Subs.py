@@ -1,6 +1,7 @@
 import os
 # Imports from this project
 from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_paths_for_ffmpeg, subs_shared_lines_for_ffmpeg
+from gui.Process import process_start, process_output
 
 
 def Subs(window):
@@ -14,9 +15,9 @@ def Subs(window):
 
     cmd = window.hasCookie(window.sub_cookie_checkbox.isChecked(), cmd)
 
-    window.process = window.process_start(cmd, window.sub_output_console, window.sub_download_button, window.process)
+    window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 
-    window.process_output(window.sub_output_console, window.sub_download_button, window.process)
+    process_output(window, window.sub_output_console, window.sub_download_button, window.process)
 
     subpath, newsubpath = subs_shared_paths_for_ffmpeg(temp.name + os.path.sep, window.settings.Youtubedl.videoDir)
 
@@ -32,9 +33,9 @@ def Subs(window):
         for line in FfmpegLines:
             window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
 
-            window.process = window.process_start(line, window.sub_output_console, window.sub_download_button, window.process)
+            window.process = process_start(window, line, window.sub_output_console, window.sub_download_button, window.process)
 
-            window.process_output(window.sub_output_console, window.sub_download_button, window.process)
+            process_output(window, window.sub_output_console, window.sub_download_button, window.process)
 
     temp.cleanup()
 
@@ -44,9 +45,9 @@ def sub_lang(window):
 
     window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
-    window.process = window.process_start(cmd, window.sub_output_console, window.sub_download_button, window.process)
+    window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 
-    window.process_output(window.sub_output_console, window.sub_download_button, window.process)
+    process_output(window, window.sub_output_console, window.sub_download_button, window.process)
 
 
 def sub_playlist_bar_toggle(window):

@@ -511,7 +511,7 @@
            </font>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #000000; color: #000000</string>
+           <string notr="true">background-color: #000000; color: #FFFFFF</string>
           </property>
          </widget>
         </item>

@@ -1,8 +1,6 @@
 import os
 import sys
 import glob
-import subprocess
-from typing import List
 try:
     from PyQt6 import QtWidgets, uic
     from PyQt6.QtWidgets import QMessageBox
@@ -123,7 +121,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # region ======upd_controls======
         self.upd_update_combobox.addItem("All")  # setting up items in combo list
         self.upd_update_combobox.addItem("yt-dl")
-        self.upd_update_combobox.addItem("dependencies")
+        self.upd_update_combobox.addItem("Dependencies")
+        self.upd_update_combobox.addItem("List versions")
         if (sys.platform.startswith("haiku")):
             self.upd_update_combobox.setCurrentIndex(1)
 
@@ -135,8 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_button.clicked.connect(lambda: Update(self))
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
-        pyVer = f"{sys.version_info[0]}.{sys.version_info[1]}.{sys.version_info[2]}"
-        self.upd_output_console.setHtml(f"yt-dl {ver}, python {pyVer}, qt {QT_VERSION_STR}")
+        self.upd_output_console.append("#yt-dl# Welcome to yt-dl-gui (Update) pick and option and click Update.")
         # endregion
 
         # region =====set_controls=====
@@ -215,53 +213,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.statusBar().setStyleSheet("background-color: #FF6600")
         else:
             self.statusBar().setStyleSheet("background-color: #A9A9A9")
-
-    @staticmethod
-    def process_start(cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "youtube_dl"):
-        if not window.running:
-            window.running = True
-            window.status("Busy.")
-            download_button.setText("Stop!")
-            tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
-            window.tabWidget.setTabText(window.tabWidget.currentIndex(), "*"+tabName)
-
-            if output_clear:
-                output_console.setHtml("")  # clearing the output_console
-            output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
-
-            if (sys.platform.startswith("win")):  # (os.name == "nt"):
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
-            else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
-                process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, errors="ignore")
-            return process
-        else:
-            process.terminate()
-            window.running = False
-
-    @staticmethod
-    def process_output(output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", button_text: str = "Download"):
-        if window.running:
-            while True:
-                test = process.stdout.readline()
-                if not test:
-                    break
-                test = str(test)
-                if "\\n" in test:
-                    test = test.replace("\\n", "\n")
-                output_console.insertPlainText(test)
-                scrollbar = output_console.verticalScrollBar()
-                scrollbar.setValue(scrollbar.maximum())
-                QtWidgets.QApplication.processEvents()
-            print("\a")
-            output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
-            download_button.setText(button_text)
-            window.running = False
-            window.status("Ready.")
-            tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
-            window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
-            QtWidgets.QApplication.processEvents()
-            scrollbar = output_console.verticalScrollBar()
-            scrollbar.setValue(scrollbar.maximum())
 
     @staticmethod
     def openFolder(loc: str):

@@ -1,45 +1,70 @@
 try:
+    from PyQt6 import QtWidgets, QtGui
     from PyQt6.QtCore import QT_VERSION_STR
 except ModuleNotFoundError:
+    from PyQt5 import QtWidgets, QtGui
     from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
-from release import settingsPath
+from release import settingsPath, ver
+from gui.Process import process_start, process_output
 
 
 def Update(window):
-    if window.upd_update_combobox.currentIndex() == 1:
+    window.upd_output_console.setHtml("")
+    if window.upd_update_combobox.currentIndex() == 0:
+        update_yt_dl(window)
+        update_depend(window)
+    elif window.upd_update_combobox.currentIndex() == 1:
         update_yt_dl(window)
     elif window.upd_update_combobox.currentIndex() == 2:
         update_depend(window)
     else:
-        update_yt_dl(window)
-        update_depend(window)
+        listVersions(window)
+
 
 
 def update_yt_dl(window):
     cmd = ["git", "pull", "--recurse-submodules"]
-    window.process = window.process_start(cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
+    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
 
-    window.process_output(window.upd_output_console, window.upd_update_button, window.process)
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
 
 def update_depend(window):
-    cmd = [window.settings.Python.python, "-V"]
-    window.process = window.process_start(cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
-
-    window.process_output(window.upd_output_console, window.upd_update_button, window.process)
     pips = window.settings.Python.pip.split(" ")
     cmd = [f"{window.settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
-    window.process = window.process_start(cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
+    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
-    window.process_output(window.upd_output_console, window.upd_update_button, window.process)
-    cmd = pips + ["install", "-U", "-r", f"req-gui{QT_VERSION_STR[:1]}.txt"]
-    window.process = window.process_start(cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-
-    window.process_output(window.upd_output_console, window.upd_update_button, window.process)
+    cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
+    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
 
 def upd_auto_toggle(window):
     window.settings.autoUpdate = not window.settings.autoUpdate
     window.settings.toJson(settingsPath)
     window.upd_auto_button.setText(f"Autoupdate=\"{window.settings.autoUpdate}\"")
+
+
+def listVersions(window):
+    window.upd_output_console.append(f"yt-dl {ver}\n\n")
+
+    cmd = [window.settings.Python.python, "-V"]
+    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+
+    window.upd_output_console.append(f"qt {QT_VERSION_STR}\n\nyoutube-dl ")
+
+    cmd = ["youtube-dl", "--version"]
+    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+
+    window.upd_output_console.append("")
+
+    cmd = ["ffmpeg", "-version"]
+    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+
+    window.upd_output_console.moveCursor(QtGui.QTextCursor.MoveOperation.Start)
+    QtWidgets.QApplication.processEvents()

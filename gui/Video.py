@@ -1,5 +1,6 @@
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
+from gui.Process import process_start, process_output
 
 
 def Video(window):
@@ -23,9 +24,9 @@ def Video(window):
 
     cmd = window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
-    window.process = window.process_start(cmd, window.vid_output_console,  window.vid_download_button, window.process)
+    window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
 
-    window.process_output(window.vid_output_console, window.vid_download_button, window.process)
+    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
 
 def vid_quality(window):
@@ -33,9 +34,9 @@ def vid_quality(window):
 
     window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
-    window.process = window.process_start(cmd, window.vid_output_console, window.vid_download_button, window.process)
+    window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 
-    window.process_output(window.vid_output_console, window.vid_download_button, window.process)
+    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
 
 def vid_playlist_bar_toggle(window):
