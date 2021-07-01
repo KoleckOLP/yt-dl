@@ -23,7 +23,7 @@ from Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
-    myappid = 'HorseArmored.yt-dl.gui5.'+ver  # Program Sting
+    myappid = 'HorseArmored.yt-dl.gui.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 
@@ -45,7 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi(f"gui{os.path.sep}gui5.ui", self)
+        uic.loadUi(f"gui{os.path.sep}gui.ui", self)
 
         self.show()
 
@@ -157,7 +157,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # region ==========🎓ABOUT🎓==========
         self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
-                               f"Version: {ver} gui5 ({curb} branch)<br>" +
+                               f"Version: {ver} gui ({curb} branch)<br>" +
                                f"Last updated on: {lstupdt}<br>" +
                                f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>" +
                                f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>" +

@@ -1,3 +1,6 @@
+##New in 2.2.0.0:
+A lot I should actually write this soon.
+
 ## New in 2.1.11.0:
 Updater now shows you python version (along with package updates)<br>
 Added support for cookies, this let's download private videos and age restricted videos.

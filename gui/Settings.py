@@ -36,9 +36,9 @@ def set_makeScript(window):  # I had an issue getting the venv working with gui
             f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
         f.close()
         f = open("yt-dl_gui.bat", "w")
-        f.write(f"@echo off\n\nstart /b pythonw.exe gui5.py")
+        f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")
         f.close()
     else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))):
         f = open("yt-dl", "w")
-        f.write(f"#!/bin/sh\n\ncd {spath} && {window.settings.Python.python} gui5.py")
+        f.write(f"#!/bin/sh\n\ncd {spath} && {window.settings.Python.python} gui.py")
         f.close()

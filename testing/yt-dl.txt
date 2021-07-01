@@ -1,6 +1,6 @@
 This is a user manual full of tips and tricks for yt-dl 2.2.0.0
 
-GUI5:
+GUI:
     Audio:
         # downloads a video and converts it to mp3 using ffmpeg (should support any webpage)
 
