@@ -62,7 +62,10 @@ class MainWindow(QtWidgets.QMainWindow):
         if (os.path.exists(settingsPath)):
             self.settings = Settings.fromJson(settingsPath)
         else:
-            self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
+            if QT_VERSION_STR[0] == '6':
+                self.messagePopup("Settings error", QMessageBox.Icon.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
+            else:
+                self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
 
         self.setWindowTitle(f"yt-dl {ver}")
 
@@ -169,19 +172,30 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
     # region ===== startup =====
-    @staticmethod
-    def messagePopup(title, icon, text, callf=None):
+    def messagePopup(self, title, icon, text, callf=None):
         msg = QMessageBox()  # Pylance is being stupid, I had to disable Type checking.
         msg.setWindowTitle(title)
         msg.setIcon(icon)
         msg.setText(text)
         if callf is not None:
-            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)  # Fuck pylance it says that this line is wrong anf that int can't bd a button, there is not int.
-            msg.buttonClicked.connect(callf)
-        msg.exec_()
+            if QT_VERSION_STR[0] == '6':
+                msg.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+            else:
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.buttonClicked.connect(callf)
+        button = msg.exec()
 
-    def SaveDefaultConfig(self, i):
-        text: str = i.text().lower()
+        if QT_VERSION_STR[0] == '6':
+            if button == QMessageBox.StandardButton.Ok:
+                self.SaveDefaultConfig("ok")
+            else:
+                exit()
+
+    def SaveDefaultConfig(self, i):  # only exists for pyqt5 support, not needed in pyqt6
+        if QT_VERSION_STR[0] == '6':
+            text = i
+        else:
+            text: str = i.text().lower()
         if "ok" in text:
             self.settings = Settings.loadDefault()
             self.settings.toJson(settingsPath)
