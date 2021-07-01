@@ -11,6 +11,7 @@ def set_save(window):
     window.settings.Python.pip = window.set_pip_bar.text()
     window.settings.Youtubedl.fromPip = window.set_ydpip_checkbox.isChecked()
     window.settings.autoUpdate = window.set_aup_checkbox.isChecked()
+    window.settings.defaultTab = window.set_Tab_combobox.currentIndex()
     ree_settings_save(window)
 
 
