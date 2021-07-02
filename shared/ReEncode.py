@@ -36,6 +36,8 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
             elif (videoc == "remove"):
                 VideoCodec = ["-vn"]
                 cmd = [cmd[0] + VideoCodec + cmd[1], cmd[2]]
+            elif (videoc == "cover"):
+                cmd = [cmd[0] + cmd[1], cmd[2]]
             elif (videoc == "hevc_nvenc"):
                 VideoCodec = ["-c:v", f"{videoc}"]
                 quality = ["-rc:v", "vbr", "-qmin", f"{int(VQsplit[1])}", "-qmax", f"{int(VQsplit[2])}", "-bf", "1"]
@@ -77,6 +79,8 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
             else:
                 cmd = ["ffmpeg", "-hide_banner"] + cmd
 
+        print(cmd)
+
         FfmpegLines = FfmpegLines + [cmd]
 
     return FfmpegLines
@@ -114,7 +118,7 @@ def reencode_shared_settings(call_window, setting: int):
     elif setting == 3:  # mp3
         return("remove",
                "none",
-               "mp3",
+               "libmp3lame",
                "190k",
                ".mp3",
                "mp3")

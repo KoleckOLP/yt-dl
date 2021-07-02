@@ -16,7 +16,7 @@ from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefau
 from gui.Audio import Audio, aud_playlist_bar_toggle
 from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
-from gui.ReEncode import Reencode, ree_settings, ree_color, ree_settings_save, ree_choose
+from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
 from gui.Settings import set_save, set_load, set_makeScript
 from Config import Settings
@@ -108,7 +108,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("mjpeg_pcm")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
-        self.ree_settings_combobox.currentIndexChanged.connect(lambda: ree_color(self))
         ree_settings(self)  # load option on startup
         self.ree_choose_button.clicked.connect(lambda: ree_choose(self))
         self.ree_reencode_button.clicked.connect(lambda: Reencode(self))
