@@ -153,7 +153,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region ==========🎓ABOUT🎓==========
-        self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
+        self.about_box.setHtml(f"<p style=\"font-size: 18px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
                                f"Version: {ver} gui ({curb} branch)<br>" +
                                f"Last updated on: {lstupdt}<br>" +
                                f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>" +
