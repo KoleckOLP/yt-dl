@@ -5,7 +5,7 @@ from colorama import init, Fore, Style  # Back
 # Imports from this projects
 from kolreq.kolreq import clear, readchar
 from release import year, lstupdt, curb, ver, settingsPath
-from Config import Settings
+from shared.Config import Settings
 from cli.Settings import Load, MakeScript
 
 init()  # initialises colorama

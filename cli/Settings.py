@@ -4,7 +4,7 @@ from colorama import init, Fore, Style  # Back
 # Imports from this project
 from release import spath, settingsPath
 from kolreq.kolreq import clear, readchar
-from Config import Settings
+from shared.Config import Settings
 
 init()  # initialises colorama
 

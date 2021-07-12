@@ -17,7 +17,7 @@ from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
 from gui.Settings import set_save, set_load, set_makeScript
-from Config import Settings
+from shared.Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
