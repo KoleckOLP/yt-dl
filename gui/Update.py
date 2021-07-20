@@ -22,7 +22,6 @@ def Update(window):
         listVersions(window)
 
 
-
 def update_yt_dl(window):
     cmd = ["git", "pull", "--recurse-submodules"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
@@ -54,17 +53,43 @@ def listVersions(window):
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
     process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
 
-    window.upd_output_console.append(f"qt {QT_VERSION_STR}\n\nyoutube-dl ")
+    window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")  # youtube-dl
 
     cmd = ["youtube-dl", "--version"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    try:
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
 
-    window.upd_output_console.append("")
+        window.upd_output_console.append("youtube-dl ")
+
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    except Exception as e:
+        window.upd_output_console.append(f"youtube-dl: {str(e)}")
+        window.upd_output_console.append("")
+        # TODO this should be a function and kinda is a really bad implementation anyway (duplicate code)
+        window.upd_update_button.setText("Update")
+        window.running = False
+        window.status("Ready.")
+        tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
+        window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
+        QtWidgets.QApplication.processEvents()
+        scrollbar = window.upd_output_console.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
 
     cmd = ["ffmpeg", "-version"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    try:
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    except Exception as e:
+        window.upd_output_console.append(f"ffmpeg: {str(e)}")
+        # TODO just a copy of the todo above
+        window.upd_update_button.setText("Update")
+        window.running = False
+        window.status("Ready.")
+        tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
+        window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
+        QtWidgets.QApplication.processEvents()
+        scrollbar = window.upd_output_console.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
 
     window.upd_output_console.moveCursor(QtGui.QTextCursor.MoveOperation.Start)
     QtWidgets.QApplication.processEvents()
