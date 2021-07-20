@@ -8,7 +8,6 @@ from shared.ReEncode import reencode_shared, reencode_shared_settings
 from gui.Process import process_start, process_output
 
 
-
 def Reencode(window):
     location = window.ree_location_bar.text()
     videoc = window.ree_videoc_bar.text()
