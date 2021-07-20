@@ -64,7 +64,6 @@ def listVersions(window):
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
     except Exception as e:
         window.upd_output_console.append(f"youtube-dl: {str(e)}")
-        window.upd_output_console.append("")
         # TODO this should be a function and kinda is a really bad implementation anyway (duplicate code)
         window.upd_update_button.setText("Update")
         window.running = False
@@ -74,6 +73,8 @@ def listVersions(window):
         QtWidgets.QApplication.processEvents()
         scrollbar = window.upd_output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
+
+    window.upd_output_console.append("")
 
     cmd = ["ffmpeg", "-version"]
     try:
