@@ -58,7 +58,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.floc = spath
 
         if (os.path.exists(settingsPath)):
-            self.settings = Settings.fromJson(settingsPath)
+            try:
+                self.settings = Settings.fromJson(settingsPath)
+            except KeyError:
+                if QT_VERSION_STR[0] == '6':
+                    self.messagePopup("Settings error", QMessageBox.Icon.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
+                else:
+                    self.messagePopup("Settings error", QMessageBox.Critical, "YYour config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
         else:
             if QT_VERSION_STR[0] == '6':
                 self.messagePopup("Settings error", QMessageBox.Icon.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
@@ -78,6 +84,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.audioDir))
         self.aud_download_button.clicked.connect(lambda: Audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
+        self.aud_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
@@ -87,6 +94,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_quality_button.clicked.connect(lambda: vid_quality(self))
         self.vid_playlist_checkbox.clicked.connect(lambda: vid_playlist_bar_toggle(self))
         self.vid_custom_radio.toggled.connect(lambda: vid_quality_bar_toggle(self))
+        self.vid_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
@@ -95,6 +103,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_download_button.clicked.connect(lambda: Subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
+        self.sub_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
@@ -224,13 +233,6 @@ class MainWindow(QtWidgets.QMainWindow):
             os.system(f"open {loc}")
         else:  # (sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
             os.system(f"xdg-open {loc}")
-
-    @staticmethod
-    def hasCookie(checkbox: bool, cmd: list):
-        if checkbox:
-            if os.path.exists(spath + "cookies.txt"):
-                cmd = cmd + ["--cookies", spath + "cookies.txt"]
-        return cmd
     # endregion
 
 

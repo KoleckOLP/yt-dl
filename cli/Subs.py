@@ -6,7 +6,7 @@ from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_path
 
 def Subs(call):
     lang = ""
-
+    print(f"cookie={call.settings.Youtubedl.cookie}")
     clear()
     print("link to video, playlist, 0. GoBack")
     url = input("#")
@@ -34,7 +34,7 @@ def Subs(call):
         else:  # playlist
             pass
 
-        cmd, temp = subs_shared_download(url, bool(numb), items, lang, call.floc)
+        cmd, temp = subs_shared_download(url, bool(numb), items, lang, call.floc, call.settings.Youtubedl.cookie)
 
         print("starting youtube-dl please wait...")
 

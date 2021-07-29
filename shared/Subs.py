@@ -3,7 +3,7 @@ import glob
 import tempfile
 from typing import List
 # Imports from this project
-from shared.Shared import shared
+from shared.Shared import shared, hasCookie
 
 
 def subs_shared_list(url):
@@ -11,7 +11,7 @@ def subs_shared_list(url):
     return cmd
 
 
-def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str):
+def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str, cookie: bool):
     temp = tempfile.TemporaryDirectory()
 
     cmd = shared(playlist, numb, floc, temp.name+os.path.sep)
@@ -23,6 +23,8 @@ def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: s
             cmd = cmd + ["--all-subs"]
         else:
             cmd = cmd + ["--sub-lang", lang]
+
+    cmd = hasCookie(cookie, cmd)
 
     return (cmd, temp)
 

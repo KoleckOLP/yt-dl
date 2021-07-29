@@ -1,4 +1,4 @@
-from shared.Shared import shared
+from shared.Shared import shared, hasCookie
 
 
 def video_list_shared(url):
@@ -6,7 +6,7 @@ def video_list_shared(url):
     return cmd
 
 
-def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: str, floc: str, directory):
+def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: str, floc: str, directory, cookie: bool):
     cmd = shared(playlist, numb, floc, directory)
 
     # the parts special to Video
@@ -16,6 +16,8 @@ def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: 
         cmd = cmd + ["-f", qual]
     else:  # the default option will give the best quality
         cmd = cmd + ["-f", "bestvideo+bestaudio"]
+
+    cmd = hasCookie(cookie, cmd)
 
     cmd = cmd + [url]
 

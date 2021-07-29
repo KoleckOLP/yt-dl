@@ -1,9 +1,13 @@
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
+from gui.Settings import set_save
 from gui.Process import process_start, process_output
 
 
 def Video(window):
+    window.settings.Youtubedl.cookie = window.vid_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+    set_save(window)  # not a great idea but save the changed ehh state of the checkbox
+
     if window.vid_normal_radio.isChecked():
         qualityChose = "1"
         qual = "best"  # these are useless
@@ -20,9 +24,8 @@ def Video(window):
                        qualityChose,
                        qual,
                        window.floc,
-                       window.settings.Youtubedl.videoDir)
-
-    cmd = window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
+                       window.settings.Youtubedl.videoDir,
+                       window.settings.Youtubedl.cookie)
 
     window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
 

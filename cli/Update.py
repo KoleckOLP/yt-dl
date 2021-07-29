@@ -3,6 +3,7 @@ from colorama import init, Fore, Style  # Back
 # Imports from this project
 from release import spath, settingsPath
 from kolreq.kolreq import clear, readchar
+from cli.Settings import Load
 
 init()  # initialises colorama
 
@@ -28,9 +29,7 @@ def upyd(call):
 def Update(call):
     clear()
     if call.settings.Youtubedl.fromPip:
-        print(
-            Style.BRIGHT + f"What do you want to update?" + Style.RESET_ALL + "\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=",
-            end="")
+        print(Style.BRIGHT + f"What do you want to update?" + Style.RESET_ALL + "\n1. All\n2. yt-dl\n3. dependencies\n4. change autoupdate=",end="")
         call.TF(call.settings.autoUpdate, False)
         print("\n0. GoBack")
         cmd = readchar("#")
@@ -50,7 +49,7 @@ def Update(call):
         elif (cmd == "4"):
             call.settings.autoUpdate = not call.settings.autoUpdate
             call.settings.toJson(settingsPath)
-            call.loadpath("hid")
+            Load(call)
             clear()
             print(f"autoupdate={call.settings.autoUpdate}\n")
         else:

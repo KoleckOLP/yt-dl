@@ -98,7 +98,7 @@ class main:
             self.name()
 
     @staticmethod
-    def process_start(cmd: List[str]):
+    def process_start(cmd: List[str]):  # FIXME when calling update the screen cleans and you can't read how the update went.
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True,
                                    errors="ignore")
         while True:

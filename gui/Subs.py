@@ -2,18 +2,21 @@ import os
 # Imports from this project
 from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_paths_for_ffmpeg, subs_shared_lines_for_ffmpeg
 from gui.Process import process_start, process_output
+from gui.Settings import set_save
 
 
 def Subs(window):
+    window.settings.Youtubedl.cookie = window.sub_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+    set_save(window)  # not a great idea but save the changed ehh state of the checkbox
+
     result = subs_shared_download(window.sub_url_bar.text(),
                                   window.sub_playlist_checkbox.isChecked(),
                                   window.sub_playlist_bar.text(),
                                   window.sub_lang_bar.text(),
-                                  window.floc)
+                                  window.floc,
+                                  window.settings.Youtubedl.cookie)
 
     cmd, temp = result
-
-    cmd = window.hasCookie(window.sub_cookie_checkbox.isChecked(), cmd)
 
     window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 

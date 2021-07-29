@@ -19,7 +19,10 @@ def Load(call, s="show"):
         call.floc = spath
     # new stuff
     if (os.path.exists(settingsPath)):
-        call.settings = Settings.fromJson(settingsPath)
+        try:
+            call.settings = Settings.fromJson(settingsPath)
+        except KeyError:
+            call.firstrun()
     else:
         call.firstrun()
 
@@ -32,7 +35,9 @@ def Load(call, s="show"):
 
 def Save(call):
     Load(call)
-    print("1. change download path\n2. delete settings\n3. generate Launch script\n0. GoBack")
+    print("1. change download path\n2. delete settings\n3. generate Launch script\n4. change autoupdate=", end="")
+    call.TF(call.settings.Youtubedl.cookie, False)
+    print("\n0. GoBack")
     cmd = readchar("#")
     if (cmd == "1"):
         call.settings.toJson(settingsPath)
@@ -50,6 +55,12 @@ def Save(call):
             MakeScript(call)
         clear()
         call.name()
+    elif (cmd == "4"):
+        call.settings.Youtubedl.cookie = not call.settings.Youtubedl.cookie
+        call.settings.toJson(settingsPath)
+        Load(call)
+        clear()
+        print(f"cookie={call.settings.Youtubedl.cookie}\n")
     else:
         clear()
         call.name()
