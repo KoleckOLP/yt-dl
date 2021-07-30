@@ -3,6 +3,7 @@ __pycache__
 .helpfiles
 env
 tenv
+venv
 audio
 videos
 *.bat
