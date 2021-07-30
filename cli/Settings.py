@@ -14,9 +14,9 @@ def Load(call, s="show"):
     pffmpeg = glob.glob(f"{spath}/ffmpeg*")
     pffprobe = glob.glob(f"{spath}/ffprobe*")
     if (not pffmpeg and not pffprobe):
-        call.fdir = False
+        call.floc = False
     else:
-        call.fdir = True
+        call.floc = spath
     # new stuff
     if (os.path.exists(settingsPath)):
         call.settings = Settings.fromJson(settingsPath)
@@ -31,13 +31,13 @@ def Load(call, s="show"):
 
 
 def Save(call):
-    call.loadpath()
+    Load(call)
     print("1. change download path\n2. delete settings\n3. generate Launch script\n0. GoBack")
     cmd = readchar("#")
     if (cmd == "1"):
         call.settings.toJson(settingsPath)
         clear()
-        call.loadpath()
+        Load(call)
     elif (cmd == "2"):  # this is very wrong!
         os.remove(call.settings)
         call.firstrun()
@@ -45,9 +45,9 @@ def Save(call):
         print("press p=" + Fore.BLUE + "PowerShell" + Style.RESET_ALL + " or <Enter>")
         cmd = input("#")
         if (cmd == "p"):
-            call.launchs(True)
+            MakeScript(call, True)
         else:
-            call.launchs()
+            MakeScript(call)
         clear()
         call.name()
     else:

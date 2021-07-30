@@ -49,9 +49,9 @@ class MainWindow(QtWidgets.QMainWindow):
         pffmpeg = glob.glob(f"{spath}/ffmpeg*")
         pffprobe = glob.glob(f"{spath}/ffprobe*")
         if (not pffmpeg and not pffprobe):
-            self.fdir = False
+            self.floc = False
         else:
-            self.fdir = True
+            self.floc = spath
 
         if (os.path.exists(settingsPath)):
             self.settings = Settings.fromJson(settingsPath)
@@ -228,7 +228,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if checkbox:
             if os.path.exists(spath + "cookies.txt"):
                 cmd = cmd + ["--cookies", spath + "cookies.txt"]
-                return cmd
+        return cmd
     # endregion
 
 

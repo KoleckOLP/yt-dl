@@ -35,7 +35,7 @@ def ReEncode(call):
           "2. change settings\n" +
           "0. GoBack")
     cmd = input("#")
-    if (cmd == ""):  # ====================SINGLE==================== #
+    if (cmd == "" or cmd == "1"):
         if (call.settings.Ffmpeg.videoCodec == "remove" and call.settings.Ffmpeg.audioCodec == "remove"):
             print("I mean you can delete the file yourself. :)")
         else:
@@ -93,66 +93,13 @@ def ReEncode(call):
                 SubsC = ""
             else:
                 SubsC = "-c:s copy"
-            os.system(
-                f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0] + append}\"")
-        print("\a")
-    elif (cmd == '1'):  # ====================WHOLE FOLDER==================== #
-        if (call.settings.Ffmpeg.videoCodec == "remove" and call.settings.Ffmpeg.audioCodec == "remove"):
-            print("I'm not gonna delete the folder for you. hmpf")
-        else:
-            print("write path to the folder with videos")
-            url = input("#")
-            # //append\\ #
-            if (call.settings.Ffmpeg.videoCodec == "remove"):
-                print("re-encoded file will get \".mp3\" appended, or type a different one")
-                append = input("#")
-                if (append == ""):
-                    append = ".mp3"
+            if (cmd == ""):
+                os.system(f"{floc}ffmpeg -hwaccel auto -i \"{url}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} {quality} -max_muxing_queue_size 9999 -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{os.path.splitext(url)[0] + append}\"")
             else:
-                print("re-encoded file will get \"_hevcopus.mkv\" appended, 1. \"_nvenc.mov\" or type a different one")
-                append = input("#")
-                if (append == ""):
-                    append = "_hevcopus.mkv"
-                elif (append == "1"):
-                    append = "_nvenc.mov"
-            # //Video Quality\\ #
-            if "," in call.settings.Ffmpeg.videoQuality:
-                VQsplit = call.settings.Ffmpeg.videoQuality.split(",")
-            else:
-                VQsplit = [call.settings.Ffmpeg.videoQuality, call.settings.Ffmpeg.videoQuality,
-                           call.settings.Ffmpeg.videoQuality]
-            # //Video Codec\\ #
-            if (call.settings.Ffmpeg.videoCodec == "libx265"):
-                VideoCodec = f"-c:v {call.settings.Ffmpeg.videoCodec}"
-                quality = f"-crf {int(VQsplit[0]) - 1} -qmin {int(VQsplit[1]) - 1} -qmax {int(VQsplit[2]) - 1}"
-                Vformat = "-vf format=yuv420p"
-            elif (call.settings.Ffmpeg.videoCodec == "copy"):
-                VideoCodec = f"-c:v {call.settings.Ffmpeg.videoCodec}"
-                quality = ""
-                Vformat = ""
-            elif (call.settings.Ffmpeg.videoCodec == "remove"):
-                VideoCodec = "-vn"
-                quality = ""
-                Vformat = ""
-            else:
-                VideoCodec = f"-c:v {call.settings.Ffmpeg.videoCodec}"
-                quality = f"-cq {VQsplit[0]} -qmin {VQsplit[1]} -qmax {VQsplit[2]}"
-                Vformat = "-vf format=yuv420p"
-            # //Audio\\ #
-            if (call.settings.Ffmpeg.audioCodec == "remove"):
-                AudioEverything = "-an"
-            else:
-                AudioEverything = f"-c:a {call.settings.Ffmpeg.audioCodec} -strict -2 -b:a {call.settings.Ffmpeg.audioBitrate}"
-            # //Subtitles\\ #
-            if (call.settings.Ffmpeg.videoCodec == "remove"):
-                SubsC = ""
-            else:
-                SubsC = "-c:s copy"
-            url = url.replace('[', '[[]')
-            videos = glob.glob(url + os.path.sep + "*.*")
-            for video in videos:
-                os.system(
-                    f"{floc}ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{video[:-4] + append}\"")
+                url = url.replace('[', '[[]')
+                videos = glob.glob(url + os.path.sep + "*.*")
+                for video in videos:
+                    os.system(f"{floc}ffmpeg -hwaccel auto -i \"{video}\" -map 0:v? -map 0:a? -map 0:s? {VideoCodec} -max_muxing_queue_size 9999 {quality} -b:v 0K {Vformat} {AudioEverything} {SubsC} \"{video[:-4] + append}\"")
         print("\a")
     elif (cmd == '2'):
         print(
