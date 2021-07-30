@@ -7,6 +7,7 @@ def Video(call):
     qual = ""
 
     clear()
+    print(f"cookie={call.settings.Youtubedl.cookie}")
     print("link to video, playlist, 0. GoBack")
     url = input("#")
     if (url == "0"):
@@ -39,7 +40,7 @@ def Video(call):
                   "1 for 720p or lower")
             qualityChoice = input("#")
 
-        cmd = video_shared(url, bool(numb), items, qualityChoice, qual, call.floc, call.settings.Youtubedl.videoDir)
+        cmd = video_shared(url, bool(numb), items, qualityChoice, qual, call.floc, call.settings.Youtubedl.videoDir, call.settings.Youtubedl.cookie)
 
         print("starting youtube-dl please wait...")
 

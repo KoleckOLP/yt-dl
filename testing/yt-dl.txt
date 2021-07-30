@@ -1,0 +1,64 @@
+This is a user manual full of tips and tricks for yt-dl 2.2.0.0
+
+GUI:
+    Audio:
+        # downloads a video and converts it to mp3 using ffmpeg (should support any webpage)
+
+        url bar: takes url to video
+
+        use cookies: lets you download your private videos (if you supply cookies.txt)
+
+        playlist toggle: playlist yes/now
+
+        playlist bar:  for example: 1-3,7,9
+
+        download: starts download
+
+        open: open folder with downloaded files
+
+    Video:
+        # downloads a video, and if necessary uses ffmpeg to merge
+
+        url bar: takes url to video
+
+        use cookies: lets you download your private videos (if you supply cookies.txt)
+
+        playlist toggle: playlist yes/no (tested even with custom but don't see the point of it, but it works)
+
+        playlist bar:  for example: 1-3,7,9
+
+        download: starts download
+
+        open: open folder with downloaded files
+
+        List quality: lists available video and audio options to use with custom (can only list for one video and that will be fist video in playlist)
+
+        Best: bestaudio+bestvideo (merged by ffmpeg) ! does not work on all webpages
+
+        Normal: best ! gives low quality on youtube, but good quality on other sites
+
+        Custom: lets you input quality values from <List quality>
+
+        if no quality is selected <Best> is used, so most webpages will fail to download, but youtube will in best quality
+
+    Subs:
+        # downloads subtitles in .vtt format and converts them to .srt (only tested on youtube)
+
+        url bar: takes url to video
+
+        use cookies: lets you download your private videos (if you supply cookies.txt)
+
+        playlist toggle: playlist yes/no (didn't really test it with custom, because I don't know if videos have reliably same en subtitle)
+
+        playlist bar:  for example: 1-3,7,9
+
+        download: starts download
+
+        open: open folder with downloaded files
+
+        List lang: lists available subtitle languages
+
+        Lang bar: you can type languages you say in <List lang> or type all to download all subtitles
+
+    Re-encode:
+        # not refactored yet.

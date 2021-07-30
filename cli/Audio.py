@@ -5,6 +5,7 @@ from shared.Audio import audio_shared
 
 def Audio(call):
     clear()
+    print(f"cookie={call.settings.Youtubedl.cookie}")
     print("link to audio, playlist, 0. GoBack")
     url = input("#")
     if(url == "0"):
@@ -19,7 +20,7 @@ def Audio(call):
         else:
             items = numb
 
-        cmd = audio_shared(url, bool(numb), items, call.floc, call.settings.Youtubedl.audioDir)
+        cmd = audio_shared(url, bool(numb), items, call.floc, call.settings.Youtubedl.audioDir, call.settings.Youtubedl.cookie)
 
         print("starting youtube-dl please wait...")
 

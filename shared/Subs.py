@@ -3,15 +3,15 @@ import glob
 import tempfile
 from typing import List
 # Imports from this project
-from shared.Shared import shared
+from shared.Shared import shared, hasCookie
 
 
-def subs_list_shared(url):
+def subs_shared_list(url):
     cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
     return cmd
 
 
-def subs_shared_part1(url: str, playlist: bool, numb: str, lang: str, floc: str):
+def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str, cookie: bool):
     temp = tempfile.TemporaryDirectory()
 
     cmd = shared(playlist, numb, floc, temp.name+os.path.sep)
@@ -24,10 +24,12 @@ def subs_shared_part1(url: str, playlist: bool, numb: str, lang: str, floc: str)
         else:
             cmd = cmd + ["--sub-lang", lang]
 
+    cmd = hasCookie(cookie, cmd)
+
     return (cmd, temp)
 
 
-def subs_shared_part2(temp, directory: str):
+def subs_shared_paths_for_ffmpeg(temp, directory: str):
     subpath = glob.glob(f"{temp}*.vtt")
 
     os.makedirs(directory, exist_ok=True)
@@ -43,7 +45,7 @@ def subs_shared_part2(temp, directory: str):
     return (subpath, retNewSubsPath)
 
 
-def subs_shared_part3(call_window, subpath: List[str], newsubpath: List[str]):
+def subs_shared_lines_for_ffmpeg(call_window, subpath: List[str], newsubpath: List[str]):
     retFfmpegLines = []
 
     if not subpath or not newsubpath:

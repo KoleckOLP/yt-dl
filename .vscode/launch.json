@@ -9,7 +9,7 @@
             "name": "Run yt-dl-gui PyQt5",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/gui5.py",
+            "program": "${workspaceFolder}/gui.py",
             "console": "integratedTerminal"
         },
         {

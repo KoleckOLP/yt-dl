@@ -1,4 +1,8 @@
-def shared(playlist: bool, numb: str, floc: str, directory:str):
+import os
+from release import spath
+
+
+def shared(playlist: bool, numb: str, floc: str, directory: str):
     cmd = ["youtube-dl"]
 
     if floc:
@@ -10,4 +14,11 @@ def shared(playlist: bool, numb: str, floc: str, directory:str):
             cmd = cmd + ["--playlist-items", numb]
     else:  # no playlist
         cmd = cmd + ["-o", f"{directory}%(title)s.%(ext)s", "--no-playlist"]
+    return cmd
+
+
+def hasCookie(checkbox: bool, cmd: list):
+    if checkbox:
+        if os.path.exists(spath + "cookies.txt"):
+            cmd = cmd + ["--cookies", spath + "cookies.txt"]
     return cmd

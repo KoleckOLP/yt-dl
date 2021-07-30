@@ -1,88 +1,62 @@
 import os
-from PyQt5.QtWidgets import QMessageBox
 # Imports from this project
-from shared.Subs import subs_list_shared, subs_shared_part1, subs_shared_part2, subs_shared_part3
+from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_paths_for_ffmpeg, subs_shared_lines_for_ffmpeg
+from gui.Process import process_start, process_output
+from gui.Settings import set_save
 
 
 def Subs(window):
-    if not window.running:
-        window.running = True
-        window.status("Busy.")
+    window.settings.Youtubedl.cookie = window.sub_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+    set_save(window)  # not a great idea but save the changed ehh state of the checkbox
 
-        window.tabWidget.setTabText(2, "*Subs")
+    result = subs_shared_download(window.sub_url_bar.text(),
+                                  window.sub_playlist_checkbox.isChecked(),
+                                  window.sub_playlist_bar.text(),
+                                  window.sub_lang_bar.text(),
+                                  window.floc,
+                                  window.settings.Youtubedl.cookie)
 
-        window.sub_output_console.setHtml("")  # clearing the output_console.
+    cmd, temp = result
 
-        result = subs_shared_part1(window.sub_url_bar.text(),
-                                   window.sub_playlist_checkbox.isChecked(),
-                                   window.sub_playlist_bar.text(),
-                                   window.sub_lang_bar.text(),
-                                   window.floc)
+    window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 
-        cmd, temp = result
+    process_output(window, window.sub_output_console, window.sub_download_button, window.process)
 
-        cmd = window.hasCookie(window.sub_cookie_checkbox.isChecked(), cmd)
+    subpath, newsubpath = subs_shared_paths_for_ffmpeg(temp.name + os.path.sep, window.settings.Youtubedl.videoDir)
 
-        window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
+    FfmpegLines = subs_shared_lines_for_ffmpeg(window, subpath, newsubpath)
 
-        window.process_start(cmd, window.sub_output_console)
-
-        subpath, newsubpath = subs_shared_part2(temp.name+os.path.sep, window.settings.Youtubedl.videoDir)
-
-        FfmpegLines = subs_shared_part3(window, subpath, newsubpath)
-
-        if isinstance(FfmpegLines, str):
-            if FfmpegLines == "error":
-                window.sub_output_console.insertPlainText(f"#yt-dl# found an issue aborting...\n")
-            else:
-                window.sub_output_console.insertPlainText(f"#yt-dl# file {FfmpegLines} already exists aborting...\n")
-
+    if isinstance(FfmpegLines, str):
+        if FfmpegLines == "error":
+            window.sub_output_console.insertPlainText(f"#yt-dl# found an issue aborting...\n")
         else:
-            for line in FfmpegLines:
-                window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
+            window.sub_output_console.insertPlainText(f"#yt-dl# file {FfmpegLines} already exists aborting...\n")
 
-                window.process_start(line, window.sub_output_console)
-
-        temp.cleanup()
-
-        window.running = False
-        window.status("Ready.")
-        window.tabWidget.setTabText(2, "Subs")
     else:
-        window.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+        for line in FfmpegLines:
+            window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
+
+            window.process = process_start(window, line, window.sub_output_console, window.sub_download_button, window.process)
+
+            process_output(window, window.sub_output_console, window.sub_download_button, window.process)
+
+    temp.cleanup()
 
 
 def sub_lang(window):
-    if not window.running:
-        window.running = True
-        window.status("Busy.")
+    cmd = subs_shared_list(window.sub_url_bar.text())  # seems kinda unnecessary
 
-        window.sub_output_console.setHtml("")  # clearing the output_console
+    window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
-        cmd = subs_list_shared(window.sub_url_bar.text())  # seems kinda unnecessary
+    window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 
-        window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
-
-        window.process_start(cmd, window.sub_output_console)
-
-        window.running = False
-        window.status("Ready.")
-    else:
-        window.messagePopup("Process warning", QMessageBox.Warning, "One process already running!")
+    process_output(window, window.sub_output_console, window.sub_download_button, window.process)
 
 
 def sub_playlist_bar_toggle(window):
     window.sub_lang_button.setEnabled(not window.sub_playlist_checkbox.isChecked())
     window.sub_playlist_bar.setEnabled(window.sub_playlist_checkbox.isChecked())
     if (window.sub_playlist_checkbox.isChecked()):
-        window.sub_playlist_bar.setStyleSheet("background-color: #909090;")
+        window.sub_playlist_bar.setStyleSheet(f"background-color: {window.enabledColor}; Border: None; Color: #FFFFFF;")
     else:
-        window.sub_playlist_bar.setStyleSheet("background-color: #707070;")
-
-
-def sub_lang_bar_toggle(window):
-    window.sub_lang_bar.setEnabled(window.sub_lang_checkbox.isChecked())
-    if (window.sub_lang_checkbox.isChecked()):
-        window.sub_lang_bar.setStyleSheet("background-color: #909090;")
-    else:
-        window.sub_lang_bar.setStyleSheet("background-color: #707070;")
+        window.sub_playlist_bar.setStyleSheet(f"background-color: {window.disabledColor}; Border: None; Color: #FFFFFF;")

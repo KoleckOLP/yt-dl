@@ -5,7 +5,7 @@ from colorama import init, Fore, Style  # Back
 # Imports from this projects
 from kolreq.kolreq import clear, readchar
 from release import year, lstupdt, curb, ver, settingsPath
-from Config import Settings
+from shared.Config import Settings
 from cli.Settings import Load, MakeScript
 
 init()  # initialises colorama
@@ -29,7 +29,7 @@ class main:
     # ==========FIRST TIME SETUP MENU========== #
     def firstrun(self):
         clear()
-        self.settings = Settings.loadDefault()
+        self.settings = Settings.loadDefault()  # There is nothing wrong with this
         print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
         print("What's the name of your python executable.\n<enter> for python (apologise fo inconvenience)")
         self.settings.Python.python = input("#")
@@ -98,7 +98,7 @@ class main:
             self.name()
 
     @staticmethod
-    def process_start(cmd: List[str]):
+    def process_start(cmd: List[str]):  # FIXME when calling update the screen cleans and you can't read how the update went.
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True,
                                    errors="ignore")
         while True:

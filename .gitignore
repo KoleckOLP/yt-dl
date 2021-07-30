@@ -1,19 +1,31 @@
-*.json
-__pycache__
-.helpfiles
+# python virtual enviroments
 env
 tenv
 venv
-audio
-videos
-*.bat
-*.ps1
-*.vbs
-yt-dl
+
+# who knows what is this
+~$*
+
+# ide folders
+.idea
+.vscode
+
+# mess python makes
+__pycache__
+
+
+# files used by yt-dl
+cookies.txt
 ffmpeg.exe
 ffprobe.exe
 ffplay.exe
+*.bat
+*.ps1
+*.vbs
+*.json
+audio
+videos
+
+# temp folders
 ffdir
-~$*
-.idea
-cookies.txt
+.helpfiles

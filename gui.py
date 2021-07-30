@@ -1,23 +1,27 @@
 import os
 import sys
 import glob
-import subprocess
-from typing import List
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtWidgets import QMessageBox
+try:
+    from PyQt6 import QtWidgets, uic
+    from PyQt6.QtWidgets import QMessageBox
+    from PyQt6.QtCore import QT_VERSION_STR
+except ModuleNotFoundError:
+    from PyQt5 import QtWidgets, uic
+    from PyQt5.QtWidgets import QMessageBox
+    from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
 from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
-from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle, sub_lang_bar_toggle
+from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
 from gui.Settings import set_save, set_load, set_makeScript
-from Config import Settings
+from shared.Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
-    myappid = 'HorseArmored.yt-dl.gui5.'+ver  # Program Sting
+    myappid = 'HorseArmored.yt-dl.gui.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 
 
@@ -39,7 +43,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        uic.loadUi(f"gui{os.path.sep}gui5.ui", self)
+        uic.loadUi(f"gui{os.path.sep}gui.ui", self)
 
         self.show()
 
@@ -54,9 +58,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self.floc = spath
 
         if (os.path.exists(settingsPath)):
-            self.settings = Settings.fromJson(settingsPath)
+            try:
+                self.settings = Settings.fromJson(settingsPath)
+            except KeyError:
+                if QT_VERSION_STR[0] == '6':
+                    self.messagePopup("Settings error", QMessageBox.Icon.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
+                else:
+                    self.messagePopup("Settings error", QMessageBox.Critical, "YYour config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
         else:
-            self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
+            if QT_VERSION_STR[0] == '6':
+                self.messagePopup("Settings error", QMessageBox.Icon.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
+            else:
+                self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
 
         self.setWindowTitle(f"yt-dl {ver}")
 
@@ -64,12 +77,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.running = False
         self.status("Ready.")
+        self.process = ""
         # endregion
 
         # region =====aud_controls=====
         self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.audioDir))
         self.aud_download_button.clicked.connect(lambda: Audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
+        self.aud_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
@@ -79,6 +94,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_quality_button.clicked.connect(lambda: vid_quality(self))
         self.vid_playlist_checkbox.clicked.connect(lambda: vid_playlist_bar_toggle(self))
         self.vid_custom_radio.toggled.connect(lambda: vid_quality_bar_toggle(self))
+        self.vid_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
@@ -87,7 +103,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_download_button.clicked.connect(lambda: Subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
-        self.sub_lang_checkbox.toggled.connect(lambda: sub_lang_bar_toggle(self))
+        self.sub_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
@@ -96,6 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("h264_nvenc")
         self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("mp3")
+        self.ree_settings_combobox.addItem("mjpeg_pcm")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
         ree_settings(self)  # load option on startup
@@ -112,7 +129,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # region ======upd_controls======
         self.upd_update_combobox.addItem("All")  # setting up items in combo list
         self.upd_update_combobox.addItem("yt-dl")
-        self.upd_update_combobox.addItem("dependencies")
+        self.upd_update_combobox.addItem("Dependencies")
+        self.upd_update_combobox.addItem("List versions")
         if (sys.platform.startswith("haiku")):
             self.upd_update_combobox.setCurrentIndex(1)
 
@@ -124,6 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_button.clicked.connect(lambda: Update(self))
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
+        self.upd_output_console.append("#yt-dl# Welcome to yt-dl-gui (Update) pick and option and click Update.")
         # endregion
 
         # region =====set_controls=====
@@ -143,8 +162,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region ==========🎓ABOUT🎓==========
-        self.about_box.setHtml(f"<p style=\"font-size: 20px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
-                               f"Version: {ver} gui5 ({curb} branch)<br>" +
+        self.about_box.setHtml(f"<p style=\"font-size: 18px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
+                               f"Version: {ver} gui ({curb} branch)<br>" +
                                f"Last updated on: {lstupdt}<br>" +
                                f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>" +
                                f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>" +
@@ -159,24 +178,38 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
     # region ===== startup =====
-    @staticmethod
-    def messagePopup(title, icon, text, callf=None):
+    def messagePopup(self, title, icon, text, callf=None):
         msg = QMessageBox()  # Pylance is being stupid, I had to disable Type checking.
         msg.setWindowTitle(title)
         msg.setIcon(icon)
         msg.setText(text)
         if callf is not None:
-            msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)  # Fuck pylance it says that this line is wrong anf that int can't bd a button, there is not int.
-            msg.buttonClicked.connect(callf)
-        msg.exec_()
+            if QT_VERSION_STR[0] == '6':
+                msg.setStandardButtons(QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel)
+            else:
+                msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+                msg.buttonClicked.connect(callf)
+        button = msg.exec()
 
-    def SaveDefaultConfig(self, i):
-        text: str = i.text().lower()
+        if QT_VERSION_STR[0] == '6':
+            if button == QMessageBox.StandardButton.Ok:
+                self.SaveDefaultConfig("ok")
+            else:
+                exit()
+
+    def SaveDefaultConfig(self, i):  # only exists for pyqt5 support, not needed in pyqt6
+        if QT_VERSION_STR[0] == '6':
+            text = i
+        else:
+            text: str = i.text().lower()
         if "ok" in text:
             self.settings = Settings.loadDefault()
             self.settings.toJson(settingsPath)
         else:
             exit()
+
+    enabledColor = "#383838"
+    disabledColor = "#242424"
     # endregion
 
     # region ===== used by most =====
@@ -190,30 +223,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.statusBar().setStyleSheet("background-color: #A9A9A9")
 
     @staticmethod
-    def process_start(cmd: List[str], output_console):
-        if (sys.platform.startswith("win")):  # (os.name == "nt"):
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
-        else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, errors="ignore")
-        while True:
-            test = process.stdout.readline()
-            if not test:
-                break
-            test = str(test)
-            if "\\n" in test:
-                test = test.replace("\\n", "\n")
-            output_console.insertPlainText(test)
-            scrollbar = output_console.verticalScrollBar()
-            scrollbar.setValue(scrollbar.maximum())
-            QtWidgets.QApplication.processEvents()
-        print("\a")
-        output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
-        QtWidgets.QApplication.processEvents()
-        scrollbar = output_console.verticalScrollBar()
-        scrollbar.setValue(scrollbar.maximum())
-
-    @staticmethod
     def openFolder(loc: str):
+        loc = os.path.dirname(loc)
         if not os.path.exists(loc):
             os.makedirs(loc, exist_ok=True)
         if (sys.platform.startswith("win")):
@@ -222,16 +233,9 @@ class MainWindow(QtWidgets.QMainWindow):
             os.system(f"open {loc}")
         else:  # (sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
             os.system(f"xdg-open {loc}")
-
-    @staticmethod
-    def hasCookie(checkbox: bool, cmd: list):
-        if checkbox:
-            if os.path.exists(spath + "cookies.txt"):
-                cmd = cmd + ["--cookies", spath + "cookies.txt"]
-        return cmd
     # endregion
 
 
 app = QtWidgets.QApplication(sys.argv)
 window = MainWindow()
-app.exec_()
+app.exec()
