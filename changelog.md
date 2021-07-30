@@ -6,8 +6,10 @@ CLI was brought more up to date with GUI<br>
 you can now list versions of all dependencies, (including python and qt)<br>
 this will also tell you if you are missing some and if ffmpeg was found<br>
 Updated to PyQt6, while keeping support for PyQt5 (HaikuOS), please use PyQt6 if you can.<br>
-Brand new darker design that makes the app no-longer look like a Windows 9x
-(design is just a re-color inspired by google material design, apple human interface guidelines and microsoft WinUI)
+Brand new darker design that makes the app no-longer look like a Windows 9x<br>
+(design is just a re-color inspired by google material design, apple human interface guidelines and microsoft WinUI)<br>
+added ability to stop download by pressing the download button again (it says stop)<br>
+just press it once it will look like it does nothing but it will stop eventually<br>
 Probably more, but I don't remember
 
 ## New in 2.1.10.1:
