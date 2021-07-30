@@ -3,7 +3,7 @@ import sys
 from datetime import datetime
 
 year = datetime.now().year
-lstupdt = "2021-07-29"  # Well now that it's in a separate file I should be updating it more often.
+lstupdt = "2021-07-30"  # Well now that it's in a separate file I should be updating it more often.
 spath = sys.path[0]+os.path.sep  # path of the yt-dl dir
 settingsPath = spath+"settings.json"
 videoDirDefault = spath+"videos"+os.path.sep
