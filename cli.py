@@ -31,7 +31,7 @@ from cli.Audio import Audio
 from cli.Video import Video
 from cli.Subs import Subs
 from cli.ReEncode import ReEncode
-from cli.Debug import Debug
+from cli.Debug import Debug  # this comment fixes a warning
 from cli.Update import Update, AutoUpdate
 from cli.Settings import Load, Save
 

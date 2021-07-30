@@ -29,7 +29,7 @@ class main:
     # ==========FIRST TIME SETUP MENU========== #
     def firstrun(self):
         clear()
-        self.settings = Settings.loadDefault()
+        self.settings = Settings.loadDefault()  # There is nothing wrong with this
         print("this program requires ffmpeg and ffprobe, please put them into the yt-dl directory")
         print("What's the name of your python executable.\n<enter> for python (apologise fo inconvenience)")
         self.settings.Python.python = input("#")

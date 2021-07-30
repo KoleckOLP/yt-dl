@@ -20,8 +20,7 @@ def upytdl():
 
 def upyd(call):
     print("updating pip...")
-    os.system(
-        f"{call.settings.Python.python} -m {call.settings.Python.pip} install --upgrade {call.settings.Python.pip}")
+    os.system(f"{call.settings.Python.python} -m {call.settings.Python.pip} install --upgrade {call.settings.Python.pip}")
     print("Updating dependencies...")
     os.system(f"{call.settings.Python.pip} install -U -r req-cli.txt")
 

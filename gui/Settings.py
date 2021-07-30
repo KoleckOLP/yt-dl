@@ -33,8 +33,7 @@ def set_load(window, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vq
 def set_makeScript(window):  # I had an issue getting the venv working with gui
     if (sys.platform.startswith("win")):
         f = open("yt-dl_gui.vbs", "w")
-        f.write(
-            f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
+        f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
         f.close()
         f = open("yt-dl_gui.bat", "w")
         f.write(f"@echo off\n\nstart /b pythonw.exe gui.py")

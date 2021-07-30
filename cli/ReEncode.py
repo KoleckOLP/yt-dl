@@ -67,7 +67,7 @@ def ReEncode(call):
         if cmd == "5":  # this is dumb lol
             pass
         if cmd == "6":
-            print(f"type a video codec, current=\"{call.settings.Ffmpeg.videoCodec}\" <Enter> to keep")  # FIXME duplicite code
+            print(f"type a video codec, current=\"{call.settings.Ffmpeg.videoCodec}\" <Enter> to keep")  # FIXME duplicate code
             cmd = input("#")
             if cmd == "":
                 pass
