@@ -7,8 +7,8 @@ venv
 ~$*
 
 # ide folders
-.idea
-.vscode
+#.idea
+#.vscode
 
 # mess python makes
 __pycache__
