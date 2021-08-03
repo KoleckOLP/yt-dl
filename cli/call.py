@@ -45,7 +45,7 @@ class main:
             self.settings.Youtubedl.fromPip = True
         else:
             self.settings.Youtubedl.fromPip = False
-        print("\nDo you want autoudate on launch? [Y/n]")
+        print("\nDo you want autoupdate on launch? [Y/n]")
         cmd = readchar("#")
         if (cmd == "y"):
             self.settings.autoUpdate = True
