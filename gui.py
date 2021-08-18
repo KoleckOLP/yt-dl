@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
-from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
+from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle  #lel
 from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
@@ -113,6 +113,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.addItem("hevc_nvenc")
         self.ree_settings_combobox.addItem("mp3")
         self.ree_settings_combobox.addItem("mjpeg_pcm")
+        self.ree_settings_combobox.addItem("libx264")
+        self.ree_settings_combobox.addItem("vp9")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
         ree_settings(self)  # load option on startup

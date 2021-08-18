@@ -24,13 +24,7 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
             else:
                 VQsplit = [videoq, videoq, videoq]
             # //Video Codec\\#
-            if (videoc == "libx265"):
-                VideoCodec = ["-c:v", f"{videoc}"]
-                quality = ["-crf", f"{int(VQsplit[0]) - 1}", "-qmin", f"{int(VQsplit[1]) - 1}", "-qmax",
-                           f"{int(VQsplit[2]) - 1}"]
-                Vformat = ["-vf", "format=yuv420p"]
-                cmd = [cmd[0] + VideoCodec + quality + cmd[1] + Vformat, cmd[2]]
-            elif (videoc == "copy"):
+            if (videoc == "copy"):
                 VideoCodec = [f"-c:v", f"{videoc}"]
                 cmd = [cmd[0] + VideoCodec + cmd[1], cmd[2]]
             elif (videoc == "remove"):
@@ -54,12 +48,20 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
                 quality = ["-q:v", videoq]
                 Vformat = ["-vf", "format=yuv420p"]
                 cmd = [cmd[0] + VideoCodec + quality + cmd[1] + Vformat, cmd[2]]
+            else:  # (videoc == "libx265" or videoc == "libx264" or videoc == "libvpx-vp9"):
+                VideoCodec = ["-c:v", f"{videoc}"]
+                quality = ["-crf", f"{int(VQsplit[0]) - 1}", "-qmin", f"{int(VQsplit[1]) - 1}", "-qmax",
+                           f"{int(VQsplit[2]) - 1}"]
+                Vformat = ["-vf", "format=yuv420p"]
+                cmd = [cmd[0] + VideoCodec + quality + cmd[1] + Vformat, cmd[2]]
+            '''
             else:
                 VideoCodec = ["-c:v", f"{videoc}"]
                 quality = ["-cq", f"{int(VQsplit[0]) - 1}", "-qmin", f"{int(VQsplit[1]) - 1}", "-qmax",
                            f"{int(VQsplit[2]) - 1}"]
                 Vformat = ["-vf", "format=yuv420p"]
                 cmd = [cmd[0] + VideoCodec + quality + cmd[1] + Vformat, cmd[2]]
+            '''
             # //Audio\\#
             if (audioc == "remove"):
                 AudioEverything = ["-an"]
@@ -86,7 +88,7 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
 
 
 def reencode_shared_settings(call_window, setting: int):
-    if setting == 5:  # custom
+    if setting == 7:  # custom
         return(call_window.settings.Ffmpeg.videoCodec,
                call_window.settings.Ffmpeg.videoQuality,
                call_window.settings.Ffmpeg.audioCodec,
@@ -95,21 +97,21 @@ def reencode_shared_settings(call_window, setting: int):
                "custom/current")
     elif setting == 0:  # hevc_opus
         return("libx265",
-               "24,24,24",
+               "22,22,22",
                "opus",
                "190k",
                "_hevcopus.mkv",
                "hevc_opus")
     elif setting == 1:  # h264_nvenc
         return("h264_nvenc",
-               "24,24,24",
+               "22,22,22",
                "aac",
                "190k",
                "_nvenc.mov",
                "h264_nvenc")
     elif setting == 2:  # hevc_nvenc
         return("hevc_nvenc",
-               "24,24,24",
+               "22,22,22",
                "opus",
                "190k",
                "_henc.mkv",
@@ -128,3 +130,17 @@ def reencode_shared_settings(call_window, setting: int):
                "190k",
                "_mjpgpcm.mov",
                "mjpeg_pcm")
+    elif setting == 5:  # mjpeg_pcm
+        return("libx264",
+               "22,22,22",
+               "opus",
+               "190k",
+               "_libx264.mkv",
+               "libx264")
+    elif setting == 6:  # mjpeg_pcm
+        return("libvpx-vp9",
+               "22,22,22",
+               "opus",
+               "190k",
+               "_vopus9.mp4",
+               "vp9")
