@@ -82,7 +82,6 @@ def listVersions(window):
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
     except Exception as e:
         window.upd_output_console.append(f"ffmpeg: {str(e)}")
-        # TODO just a copy of the todo above
         window.upd_update_button.setText("Update")
         window.running = False
         window.status("Ready.")

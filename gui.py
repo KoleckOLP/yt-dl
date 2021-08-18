@@ -17,6 +17,7 @@ from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
 from gui.Settings import set_save, set_load, set_makeScript
+from shared.ReEncode import reencode_shared_settings
 from shared.Config import Settings
 
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
@@ -108,15 +109,24 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====ree_controls=====
-        self.ree_settings_combobox.addItem("hevc_opus")  # setting up items in combo list
-        self.ree_settings_combobox.addItem("h264_nvenc")
-        self.ree_settings_combobox.addItem("hevc_nvenc")
-        self.ree_settings_combobox.addItem("mp3")
+        i = 0
+        for i in range(0, 100):
+            setting = reencode_shared_settings(self, i)
+            if setting:
+                self.ree_settings_combobox.addItem(setting[5])
+            else:
+                break
+        '''
+        self.ree_settings_combobox.addItem("x264_opus (avc)")  # setting up items in combo list
+        self.ree_settings_combobox.addItem("x264_opus (hevc)")
+        self.ree_settings_combobox.addItem("h264_nvenc_aac (avc)")
+        self.ree_settings_combobox.addItem("h265_nvenc_aac (hevc)")
         self.ree_settings_combobox.addItem("mjpeg_pcm")
-        self.ree_settings_combobox.addItem("libx264")
-        self.ree_settings_combobox.addItem("vp9")
+        self.ree_settings_combobox.addItem("vp9_opus")
+        self.ree_settings_combobox.addItem("mp3")
         self.ree_settings_combobox.addItem("custom")
         self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
+        '''
         ree_settings(self)  # load option on startup
         self.ree_choose_button.clicked.connect(lambda: ree_choose(self))
         self.ree_reencode_button.clicked.connect(lambda: Reencode(self))

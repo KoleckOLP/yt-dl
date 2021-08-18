@@ -57,16 +57,23 @@ def ReEncode(call):
 
     # ========== CHANGE SETTINGS ========== #
     elif (cmd == '2'):
+        i = 0
         print("========== Options ==========")
-        for i in range(0, 6):
+        for i in range(0, 100):
             setting = reencode_shared_settings(call, i)
-            current_codec_print(f"{i}, {setting[5]}", setting[0], setting[1], setting[2], setting[3], setting[4])
+            if setting:
+                if setting[5] == "custom":
+                    name = "current"
+                else:
+                    name = setting[5]
+                current_codec_print(f"{i}, {name}", setting[0], setting[1], setting[2], setting[3], setting[4])
+            else:
+                break
         print("========== Pick an Option ==========")
-        print("0 - 4 to pick setting\n5 to keep current\n6 to edit custom")
+        print(f"0 - {i-1} to pick setting\n{i-1} to keep current\n{i} to edit custom")
         cmd = input("#")
-        if cmd == "5":  # this is dumb lol
-            pass
-        if cmd == "6":
+        cmd = int(cmd)
+        if cmd == str(i):
             print(f"type a video codec, current=\"{call.settings.Ffmpeg.videoCodec}\" <Enter> to keep")  # FIXME duplicate code
             cmd = input("#")
             if cmd == "":
@@ -97,13 +104,15 @@ def ReEncode(call):
                 pass
             else:
                 call.settings.Ffmpeg.append = cmd
-        else:
+        elif cmd < i:
             setting = reencode_shared_settings(call, int(cmd))
             call.settings.Ffmpeg.videoCodec = setting[0]
             call.settings.Ffmpeg.videoQuality = setting[1]
             call.settings.Ffmpeg.audioCodec = setting[2]
             call.settings.Ffmpeg.audioBitrate = setting[3]
             call.settings.Ffmpeg.append = setting[4]
+        else:
+            pass
         call.settings.toJson(settingsPath)
     else:
         clear()
