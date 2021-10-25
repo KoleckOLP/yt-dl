@@ -1,13 +1,16 @@
 from shared.Shared import shared, hasCookie
 
 
-def video_list_shared(url):
-    cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
+def video_list_shared(url: str, ytex: str):
+    if ytex:
+        cmd = ytex+["-F", "--no-playlist", f"{url}"]
+    else:
+        cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
     return cmd
 
 
-def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: str, floc: str, directory, cookie: bool):
-    cmd = shared(playlist, numb, floc, directory)
+def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: str, floc: str, ytex: str, directory, cookie: bool):
+    cmd = shared(playlist, numb, floc, ytex, directory)
 
     # the parts special to Video
     if qualityChoice == "1":  # best and or the bad pick of 360p/720p

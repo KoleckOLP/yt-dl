@@ -14,6 +14,7 @@ def Subs(window):
                                   window.sub_playlist_bar.text(),
                                   window.sub_lang_bar.text(),
                                   window.floc,
+                                  window.ytex,
                                   window.settings.Youtubedl.cookie)
 
     cmd, temp = result
@@ -44,7 +45,7 @@ def Subs(window):
 
 
 def sub_lang(window):
-    cmd = subs_shared_list(window.sub_url_bar.text())  # seems kinda unnecessary
+    cmd = subs_shared_list(window.sub_url_bar.text(), window.ytex)  # seems kinda unnecessary
 
     window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 

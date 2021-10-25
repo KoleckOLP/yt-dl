@@ -6,15 +6,18 @@ from typing import List
 from shared.Shared import shared, hasCookie
 
 
-def subs_shared_list(url):
-    cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
+def subs_shared_list(url: str, ytex: str):
+    if ytex:
+        cmd = ytex+["--list-subs", "--no-playlist", f"{url}"]
+    else:
+        cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
     return cmd
 
 
-def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str, cookie: bool):
+def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str, ytex: str, cookie: bool):
     temp = tempfile.TemporaryDirectory()
 
-    cmd = shared(playlist, numb, floc, temp.name+os.path.sep)
+    cmd = shared(playlist, numb, floc, ytex, temp.name+os.path.sep)
 
     cmd = cmd + ["--write-sub", "--write-auto-sub", "--sub-format", "vtt", "--skip-download", f"{url}"]
 

@@ -2,8 +2,11 @@ import os
 from release import spath
 
 
-def shared(playlist: bool, numb: str, floc: str, directory: str):
-    cmd = ["youtube-dl"]
+def shared(playlist: bool, numb: str, floc: str, ytex: str, directory: str):
+    if ytex:
+        cmd = ytex
+    else:
+        cmd = ["youtube-dl"]
 
     if floc:
         cmd = cmd + ["--prefer-ffmpeg", "--ffmpeg-location", floc]

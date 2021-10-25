@@ -2,6 +2,7 @@
 from shared.Video import video_list_shared, video_shared
 from gui.Settings import set_save
 from gui.Process import process_start, process_output
+from shared.Shared import hasCookie
 
 
 def Video(window):
@@ -24,6 +25,7 @@ def Video(window):
                        qualityChose,
                        qual,
                        window.floc,
+                       window.ytex,
                        window.settings.Youtubedl.videoDir,
                        window.settings.Youtubedl.cookie)
 
@@ -33,9 +35,9 @@ def Video(window):
 
 
 def vid_quality(window):
-    cmd = video_list_shared(window.vid_url_bar.text())
+    cmd = video_list_shared(window.vid_url_bar.text(), window.ytex)
 
-    window.hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
+    hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 

@@ -12,6 +12,7 @@ def Audio(window):
                        window.aud_playlist_checkbox.isChecked(),
                        window.aud_playlist_bar.text(),
                        window.floc,
+                       window.ytex,
                        window.settings.Youtubedl.audioDir,
                        window.settings.Youtubedl.cookie)
 

@@ -46,7 +46,7 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
                 QtWidgets.QApplication.processEvents()
             else:
                 process.terminate()
-                exit()  # for some reason killing the subprocess and closing the window dit not kill the app
+                exit()  # for some reason killing the subprocess and closing the window dit not kill the app, huh exit does not exists?
         print("\a")
         if output_clear:
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")

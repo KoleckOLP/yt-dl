@@ -56,7 +56,10 @@ def listVersions(window):
 
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")  # youtube-dl
 
-    cmd = ["youtube-dl", "--version"]
+    if window.ytex:
+        cmd = window.ytex+["--version"]
+    else:
+        cmd = ["youtube-dl", "--version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
 

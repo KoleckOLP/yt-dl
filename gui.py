@@ -61,6 +61,16 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.floc = spath
 
+        # this code is probably Windows only and it's ugly af
+        pytonLoc = os.path.dirname(sys.executable)+os.path.sep
+        pythonw = sys.executable.replace("python.exe", "pythonw.exe")
+        print(pythonw)
+        youtubedl = glob.glob(f"{pytonLoc}Scripts{os.path.sep}youtube-dl*")
+        if (not youtubedl):
+            self.ytex = False
+        else:
+            self.ytex = [f"{pythonw}", f"{pytonLoc}Scripts{os.path.sep}youtube-dl.exe"]
+
         if (os.path.exists(settingsPath)):
             try:
                 self.settings = Settings.fromJson(settingsPath)
