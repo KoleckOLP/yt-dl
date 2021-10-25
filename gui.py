@@ -54,17 +54,20 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAcceptDrops(True)
 
         # region ===== startup =====
-        pffmpeg = glob.glob(f"{spath}ffmpeg*")
-        pffprobe = glob.glob(f"{spath}ffprobe*")
+        pffmpeg = glob.glob(f"{spath}..\\ffmpeg*")
+        pffprobe = glob.glob(f"{spath}..\\ffprobe*")
         if (not pffmpeg and not pffprobe):
             self.floc = False
-        else:
-            self.floc = spath
+        else:  # THis code is absolutely terrible :)
+            directorySplit = pffmpeg[0]
+            directorySplit = directorySplit.split("\\")
+            directorySplit = directorySplit[:-3]
+            directorySplit = "\\".join(directorySplit)
+            self.floc = directorySplit
 
         # this code is probably Windows only and it's ugly af
         pytonLoc = os.path.dirname(sys.executable)+os.path.sep
         pythonw = sys.executable.replace("python.exe", "pythonw.exe")
-        print(pythonw)
         youtubedl = glob.glob(f"{pytonLoc}Scripts{os.path.sep}youtube-dl*")
         if (not youtubedl):
             self.ytex = False
