@@ -1,4 +1,8 @@
 import os
+
+# changing python working directory to script location to fix most path issues
+os.chdir(os.path.dirname(__file__))
+
 import sys
 import glob
 try:
@@ -24,7 +28,6 @@ if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
     myappid = 'HorseArmored.yt-dl.gui.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
-
 
 class MainWindow(QtWidgets.QMainWindow):
     # region ===== drag & drop =====
