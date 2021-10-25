@@ -1,3 +1,4 @@
+import os
 try:
     from PyQt6 import QtWidgets, QtGui
     from PyQt6.QtCore import QT_VERSION_STR
@@ -63,7 +64,7 @@ def listVersions(window):
 
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
     except Exception as e:
-        window.upd_output_console.append(f"youtube-dl: {str(e)}")
+        window.upd_output_console.append(f"youtube-dl: {str(e)}\n")
         # TODO this should be a function and kinda is a really bad implementation anyway (duplicate code)
         window.upd_update_button.setText("Update")
         window.running = False
@@ -76,7 +77,10 @@ def listVersions(window):
 
     window.upd_output_console.append("")
 
-    cmd = ["ffmpeg", "-version"]
+    if window.floc:
+        cmd = [f"{window.floc+os.path.sep}ffmpeg", "-version"]
+    else:
+        cmd = ["ffmpeg", "-version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
