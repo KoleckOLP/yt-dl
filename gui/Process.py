@@ -21,7 +21,7 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
 
         if (sys.platform.startswith("win")):  # (os.name == "nt"):
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8")  # this one does not check if another process is running
-        else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"): #other oeses should be fine with this
+        else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"):  # other oeses should be fine with this
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, errors="ignore")
 
         return process

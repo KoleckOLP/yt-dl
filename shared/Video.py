@@ -1,7 +1,7 @@
 from shared.Shared import shared, hasCookie
 
 
-def video_list_shared(url: str, ytex: str):
+def video_list_shared(url: str, ytex):
     if ytex:
         cmd = ytex+["-F", "--no-playlist", f"{url}"]
     else:

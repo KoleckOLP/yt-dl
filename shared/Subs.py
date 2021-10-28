@@ -6,7 +6,7 @@ from typing import List
 from shared.Shared import shared, hasCookie
 
 
-def subs_shared_list(url: str, ytex: str):
+def subs_shared_list(url: str, ytex):
     if ytex:
         cmd = ytex+["--list-subs", "--no-playlist", f"{url}"]
     else:

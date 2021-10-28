@@ -1,7 +1,5 @@
 import os
 import glob
-# Imports from this project
-from release import spath
 
 
 def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, append):
@@ -87,7 +85,7 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
     return FfmpegLines
 
 
-def reencode_shared_settings(call_window, setting: int):  #TODO change this to a list of lists (will simpify gui.py and cli/ReEncode.py)
+def reencode_shared_settings(call_window, setting: int):  # TODO change this to a list of lists (will simplify gui.py and cli/ReEncode.py)
     if setting == 0:  # x264_opus (avc)
         return("libx264",
                "22,22,22",

@@ -125,7 +125,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====ree_controls=====
-        i = 0
         for i in range(0, 100):
             setting = reencode_shared_settings(self, i)
             if setting:
