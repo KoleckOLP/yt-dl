@@ -82,10 +82,7 @@ class main:
               f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez\n" +
               f"           (C)2011-{year} youtube-dl developers\n" +
               f"ffmpeg (C)2000-{year} FFmpeg team\n" +
-              f"Thanks to kangalioo who always helps a ton!\n" +
-              f"Thanks to siscode for featuring my project\n" +
-              f"and helping me improve it.\n" +
-              f"You can find them both on github.")
+              f"Thanks to kangalioo who always helps a ton!")
         print(Style.BRIGHT + "Do you want to see whats new? [Y/n]" + Style.RESET_ALL)
         cmd = readchar("#")
         if (cmd == "y"):
