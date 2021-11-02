@@ -1,4 +1,8 @@
 import os  # importing os so I can os.system to install dependencies
+
+# changing python working directory to script location to fix most path issues
+os.chdir(os.path.dirname(__file__))
+
 try:
     import getch  # testing if dependencies are installed, not used in main.py
     import colorama  # point sf this is preventing crashes on missing dependencies in kolreq submodule and call.py
