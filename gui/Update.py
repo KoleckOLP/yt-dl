@@ -63,7 +63,7 @@ def listVersions(window):
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
 
-        window.upd_output_console.append("youtube-dl ")
+        window.upd_output_console.append("yt-dlp ")
 
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
     except Exception as e:
