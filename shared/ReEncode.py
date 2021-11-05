@@ -52,14 +52,6 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
                            f"{int(VQsplit[2]) - 1}"]
                 Vformat = ["-vf", "format=yuv420p"]
                 cmd = [cmd[0] + VideoCodec + quality + cmd[1] + Vformat, cmd[2]]
-            '''
-            else:
-                VideoCodec = ["-c:v", f"{videoc}"]
-                quality = ["-cq", f"{int(VQsplit[0]) - 1}", "-qmin", f"{int(VQsplit[1]) - 1}", "-qmax",
-                           f"{int(VQsplit[2]) - 1}"]
-                Vformat = ["-vf", "format=yuv420p"]
-                cmd = [cmd[0] + VideoCodec + quality + cmd[1] + Vformat, cmd[2]]
-            '''
             # //Audio\\#
             if (audioc == "remove"):
                 AudioEverything = ["-an"]

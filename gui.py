@@ -131,17 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ree_settings_combobox.addItem(setting[5])
             else:
                 break
-        '''
-        self.ree_settings_combobox.addItem("x264_opus (avc)")  # setting up items in combo list
-        self.ree_settings_combobox.addItem("x264_opus (hevc)")
-        self.ree_settings_combobox.addItem("h264_nvenc_aac (avc)")
-        self.ree_settings_combobox.addItem("h265_nvenc_aac (hevc)")
-        self.ree_settings_combobox.addItem("mjpeg_pcm")
-        self.ree_settings_combobox.addItem("vp9_opus")
-        self.ree_settings_combobox.addItem("mp3")
-        self.ree_settings_combobox.addItem("custom")
-        self.ree_settings_combobox.setCurrentIndex(self.settings.defaultCodec)
-        '''
+
         ree_settings(self)  # load option on startup
         self.ree_choose_button.clicked.connect(lambda: ree_choose(self))
         self.ree_reencode_button.clicked.connect(lambda: Reencode(self))
@@ -149,7 +139,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_settings_combobox.activated.connect(lambda: ree_settings(self))
         self.ree_settings_button.clicked.connect(lambda: ree_settings_save(self))
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
-        # self.ree_location_bar.setDragEnabled(True)
         self.ree_location_bar.setAcceptDrops(True)
         # endregion
 

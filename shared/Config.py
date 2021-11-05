@@ -77,6 +77,6 @@ class Settings:
                                        "24,24,24",  # same as above
                                        "190k",  # same as above
                                        "_custom.mkv"),  # same as above
-                        False,  # I would recommend not having auto update off xD
-                        0,  # audio tab
-                        0)  # hevc_opus
+                                        False,  # I would recommend not having auto update off xD
+                                        0,  # audio tab
+                                        0)  # hevc_opus
