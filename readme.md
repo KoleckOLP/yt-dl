@@ -1,5 +1,6 @@
 # yt-dl
-Multiplatform CLI and GUI youtube-dl simplifier
+Multiplatform CLI and GUI youtube-dl simplifier<br>
+[![CodeFactor](https://www.codefactor.io/repository/github/koleckolp/yt-dl/badge/testing)](https://www.codefactor.io/repository/github/koleckolp/yt-dl/overview/testing)
 
 ### Rewritten in Python 3.
 
