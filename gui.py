@@ -1,10 +1,7 @@
 import os
-
-# changing python working directory to script location to fix most path issues
-os.chdir(os.path.dirname(__file__))
-
 import sys
 import glob
+
 try:
     from PyQt6 import QtWidgets, uic
     from PyQt6.QtWidgets import QMessageBox
@@ -16,7 +13,7 @@ except ModuleNotFoundError:
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
-from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle  #lel
+from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
@@ -24,10 +21,14 @@ from gui.Settings import set_save, set_load, set_makeScript
 from shared.ReEncode import reencode_shared_settings
 from shared.Config import Settings
 
+# changing python working directory to script location to fix most path issues
+os.chdir(os.path.dirname(__file__))
+
 if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
     import ctypes
     myappid = 'HorseArmored.yt-dl.gui.'+ver  # Program Sting
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 
 class MainWindow(QtWidgets.QMainWindow):
     # region ===== drag & drop =====
@@ -65,7 +66,7 @@ class MainWindow(QtWidgets.QMainWindow):
             directorySplit = "\\".join(directorySplit)
             self.floc = directorySplit
 
-        # this code is probably Windows only and it's ugly af
+        # this code is probably Windows only, and it's ugly af
         pytonLoc = os.path.dirname(sys.executable)+os.path.sep
         pythonw = sys.executable.replace("python.exe", "pythonw.exe")
         youtubedl = glob.glob(f"{pytonLoc}Scripts{os.path.sep}yt-dlp*")
@@ -240,13 +241,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def openFolder(loc: str):
         loc = os.path.dirname(loc)
         if not os.path.exists(loc):
-            os.makedirs(loc, exist_ok=True)
-        if (sys.platform.startswith("win")):
-            os.system(f"start {loc}")
-        elif (sys.platform.startswith(("darwin", "haiku"))):  # haiku support :3
-            os.system(f"open {loc}")
-        else:  # (sys.platform.startswith(("linux", "freebsd"))): #hoping that other OSes use xdg-open
-            os.system(f"xdg-open {loc}")
+            loc = "." + os.path.sep  # if path does not exist open installation folder
+        os.startfile(loc)  # should open in default application TODO: test on Haiku, MacOS, Linux
     # endregion
 
 
