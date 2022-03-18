@@ -10,9 +10,7 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
     else:
         VidsToRender = [f"{location}"]
     for video in VidsToRender:
-        if os.path.isfile(os.path.splitext(video)[0] + append):
-            return f"#yt-dl# file {video} already exists skipping...\n"  # remember to check for this
-        else:
+        if not os.path.isfile(os.path.splitext(video)[0] + append):
             cmd = [["-hwaccel", "auto", "-i", f"{video}", "-map", "0:v?", "-map", "0:a?", "-map", "0:s?"],
                    ["-max_muxing_queue_size", "9999", "-b:v", "0K"], [f"{os.path.splitext(video)[0] + append}"]]
 
@@ -72,8 +70,9 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
             else:
                 cmd = ["ffmpeg", "-hide_banner"] + cmd
 
-        FfmpegLines = FfmpegLines + [cmd]
-
+            FfmpegLines = FfmpegLines + [cmd]
+        else:
+            return f"#yt-dl# file {video} already exists skipping...\n"  # remember to check for this
     return FfmpegLines
 
 
