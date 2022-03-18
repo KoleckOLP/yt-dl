@@ -126,12 +126,10 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====ree_controls=====
-        for i in range(0, 100):
+        for i in range(0, int(reencode_shared_settings(self, "len"))):
             setting = reencode_shared_settings(self, i)
             if setting:
-                self.ree_settings_combobox.addItem(setting[5])
-            else:
-                break
+                self.ree_settings_combobox.addItem(setting[5])  # writes name of the setting
 
         ree_settings(self)  # load option on startup
         self.ree_choose_button.clicked.connect(lambda: ree_choose(self))

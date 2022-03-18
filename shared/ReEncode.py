@@ -77,60 +77,56 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
     return FfmpegLines
 
 
-def reencode_shared_settings(call_window, setting: int):  # TODO change this to a list of lists (will simplify gui.py and cli/ReEncode.py)
-    if setting == 0:  # x264_opus (avc)
-        return("libx264",
-               "22,22,22",
-               "opus",
-               "190k",
-               "_libx264.mkv",
-               "x264_opus (avc)")
-    elif setting == 1:  # x265_opus (hevc)
-        return("libx265",
-               "22,22,22",
-               "opus",
-               "190k",
-               "_hevcopus.mkv",
-               "x265_opus (hevc)")
-    elif setting == 2:  # h264_nvenc_aac (avc)
-        return("h264_nvenc",
-               "22,22,22",
-               "aac",
-               "190k",
-               "_nvenc.mov",
-               "h264_nvenc_aac (avc)")
-    elif setting == 3:  # h265_nvenc_opus (hevc)
-        return("hevc_nvenc",
-               "22,22,22",
-               "opus",
-               "190k",
-               "_henc.mkv",
-               "h265_nvenc_opus (hevc)")
-    elif setting == 4:  # mjpeg_pcm
-        return("mjpeg",
-               "2",
-               "pcm_s16be",
-               "190k",
-               "_mjpgpcm.mov",
-               "mjpeg_pcm")
-    elif setting == 5:  # vp9_opus
-        return("libvpx-vp9",
-               "22,22,22",
-               "opus",
-               "190k",
-               "_vopus9.mp4",
-               "vp9_opus")
-    elif setting == 6:  # mp3
-        return("remove",
-               "none",
-               "libmp3lame",
-               "190k",
-               ".mp3",
-               "mp3")
-    if setting == 7:  # custom
-        return(call_window.settings.Ffmpeg.videoCodec,
-               call_window.settings.Ffmpeg.videoQuality,
-               call_window.settings.Ffmpeg.audioCodec,
-               call_window.settings.Ffmpeg.audioBitrate,
-               call_window.settings.Ffmpeg.append,
-               "custom")
+def reencode_shared_settings(call_window, setting=0):  # still could be done better, shouldn't be a function at all
+    reencode_options = [["libx264",
+                         "22,22,22",
+                         "opus",
+                         "190k",
+                         "_libx264.mkv",
+                         "x264_opus (avc)"],
+                        ["libx265",
+                         "22,22,22",
+                         "opus",
+                         "190k",
+                         "_hevcopus.mkv",
+                         "x265_opus (hevc)"],
+                        ["h264_nvenc",
+                         "22,22,22",
+                         "aac",
+                         "190k",
+                         "_nvenc.mov",
+                         "h264_nvenc_aac (avc)"],
+                        ["hevc_nvenc",
+                         "22,22,22",
+                         "opus",
+                         "190k",
+                         "_henc.mkv",
+                         "h265_nvenc_opus (hevc)"],
+                        ["mjpeg",
+                         "2",
+                         "pcm_s16be",
+                         "190k",
+                         "_mjpgpcm.mov",
+                         "mjpeg_pcm"],
+                        ["libvpx-vp9",
+                         "22,22,22",
+                         "opus",
+                         "190k",
+                         "_vopus9.mp4",
+                         "vp9_opus"],
+                        ["remove",
+                         "none",
+                         "libmp3lame",
+                         "190k",
+                         ".mp3",
+                         "mp3"],
+                        [call_window.settings.Ffmpeg.videoCodec,
+                         call_window.settings.Ffmpeg.videoQuality,
+                         call_window.settings.Ffmpeg.audioCodec,
+                         call_window.settings.Ffmpeg.audioBitrate,
+                         call_window.settings.Ffmpeg.append,
+                         "custom"]]
+
+    if setting == "len":
+        return len(reencode_options)
+    return (reencode_options[setting])
