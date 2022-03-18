@@ -1,7 +1,7 @@
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
 from gui.Settings import set_save
-from gui.Process import process_start, process_output
+# from gui.Process import process_start, process_output
 from shared.Shared import hasCookie
 
 
@@ -29,9 +29,9 @@ def Video(window):
                        window.settings.Youtubedl.videoDir,
                        window.settings.Youtubedl.cookie)
 
-    window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
+    # window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
 
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+    # process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
 
 def vid_quality(window):

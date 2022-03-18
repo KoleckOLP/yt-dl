@@ -1,7 +1,8 @@
 # Imports from this project
 from shared.Audio import audio_shared
 from gui.Settings import set_save
-from gui.Process import process_start, process_output
+from gui.Process import Whatever
+from PyQt6.QtCore import QObject, pyqtSignal, pyqtSlot, QThread
 
 
 def Audio(window):
@@ -16,9 +17,7 @@ def Audio(window):
                        window.settings.Youtubedl.audioDir,
                        window.settings.Youtubedl.cookie)
 
-    window.process = process_start(window, cmd, window.aud_output_console, window.aud_download_button, window.process)
-
-    process_output(window, window.aud_output_console, window.aud_download_button, window.process)
+    Whatever.sadCry(window, cmd, window.aud_output_console)
 
 
 def aud_playlist_bar_toggle(window):
