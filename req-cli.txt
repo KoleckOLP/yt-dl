@@ -1,4 +1,0 @@
-colorama
-py-getch
-wheel
-youtube-dl

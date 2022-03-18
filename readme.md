@@ -75,19 +75,3 @@ Requirements:
 </details>
 
 ![GUI on Haiku](promo/HaikuOS.png)
-
-
-<details>
-    <summary>Cli (win,mac,lin,android)</summary>
-1. install git
-2. install python3
-3. clone repo with git `git clone https://github.com/koleckolp/yt-dl`
-    1. \(optional) update pip: `py -m pip install -U pip`
-4. install requirements: `pip install -r req-cli.txt`
-5. get ffmpeg and ffprobe(may come with ffmpeg, or ffmpeg-tools) and put them into the yt-dl directory
-6. launch `pythonw main.py`
-    1. \(recommended) on the settings (7) fix your setting and Make Launch Script (3)
-    2. than you can make a desktop shortcut from `yt-dl.bat` or `yt-dl` (which ever you get, don't forget to chmod +x on posix systems)
-</details>
-
-![CLI on Windows 10 in Powershell 7](promo/cli_win_pwsh.png)
