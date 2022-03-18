@@ -47,6 +47,18 @@ def upd_auto_toggle(window):
     window.upd_auto_button.setText(f"Autoupdate=\"{window.settings.autoUpdate}\"")
 
 
+def missingDependency(window, name, e):  # still kinda ugly function
+    window.upd_output_console.append(f"{name}: {str(e)}\n")
+    window.upd_update_button.setText("Update")
+    window.running = False
+    window.status("Ready.")
+    tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
+    window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
+    QtWidgets.QApplication.processEvents()
+    scrollbar = window.upd_output_console.verticalScrollBar()
+    scrollbar.setValue(scrollbar.maximum())
+
+
 def listVersions(window):
     window.upd_output_console.append(f"yt-dl {ver}\n\n")
 
@@ -54,7 +66,7 @@ def listVersions(window):
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
     process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
 
-    window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")  # youtube-dl
+    window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
 
     if window.ytex:
         cmd = window.ytex+["--version"]
@@ -67,16 +79,7 @@ def listVersions(window):
 
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
     except Exception as e:
-        window.upd_output_console.append(f"youtube-dl: {str(e)}\n")
-        # TODO this should be a function and kinda is a really bad implementation anyway (duplicate code)
-        window.upd_update_button.setText("Update")
-        window.running = False
-        window.status("Ready.")
-        tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
-        window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
-        QtWidgets.QApplication.processEvents()
-        scrollbar = window.upd_output_console.verticalScrollBar()
-        scrollbar.setValue(scrollbar.maximum())
+        missingDependency(window, "yt-dlp", e)
 
     window.upd_output_console.append("")
 
@@ -88,15 +91,7 @@ def listVersions(window):
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
     except Exception as e:
-        window.upd_output_console.append(f"ffmpeg: {str(e)}")
-        window.upd_update_button.setText("Update")
-        window.running = False
-        window.status("Ready.")
-        tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
-        window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
-        QtWidgets.QApplication.processEvents()
-        scrollbar = window.upd_output_console.verticalScrollBar()
-        scrollbar.setValue(scrollbar.maximum())
+        missingDependency(window, "ffmpeg", e)
 
     window.upd_output_console.moveCursor(QtGui.QTextCursor.MoveOperation.Start)
     QtWidgets.QApplication.processEvents()
