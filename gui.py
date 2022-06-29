@@ -55,14 +55,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAcceptDrops(True)
 
         # region ===== startup =====
-        pffmpeg = glob.glob(f"{spath}..\\ffmpeg*")
-        pffprobe = glob.glob(f"{spath}..\\ffprobe*")
+        pffmpeg = glob.glob(f"{spath}ffmpeg*")
+        pffprobe = glob.glob(f"{spath}ffprobe*")
         if (not pffmpeg and not pffprobe):
             self.floc = False
         else:  # THis code is absolutely terrible :)
             directorySplit = pffmpeg[0]
             directorySplit = directorySplit.split("\\")
-            directorySplit = directorySplit[:-3]
+            directorySplit = directorySplit[:-1]
             directorySplit = "\\".join(directorySplit)
             self.floc = directorySplit
 
