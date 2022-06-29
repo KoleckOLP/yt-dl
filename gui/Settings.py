@@ -1,7 +1,8 @@
 import sys
 # Imports from this project
-from release import spath
+from release import spath, settingsPath
 from gui.ReEncode import ree_settings_save
+from shared.Config import Settings
 
 
 def set_save(window):
@@ -42,3 +43,8 @@ def set_makeScript(window):  # I had an issue getting the venv working with gui
         f = open("yt-dl", "w")
         f.write(f"#!/bin/sh\n\ncd {spath} && {window.settings.Python.python} gui.py")
         f.close()
+
+def WriteDefaultJson(window):
+    window.settings = Settings.loadDefault()
+    window.settings.toJson(settingsPath)
+    set_load(window, window.settings.Youtubedl.audioDir, window.settings.Youtubedl.videoDir, window.settings.Python.python, window.settings.Python.pip, window.settings.Youtubedl.fromPip, window.settings.autoUpdate, window.settings.Ffmpeg.audioCodec, window.settings.Ffmpeg.videoCodec, window.settings.Ffmpeg.audioBitrate, window.settings.Ffmpeg.videoQuality, window.settings.Ffmpeg.append, window.settings.defaultTab)

@@ -1,3 +1,4 @@
+from logging.handlers import DEFAULT_TCP_LOGGING_PORT
 import os
 import sys
 import glob
@@ -17,7 +18,7 @@ from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_b
 from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
 from gui.Update import Update, upd_auto_toggle
-from gui.Settings import set_save, set_load, set_makeScript
+from gui.Settings import set_save, set_load, set_makeScript, WriteDefaultJson
 from shared.ReEncode import reencode_shared_settings
 from shared.Config import Settings
 
@@ -161,8 +162,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====set_controls=====
+        self.set_loaddef_button.clicked.connect(lambda: WriteDefaultJson(self))
         self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab))
-        self.set_loaddef_button.clicked.connect(lambda: set_load(self, audioDirDefault, videoDirDefault, "python", "pip", True, False, "opus", "libx265", "190k", "24,24,24", "_custom.mkv", 0))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
         self.set_launch_button.clicked.connect(lambda: set_makeScript(self))
         self.set_save_button.clicked.connect(lambda: set_save(self))
@@ -216,8 +217,7 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             text: str = i.text().lower()
         if "ok" in text:
-            self.settings = Settings.loadDefault()
-            self.settings.toJson(settingsPath)
+            WriteDefaultJson(self)
         else:
             exit()
 

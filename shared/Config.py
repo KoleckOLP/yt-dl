@@ -1,6 +1,6 @@
 import json
 # Imports from this projects
-from release import videoDirDefault, audioDirDefault
+from release import videoDirDefault, audioDirDefault, spath
 
 
 class Encoder(json.JSONEncoder):
@@ -66,8 +66,15 @@ class Settings:
 
     @staticmethod
     def loadDefault():
-        return Settings(PythonSettings("python",  # I don't like this because some systems need python3 or python3.x here
-                                       "pip"),  # some systems might have pip3.x here
+        if(spath.find("yt-dl_portable")):
+            defpython = "..\python\python"
+            defpip = "..\python\python -m pip"
+        else:
+            defpython = "python"
+            defpip = "pip"
+
+        return Settings(PythonSettings(defpython,  # I don't like this because some systems need python3 or python3.x here
+                                       defpip),  # some systems might have pip3.x here
                         YoutubedlSettings(audioDirDefault,  # audio folder inside of yt-dl
                                           videoDirDefault,  # video folder inside of yt-dl
                                           True,
