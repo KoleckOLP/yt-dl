@@ -37,7 +37,7 @@ def Video(window):
 def vid_quality(window):
     cmd = video_list_shared(window.vid_url_bar.text(), window.ytex)
 
-    hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
+    cmd = hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 
