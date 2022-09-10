@@ -23,8 +23,8 @@ ffplay.exe
 *.ps1
 *.vbs
 *.json
-audio
-videos
+audio/
+videos/
 
 # temp folders
 ffdir/
