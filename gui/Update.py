@@ -24,7 +24,10 @@ def Update(window):
 
 
 def update_yt_dl(window):
-    cmd = ["git", "pull", "--recurse-submodules"]
+    if window.floc:
+        cmd = [f"{window.floc+os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "pull", "--recurse-submodules"]
+    else:
+        cmd = ["git.exe", "pull", "--recurse-submodules"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
 
     process_output(window, window.upd_output_console, window.upd_update_button, window.process)
