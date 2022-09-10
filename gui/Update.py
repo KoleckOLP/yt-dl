@@ -63,18 +63,35 @@ def missingDependency(window, name, e):  # still kinda ugly function
 
 
 def listVersions(window):
+    # yt-dl version
     window.upd_output_console.append(f"yt-dl {ver}\n\n")
 
+    if window.floc:
+        cmd = [f"{window.floc + os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "-v"]
+    else:
+        cmd = ["git.exe", "-v"]
+    try:
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    except Exception as e:
+        missingDependency(window, "git", e)
+
+    window.upd_output_console.append("")
+
+    # python version
     cmd = [window.settings.Python.python, "-V"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
     process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
 
+    # qt version
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
 
+    # yt-dlp version
+    print(window.ytex)
     if window.ytex:
         cmd = window.ytex+["--version"]
     else:
-        cmd = ["youtube-dl", "--version"]
+        cmd = ["yt-dlp", "--version"]  # I have no clue if the non-portable even works
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
 
@@ -86,6 +103,7 @@ def listVersions(window):
 
     window.upd_output_console.append("")
 
+    # ffmpeg version
     if window.floc:
         cmd = [f"{window.floc+os.path.sep}ffmpeg", "-version"]
     else:
