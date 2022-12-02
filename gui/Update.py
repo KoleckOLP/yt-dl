@@ -69,7 +69,7 @@ def listVersions(window):
     if window.floc:
         cmd = [f"{window.floc + os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "-v"]
     else:
-        cmd = ["git.exe", "-v"]
+        cmd = ["git.exe", "--version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
