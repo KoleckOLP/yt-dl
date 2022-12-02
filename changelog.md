@@ -1,4 +1,9 @@
-## New in 2.2.0.0 Major Release:
+## New in 2.2.1.1 Unreleased Testing:
+CLI was depricated
+Cookies now also work in List Quality
+kinda forgot to update the changelog
+
+## New in 2.2.0.0 Unreleased Testing:
 Added support for cookies, this let's download private videos and age restricted videos.
 Cookies support in CLI<br>
 Cookies checkbox states saves if you click download<br>
