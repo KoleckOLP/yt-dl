@@ -87,7 +87,6 @@ def listVersions(window):
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
 
     # yt-dlp version
-    print(window.ytex)
     if window.ytex:
         cmd = window.ytex+["--version"]
     else:
