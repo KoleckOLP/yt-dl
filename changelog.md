@@ -1,3 +1,6 @@
+## New in 2.2.1.4 Released Testing:
+Subs nolonger crash
+
 ## New in 2.2.1.3 Released Testing:
 Updating dependencies 
 fixing some issues with the last release of portable not working
