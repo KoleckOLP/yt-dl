@@ -1,3 +1,10 @@
+## New in 2.2.1.3 Released Testing:
+Updating dependencies 
+fixing some issues with the last release of portable not working
+
+## New in 2.2.1.2 Released Testing:
+yt-dl repo was archived and not yt-dl portable is just the way I release yt-dl for windows.
+
 ## New in 2.2.1.1 Unreleased Testing:
 CLI was depricated
 Cookies now also work in List Quality
