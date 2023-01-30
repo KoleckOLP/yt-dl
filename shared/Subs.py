@@ -59,7 +59,7 @@ def subs_shared_lines_for_ffmpeg(call_window, subpath: List[str], newsubpath: Li
             return new
 
         if call_window.floc:
-            ffmpeg = call_window.floc+"ffmpeg"
+            ffmpeg = call_window.floc+os.path.sep+"ffmpeg"
         else:
             ffmpeg = "ffmpeg"
         retFfmpegLines = retFfmpegLines + [[ffmpeg, "-i", old, new]]
