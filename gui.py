@@ -5,7 +5,7 @@ import glob
 
 try:
     from PyQt6 import QtWidgets, uic
-    from PyQt6.QtWidgets import QMessageBox
+    from PyQt6.QtWidgets import QMessageBox, QApplication
     from PyQt6.QtCore import QT_VERSION_STR
 except ModuleNotFoundError:
     from PyQt5 import QtWidgets, uic
@@ -46,6 +46,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ree_location_bar.setText(drag)  # dropping anywhere on the main window drops into ree_location_bar
     # endregion
+
+    def closeEvent(self, e):  # when closing the app it's size and position gets saved, there alsoe has to be "e" even if it's not used or it throws an error
+        self.settings.Window.windowWidth = self.geometry().width()
+        self.settings.Window.windowHeight = self.geometry().height()
+        self.settings.Window.windowPosX = self.pos().x()
+        self.settings.Window.windowPosY = self.pos().y()
+        self.settings.toJson(settingsPath)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -91,6 +98,13 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
 
         self.setWindowTitle(f"yt-dl {ver}")
+
+        # changing size and position of the window
+        if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:
+            self.resize(self.settings.Window.windowWidth, self.settings.Window.windowHeight)
+
+        if self.settings.Window.windowPosX != 0 or self.settings.Window.windowPosY != 0:
+            self.move(self.settings.Window.windowPosX, self.settings.Window.windowPosY)
 
         self.tabWidget.setCurrentIndex(self.settings.defaultTab)  # the code will not get here if settings is undefined.
 
