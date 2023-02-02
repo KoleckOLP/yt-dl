@@ -173,7 +173,7 @@
        <enum>QTabWidget::Rounded</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="audio_tab">
        <attribute name="title">
@@ -1002,7 +1002,7 @@
            <string notr="true">Color: #FFFFFF;</string>
           </property>
           <property name="text">
-           <string>youtube-dl from pip</string>
+           <string>yt-dlp from pip</string>
           </property>
          </widget>
         </item>
