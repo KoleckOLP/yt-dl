@@ -40,12 +40,13 @@ def ree_settings(window):
 
 
 def ree_settings_save(window):
-    window.settings.Ffmpeg.videoCodec = window.ree_videoc_bar.text()
-    window.settings.Ffmpeg.audioCodec = window.ree_audioc_bar.text()
-    window.settings.Ffmpeg.videoQuality = window.ree_videoq_bar.text()
-    window.settings.Ffmpeg.audioBitrate = window.ree_audiob_bar.text()
-    window.settings.Ffmpeg.append = window.ree_append_bar.text()
-    window.settings.defaultCodec = window.ree_settings_combobox.currentIndex()
+    if window.ree_settings_combobox.currentText() == "custom":
+        window.settings.Ffmpeg.videoCodec = window.ree_videoc_bar.text()
+        window.settings.Ffmpeg.audioCodec = window.ree_audioc_bar.text()
+        window.settings.Ffmpeg.videoQuality = window.ree_videoq_bar.text()
+        window.settings.Ffmpeg.audioBitrate = window.ree_audiob_bar.text()
+        window.settings.Ffmpeg.append = window.ree_append_bar.text()
+        window.settings.defaultCodec = window.ree_settings_combobox.currentIndex()
     window.settings.toJson(settingsPath)
 
 
