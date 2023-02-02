@@ -30,12 +30,19 @@ class FfmpegSettings:
         self.audioBitrate = audioBitrate
         self.append = append
 
+class WindowSettings:
+    def __init__(self, windowWidth: int, windowHeight: int, windowPosX: int, windowPosY: int):
+        self.windowWidth = windowWidth
+        self.windowHeight = windowHeight
+        self.windowPosX = windowPosX
+        self.windowPosY = windowPosY
 
 class Settings:
-    def __init__(self, Python: PythonSettings, Youtubedl: YoutubedlSettings, Ffmpeg: FfmpegSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int):
+    def __init__(self, Python: PythonSettings, Youtubedl: YoutubedlSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int):
         self.Python = Python
         self.Youtubedl = Youtubedl
         self.Ffmpeg = Ffmpeg
+        self.Window = Window
         self.autoUpdate = autoUpdate
         self.defaultTab = defaultTab
         self.defaultCodec = defaultCodec
@@ -60,6 +67,10 @@ class Settings:
                                        x["Ffmpeg"]["videoQuality"],
                                        x["Ffmpeg"]["audioBitrate"],
                                        x["Ffmpeg"]["append"]),
+                        WindowSettings(x["Window"]["windowWidth"],
+                                       x["Window"]["windowHeight"],
+                                       x["Window"]["windowPosX"],
+                                       x["Window"]["windowPosY"]),
                         x["autoUpdate"],
                         x["defaultTab"],
                         x["defaultCodec"])
@@ -84,6 +95,10 @@ class Settings:
                                        "24,24,24",  # same as above
                                        "190k",  # same as above
                                        "_custom.mkv"),  # same as above
-                                        False,  # I would recommend not having auto update on, it's annoying.
-                                        0,  # audio tab
-                                        0)  # hevc_opus
+                        WindowSettings(0,
+                                       0,
+                                       0,
+                                       0),
+                        False,  # I would recommend not having auto update on, it's annoying.
+                        0,  # audio tab
+                        0)  # hevc_opus
