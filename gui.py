@@ -193,16 +193,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # region ==========🎓ABOUT🎓==========
         self.about_box.setHtml(f"<p style=\"font-size: 18px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
-                               f"Version: {ver} gui ({curb} branch)<br>" +
+                               f"Version: {ver} ({curb} branch)<br>" +
                                f"Last updated on: {lstupdt}<br>" +
-                               f"My webpage: <a href=\"https://koleckolp.comli.com\">https://koleckolp.comli.com</a><br>" +
+                               f"My webpage: <a href=\"https://tiny.cc/koleq\">https://tiny.cc/koleq</a><br>" +
                                f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>" +
-                               f"need help? ask here: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://discord.gg/W88375j</a><br>" +
-                               f"youtube-dl (C)2008-2011 Ricardo Garcia Gonzalez<br>" +
-                               f"                 (C)2011-{year} youtube-dl developers<br>" +
+                               f"need help? ask here: <a href=\"https://discord.gg/W88375j\">https://discord.gg/W88375j</a><br>" +
+                               f"yt-dlp (C)2021-{year} yt-dlp contributors"
                                f"ffmpeg (C)2000-{year} FFmpeg team<br>" +
                                f"Thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>" +
-                               f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/master/changelog.md\">here</a></pre></p>")
+                               f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/testing/changelog.md\">here</a></pre></p>")
         # endregion
 
     # region ===== startup =====
