@@ -198,7 +198,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                f"My webpage: <a href=\"https://tiny.cc/koleq\">https://tiny.cc/koleq</a><br>" +
                                f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>" +
                                f"need help? ask here: <a href=\"https://discord.gg/W88375j\">https://discord.gg/W88375j</a><br>" +
-                               f"yt-dlp (C)2021-{year} yt-dlp contributors"
+                               f"yt-dlp (C)2021-{year} yt-dlp contributors<br>"
                                f"ffmpeg (C)2000-{year} FFmpeg team<br>" +
                                f"Thanks to <a href=\"https://github.com/kangalioo\">kangalioo</a> who always helps a ton!<br>" +
                                f"You can read the changelog: <a href=\"https://github.com/KoleckOLP/yt-dl/blob/testing/changelog.md\">here</a></pre></p>")
