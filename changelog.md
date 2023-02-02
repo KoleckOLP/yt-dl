@@ -1,3 +1,8 @@
+## NEw in 2.2.1.5 Release Testing:
+Added window size and position now gets saved on exit
+Added window size and position now gets loaded on startup
+Fixed an issue where your custom ReEncode config would get overridden if you pressed save in Settings
+
 ## New in 2.2.1.4 Released Testing:
 Subs nolonger crash
 
