@@ -1,4 +1,4 @@
-import os
+import os, sys
 try:
     from PyQt6 import QtWidgets, QtGui
     from PyQt6.QtCore import QT_VERSION_STR
@@ -27,7 +27,7 @@ def update_yt_dl(window):
     if window.floc:
         cmd = [f"{window.floc+os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "pull", "--recurse-submodules"]
     else:
-        cmd = ["git.exe", "pull", "--recurse-submodules"]
+        cmd = ["git", "pull", "--recurse-submodules"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
 
     process_output(window, window.upd_output_console, window.upd_update_button, window.process)
