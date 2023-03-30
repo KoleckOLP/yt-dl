@@ -253,7 +253,12 @@ class MainWindow(QtWidgets.QMainWindow):
         loc = os.path.dirname(loc)
         if not os.path.exists(loc):
             loc = "." + os.path.sep  # if path does not exist open installation folder
-        os.startfile(loc)  # should open in default application TODO: test on Haiku, MacOS, Linux
+        if (sys.platform.startswith("win")):
+            os.startfile(loc)  # does not work on macOS
+        elif (sys.platform.startswith("darwin")):
+            os.system(f"open {loc}")
+        else:  # linux haiku and others
+            print("sorry this platform is not supported yet")
     # endregion
 
 
