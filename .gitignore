@@ -13,6 +13,8 @@ venv
 # mess python makes
 __pycache__/
 
+# macOS junk
+.DS_Store
 
 # files used by yt-dl
 cookies.txt
@@ -23,6 +25,7 @@ ffplay.exe
 *.ps1
 *.vbs
 *.json
+yt-dl
 audio/
 videos/
 
