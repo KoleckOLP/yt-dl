@@ -6,7 +6,7 @@ def shared(playlist: bool, numb: str, floc: str, ytex: str, directory: str):
     if ytex:
         cmd = ytex
     else:
-        cmd = ["youtube-dl"]
+        cmd = ["yt-dlp"]
 
     if floc:
         cmd = cmd + ["--prefer-ffmpeg", "--ffmpeg-location", floc]

@@ -5,7 +5,7 @@ def video_list_shared(url: str, ytex):
     if ytex:
         cmd = ytex+["-F", "--no-playlist", f"{url}"]
     else:
-        cmd = ["youtube-dl", "-F", "--no-playlist", f"{url}"]
+        cmd = ["yt-dlp", "-F", "--no-playlist", f"{url}"]
     return cmd
 
 
