@@ -1,4 +1,7 @@
-## NEw in 2.2.1.5 Release Testing:
+## New in 2.2.1.6
+Bugfixing for macOS
+
+## New in 2.2.1.5 Release Testing:
 Added window size and position now gets saved on exit
 Added window size and position now gets loaded on startup
 Fixed an issue where your custom ReEncode config would get overridden if you pressed save in Settings
