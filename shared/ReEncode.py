@@ -64,8 +64,8 @@ def reencode_shared(call_window, location, videoc, videoq, audioc, audiob, appen
                 SubsC = ["-c:s", "copy"]
                 cmd = cmd[0] + SubsC + cmd[1]
 
-            floc = [f"{call_window.floc + os.path.sep + 'ffmpeg'}", "-hide_banner"]
             if call_window.floc:
+                floc = [f"{call_window.floc + os.path.sep + 'ffmpeg'}", "-hide_banner"]
                 cmd = floc + cmd
             else:
                 cmd = ["ffmpeg", "-hide_banner"] + cmd
