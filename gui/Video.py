@@ -11,7 +11,7 @@ def Video(window):
 
     if window.vid_normal_radio.isChecked():
         qualityChose = "1"
-        qual = "best"  # these are useless
+        qual = "best[ext=mp4]"  # these are useless
     elif window.vid_custom_radio.isChecked():
         qualityChose = "2"
         qual = window.vid_quality_bar.text()
@@ -32,6 +32,9 @@ def Video(window):
     window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
 
     process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+
+    if (window.settings.autoClose):
+        exit()  # problably not the cleanest solution but doesn't left processes behind
 
 
 def vid_quality(window):

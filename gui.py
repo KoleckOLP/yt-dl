@@ -86,11 +86,12 @@ class MainWindow(QtWidgets.QMainWindow):
         if (os.path.exists(settingsPath)):
             try:
                 self.settings = Settings.fromJson(settingsPath)
-            except KeyError:
+            except KeyError as e:
+                print(e)
                 if QT_VERSION_STR[0] == '6':
                     self.messagePopup("Settings error", QMessageBox.Icon.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
                 else:
-                    self.messagePopup("Settings error", QMessageBox.Critical, "YYour config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
+                    self.messagePopup("Settings error", QMessageBox.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
         else:
             if QT_VERSION_STR[0] == '6':
                 self.messagePopup("Settings error", QMessageBox.Icon.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
@@ -177,7 +178,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # region =====set_controls=====
         self.set_loaddef_button.clicked.connect(lambda: WriteDefaultJson(self))
-        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab))
+        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
         self.set_launch_button.clicked.connect(lambda: set_makeScript(self))
         self.set_save_button.clicked.connect(lambda: set_save(self))
@@ -188,7 +189,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
-        set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab)
+        set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose)
         # endregion
 
         # region ==========🎓ABOUT🎓==========

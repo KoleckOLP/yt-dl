@@ -38,7 +38,7 @@ class WindowSettings:
         self.windowPosY = windowPosY
 
 class Settings:
-    def __init__(self, Python: PythonSettings, Youtubedl: YoutubedlSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int):
+    def __init__(self, Python: PythonSettings, Youtubedl: YoutubedlSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int, autoClose: bool):
         self.Python = Python
         self.Youtubedl = Youtubedl
         self.Ffmpeg = Ffmpeg
@@ -46,6 +46,7 @@ class Settings:
         self.autoUpdate = autoUpdate
         self.defaultTab = defaultTab
         self.defaultCodec = defaultCodec
+        self.autoClose = autoClose
 
     def toJson(self, path):
         with open(path, "w") as fh:
@@ -73,7 +74,8 @@ class Settings:
                                        x["Window"]["windowPosY"]),
                         x["autoUpdate"],
                         x["defaultTab"],
-                        x["defaultCodec"])
+                        x["defaultCodec"],
+                        x["autoClose"])
 
     @staticmethod
     def loadDefault():
@@ -101,4 +103,5 @@ class Settings:
                                        0),
                         False,  # I would recommend not having auto update on, it's annoying.
                         0,  # audio tab
-                        0)  # hevc_opus
+                        0,  # hevc_opus
+                        False)  # raf autoClose

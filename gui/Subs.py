@@ -43,6 +43,9 @@ def Subs(window):
 
     temp.cleanup()
 
+    if (window.settings.autoClose):
+        exit()  # problably not the cleanest solution but doesn't left processes behind
+
 
 def sub_lang(window):
     cmd = subs_shared_list(window.sub_url_bar.text(), window.ytex)  # seems kinda unnecessary

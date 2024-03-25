@@ -13,10 +13,11 @@ def set_save(window):
     window.settings.Youtubedl.fromPip = window.set_ydpip_checkbox.isChecked()
     window.settings.autoUpdate = window.set_aup_checkbox.isChecked()
     window.settings.defaultTab = window.set_Tab_combobox.currentIndex()
+    window.settings.autoClose = window.set_close_checkbox.isChecked()
     ree_settings_save(window)
 
 
-def set_load(window, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vqual, append, tab):
+def set_load(window, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vqual, append, tab, close):
     window.set_audio_bar.setText(audio)
     window.set_videos_bar.setText(video)
     window.set_py_bar.setText(py)
@@ -29,6 +30,7 @@ def set_load(window, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vq
     window.set_Vqual_bar.setText(vqual)
     window.set_Append_bar.setText(append)
     window.set_Tab_combobox.setCurrentIndex(tab)
+    window.set_close_checkbox.setChecked(close)
 
 
 def set_makeScript(window):  # I had an issue getting the venv working with gui
@@ -47,4 +49,4 @@ def set_makeScript(window):  # I had an issue getting the venv working with gui
 def WriteDefaultJson(window):
     window.settings = Settings.loadDefault()
     window.settings.toJson(settingsPath)
-    set_load(window, window.settings.Youtubedl.audioDir, window.settings.Youtubedl.videoDir, window.settings.Python.python, window.settings.Python.pip, window.settings.Youtubedl.fromPip, window.settings.autoUpdate, window.settings.Ffmpeg.audioCodec, window.settings.Ffmpeg.videoCodec, window.settings.Ffmpeg.audioBitrate, window.settings.Ffmpeg.videoQuality, window.settings.Ffmpeg.append, window.settings.defaultTab)
+    set_load(window, window.settings.Youtubedl.audioDir, window.settings.Youtubedl.videoDir, window.settings.Python.python, window.settings.Python.pip, window.settings.Youtubedl.fromPip, window.settings.autoUpdate, window.settings.Ffmpeg.audioCodec, window.settings.Ffmpeg.videoCodec, window.settings.Ffmpeg.audioBitrate, window.settings.Ffmpeg.videoQuality, window.settings.Ffmpeg.append, window.settings.defaultTab, window.settings.autoClose)

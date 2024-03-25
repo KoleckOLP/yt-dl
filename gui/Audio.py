@@ -20,6 +20,9 @@ def Audio(window):
 
     process_output(window, window.aud_output_console, window.aud_download_button, window.process)
 
+    if (window.settings.autoClose):
+        exit()  # problably not the cleanest solution but doesn't left processes behind
+
 
 def aud_playlist_bar_toggle(window):
     window.aud_playlist_bar.setEnabled(window.aud_playlist_checkbox.isChecked())
