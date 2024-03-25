@@ -8,4 +8,4 @@ settingsPath = spath+"settings.json"
 videoDirDefault = spath+"videos"+os.path.sep
 audioDirDefault = spath+"audio"+os.path.sep
 curb = "testing"
-ver = "2.2.2.0"  # 2. python(language), 2. major(gigantic), 1. minor(big), 1 hotfix(small)
+ver = "2.2.2.1"  # 2. python(language), 2. major(gigantic), 1. minor(big), 1 hotfix(small)

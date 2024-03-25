@@ -13,8 +13,8 @@ def video_shared(url: str, playlist: bool, numb: str, qualityChoice: str, qual: 
     cmd = shared(playlist, numb, floc, ytex, directory)
 
     # the parts special to Video
-    if qualityChoice == "1":  # best and or the bad pick of 360p/720p
-        cmd = cmd + ["-f", "best[ext=mp4]"]
+    if qualityChoice == "1":  # best quality possible
+        cmd = cmd + ["-f", "bestvideo+bestaudio"]
     elif qualityChoice == "2":  # let's you choose, should not be possible for playlist
         cmd = cmd + ["-f", qual]
     else:  # the default option will give the best quality

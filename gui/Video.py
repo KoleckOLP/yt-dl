@@ -10,13 +10,13 @@ def Video(window):
     set_save(window)  # not a great idea but save the changed ehh state of the checkbox
 
     if window.vid_normal_radio.isChecked():
-        qualityChose = "1"
+        qualityChose = ""
         qual = "best[ext=mp4]"  # these are useless
     elif window.vid_custom_radio.isChecked():
         qualityChose = "2"
         qual = window.vid_quality_bar.text()
     else:
-        qualityChose = ""
+        qualityChose = "1"
         qual = "bestvideo+bestaudio"  # these are useless
 
     cmd = video_shared(window.vid_url_bar.text(),
