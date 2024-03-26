@@ -113,5 +113,8 @@ def listVersions(window):
     except Exception as e:
         missingDependency(window, "ffmpeg", e)
 
-    window.upd_output_console.moveCursor(QtGui.QTextCursor.MoveOperation.Start)
+    try:
+        window.upd_output_console.moveCursor(QtGui.QTextCursor.MoveOperation.Start)  # this line crashes on Vista but doesn't seem to be needed :D
+    except Exception as e:
+        print(e)
     QtWidgets.QApplication.processEvents()

@@ -25,10 +25,13 @@ from shared.Config import Settings
 # changing python working directory to script location to fix most path issues
 os.chdir(os.path.dirname(__file__))
 
-if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
-    import ctypes
-    myappid = 'HorseArmored.yt-dl.gui.'+ver  # Program Sting
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+try:
+    if (sys.platform.startswith("win")):  # win, linux, darwin, freebsd
+        import ctypes
+        myappid = 'HorseArmored.yt-dl.gui.'+ver  # Program Sting
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+except Exception as e:
+    print(e)
 
 
 class MainWindow(QtWidgets.QMainWindow):
