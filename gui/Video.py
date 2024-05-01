@@ -4,6 +4,8 @@ from gui.Settings import set_save
 from gui.Process import process_start, process_output
 from shared.Shared import hasCookie
 
+import os, subprocess, glob, datetime
+
 
 def Video(window):
     window.settings.Youtubedl.cookie = window.vid_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
@@ -32,6 +34,24 @@ def Video(window):
     window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
 
     process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+
+    #attempt putting the downloaded video into the clipboard
+    latest_file = max(glob.glob(f"{window.settings.Youtubedl.videoDir}*"), key=os.path.getctime)
+
+    Powershell_process = subprocess.run(
+        ['powershell', 'Set-Clipboard', '-Path',  f'\'{latest_file}\''], 
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        universal_newlines=True
+    )
+
+    # Check the exit status
+    if Powershell_process.returncode != 0:
+        with open("log.txt", "a", encoding="utf8") as f:
+            f.write(f"{datetime.datetime.now()}\nvideo url: {window.vid_url_bar.text()}\n")
+            f.write(f"Command '{Powershell_process.args}' returned non-zero exit status {Powershell_process.returncode}.\n")
+            f.write(Powershell_process.stdout)
+            f.write(Powershell_process.stderr)
 
     if (window.settings.autoClose):
         exit()  # problably not the cleanest solution but doesn't left processes behind

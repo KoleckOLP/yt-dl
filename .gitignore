@@ -32,3 +32,6 @@ videos/
 # temp folders
 ffdir/
 .helpfiles/
+
+# log file
+log.txt
