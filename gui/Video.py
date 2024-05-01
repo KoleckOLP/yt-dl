@@ -35,7 +35,7 @@ def Video(window):
 
     process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
-    if window.vid_normal_radio.isChecked(): #only ty to put video in clipboard if it's normal quality
+    if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
         #attempt putting the downloaded video into the clipboard
         latest_file = max(glob.glob(f"{window.settings.Youtubedl.videoDir}*"), key=os.path.getctime)
         latest_file = latest_file.replace("‘", "*")  # this character makes set-clipboard fail, and prolly is not the only one
