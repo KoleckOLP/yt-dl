@@ -66,8 +66,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAcceptDrops(True)
 
         # region ===== startup =====
-        pffmpeg = glob.glob(f"{spath}ffmpeg*")
-        pffprobe = glob.glob(f"{spath}ffprobe*")
+        pffmpeg = glob.glob(f"{spath}yt-dl\ffmpeg*")
+        pffprobe = glob.glob(f"{spath}yt-dl\ffprobe*")
         if (not pffmpeg and not pffprobe):
             self.floc = False
         else:  # THis code is absolutely terrible :)
