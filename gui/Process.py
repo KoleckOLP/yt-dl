@@ -42,7 +42,7 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
                 output_console.insertPlainText(test)
                 scrollbar = output_console.verticalScrollBar()
                 scrollbar.setValue(scrollbar.maximum())
-                QtWidgets.QApplication.processEvents()
+                #QtWidgets.QApplication.processEvents()
             else:
                 process.terminate()
                 exit()  # for some reason killing the subprocess and closing the window dit not kill the app, huh exit does not exists?
@@ -54,6 +54,6 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
         window.status("Ready.")
         tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
         window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
-        QtWidgets.QApplication.processEvents()
+        #QtWidgets.QApplication.processEvents()
         scrollbar = output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())

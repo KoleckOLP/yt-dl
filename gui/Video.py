@@ -4,7 +4,7 @@ from gui.Settings import set_save
 from gui.Process import process_start, process_output
 from shared.Shared import hasCookie
 
-import os, subprocess, glob, datetime
+import os, subprocess, glob, datetime, threading
 
 
 def Video(window):
@@ -33,7 +33,9 @@ def Video(window):
 
     window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
 
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+    #process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+    thread = threading.Thread(target=process_output, args=(window, window.vid_output_console, window.vid_download_button, window.process))
+    thread.start()  # this is kinda bad because I'm editting the qui from a thread, and it could go wrong, I shold be emitting signals from a thread instead.
 
     if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
         #attempt putting the downloaded video into the clipboard
