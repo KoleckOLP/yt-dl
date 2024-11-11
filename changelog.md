@@ -1,7 +1,62 @@
-## New in 2.2.1.6
+## New in 2.2.2.2 Released Testing: 
+No new features
+original portable build is now called yt-dl-x64_10-11_portable_2.2.2.2.7z
+brand new build for 32bit Windows Vista called yt-dl-x86_vista_portable_2.2.2.2.7z
+dependencies in this version are:
+    - git 2.44.0.windows.1 (runs but fails to download I think, will be looked into, latest version)
+    - Python 3.7.9 (seems to be the latest working, 3.8.0 would just crash, Aug. 17, 2020)
+    - qt 5.9.3 (this is a really old qt version but newer would just crash, released Nov. 24, 2017)
+        - sip 4.19.8 (might be possible to update but I don't know yet, Feb. 17, 2018)
+    - yt-dlp 2023.11.16 (this is actually the latest version and it just works!)
+    - ffmpeg 2.8.5 (I could probably get a newer one working but I haven't tested more, Jan. 15, 2016)
+there is a change that I could make more version for example for Windows 7-8.1
+it's highly unlikely that there will be an XP version but who knows.
+
+## New in 2.2.2.1 Released Testing:
+Option to automatically close the program when download finishes, requested by Raf
+Default quality is now "normal" with extenction mp4, requested by Raf (he requested mp4 and option to choose defaultQuality, that will come in a later release)
+Fixed downloading whole youtube channel (was a utf-8 decoding issue)
+Fixed Best quality download not working in 2.2.2.0
+updated dependencies:
+    - git 2.43.0.windows.1 - 2.44.0.windows.1
+    - Python 3.12.1 - 3.12.2
+    - qt 6.6.1 (unchanged)
+    - yt-dlp 2023.12.30 - 2024.03.10
+    - ffmpeg 2024-01-01 - 2024-03-25
+
+# New in 2.2.2.0 Unreleased:
+info about this update is probaby lost.
+
+## New in 2.2.1.10 Released Testing:
+updated dependecies:
+    - git 2.42.0.windows.2 - 2.43.0.windows.1
+    - Python 3.12.0 - 3.12.1
+    - qt 6.5.3 - 6.6.1
+    - yt-dlp 2023.10.13 - 2023.12.30
+    - ffmpeg 2023-10-23 - 2024-01-01
+new update to panic_fix.bat this time it uninstalls all of qt6 and installs it back, fixes stuff if qt really breaks.
+
+## New in 2.2.1.9 Released Testing:
+updated dependencies:
+    - git 2.42.0.windows.2 - unchange
+    - Python 3.11.5 - 3.12.0
+    - qt 6.5.2 - 6.5.3
+    - yt-dlp 2023.09.24 - 2023.10.13
+    - ffmpeg 2023.09.29 - 2023.10.23
+
+## New in 2.2.1.8 Released Testing:
+updated dependencies
+added panic_fix.bat, if while updating program crashes run panic fix to repair dependencies
+
+## New in 2.2.1.7 Released Testing:
+updated dependencies
+tested on Windows 8.1 (doesn't work) - Might be fixed in the future
+Minimum OS is Windows 10 x64
+
+## New in 2.2.1.6 Unreleased:
 Bugfixing for macOS
 
-## New in 2.2.1.5 Release Testing:
+## New in 2.2.1.5 Released Testing:
 Added window size and position now gets saved on exit
 Added window size and position now gets loaded on startup
 Fixed an issue where your custom ReEncode config would get overridden if you pressed save in Settings
