@@ -1,7 +1,7 @@
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
 from gui.Settings import set_save
-from gui.Process import process_start, process_output
+from gui.Process import run_process_mto
 from shared.Shared import hasCookie
 
 import os, subprocess, glob, datetime, threading
@@ -30,12 +30,8 @@ def Video(window):
                        window.ytex,
                        window.settings.Youtubedl.videoDir,
                        window.settings.Youtubedl.cookie)
-
-    window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
-
-    #process_output(window, window.vid_output_console, window.vid_download_button, window.process)
-    thread = threading.Thread(target=process_output, args=(window, window.vid_output_console, window.vid_download_button, window.process))
-    thread.start()  # this is kinda bad because I'm editting the qui from a thread, and it could go wrong, I shold be emitting signals from a thread instead.
+    
+    run_process_mto(window, cmd, window.vid_output_console, window.vid_download_button)
 
     if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
         #attempt putting the downloaded video into the clipboard
@@ -65,9 +61,7 @@ def vid_quality(window):
 
     cmd = hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
-    window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
-
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+    run_process_mto(window, cmd, window.vid_output_console, window.vid_download_button)
 
 
 def vid_playlist_bar_toggle(window):

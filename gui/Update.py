@@ -7,7 +7,7 @@ except ModuleNotFoundError:
     from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import settingsPath, ver
-from gui.Process import process_start, process_output
+from gui.Process import run_process_sto
 
 
 def Update(window):
@@ -28,20 +28,17 @@ def update_yt_dl(window):
         cmd = [f"{window.floc+os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "pull", "--recurse-submodules"]
     else:
         cmd = ["git", "pull", "--recurse-submodules"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
 
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "git")  # for some reason it missed half of the letters
 
 
 def update_depend(window):
     pips = window.settings.Python.pip.split(" ")
     cmd = [f"{window.settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python")
 
-    cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    cmd = pips + ["install", "-Ur", f"req-gui.txt"]
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "pip")
 
 
 def upd_auto_toggle(window):
@@ -71,8 +68,7 @@ def listVersions(window):
     else:
         cmd = ["git", "--version"]
     try:
-        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "git", False)
     except Exception as e:
         missingDependency(window, "git", e)
 
@@ -80,8 +76,7 @@ def listVersions(window):
 
     # python version
     cmd = [window.settings.Python.python, "-V"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python", False)
 
     # qt version
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
@@ -92,11 +87,7 @@ def listVersions(window):
     else:
         cmd = ["yt-dlp", "--version"]  # I have no clue if the non-portable even works
     try:
-        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
-
-        window.upd_output_console.append("yt-dlp ")
-
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "yt-dlp", False)  # this one looks so innocent
     except Exception as e:
         missingDependency(window, "yt-dlp", e)
 
@@ -108,8 +99,7 @@ def listVersions(window):
     else:
         cmd = ["ffmpeg", "-version"]
     try:
-        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "ffmpeg", False)
     except Exception as e:
         missingDependency(window, "ffmpeg", e)
 

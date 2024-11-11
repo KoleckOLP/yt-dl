@@ -1,13 +1,14 @@
 import sys
 import subprocess
+import threading
 from typing import List
 try:
-    from PyQt6 import QtWidgets, QtGui
+    from PyQt6 import QtWidgets
 except ModuleNotFoundError:
-    from PyQt5 import QtWidgets, QtGui
+    from PyQt5 import QtWidgets
 
 
-def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "youtube_dl"):
+def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "yt-dlp"):
     if not window.running:
         window.running = True
         window.status("Busy.")
@@ -17,6 +18,8 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
 
         if output_clear:
             output_console.setHtml("")  # clearing the output_console
+            if (process_name == "none"):  # this is horrible xD
+                process_name = "yt-dlp"
             output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
 
         if (sys.platform.startswith("win")):  # (os.name == "nt"):
@@ -33,13 +36,14 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
     if window.running:
         while True:
             if window.isVisible():  # this should make sure that if window dies the subprocess dies too.
-                test = process.stdout.readline()
-                if not test:
+                line = process.stdout.readline()
+                if not line:
                     break
-                test = str(test)
-                if "\\n" in test:
-                    test = test.replace("\\n", "\n")
-                output_console.insertPlainText(test)
+                line = str(line)
+                if "\\n" in line:
+                    line = line.replace("\\n", "\n")
+                #print(test)
+                output_console.insertPlainText(line)
                 scrollbar = output_console.verticalScrollBar()
                 scrollbar.setValue(scrollbar.maximum())
                 QtWidgets.QApplication.processEvents()
@@ -57,3 +61,16 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
         QtWidgets.QApplication.processEvents()
         scrollbar = output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
+
+
+def run_process_mto(window, cmd, output_console, download_button, output_clear_proc: bool = True, process_name: str = "none", output_clear_out: bool = True, button_text: str = "Download"):  # !!!Multi Threaded Ouput!!! still has a tendency to random crash
+    window.process = process_start(window, cmd, output_console,  download_button, window.process, output_clear_proc, process_name)
+
+    thread = threading.Thread(target=process_output, args=(window, output_console, download_button, window.process, output_clear_out, button_text))
+    thread.start()  # this is kinda bad because I'm editting the gui from a thread, and it could go wrong, I shold be emitting signals from a thread instead.
+
+def run_process_sto(window, cmd, output_console, download_button, output_clear_proc: bool = True, process_name: str = "none", output_clear_out: bool = True, button_text: str = "Download"):  # !!!Single Threadded Output!!! for gui/Update.py
+    window.process = process_start(window, cmd, output_console, download_button, window.process, output_clear_proc, process_name)
+    if (process_name == "yt-dlp"):
+        window.upd_output_console.append("yt-dlp ")
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, output_clear_out, button_text)

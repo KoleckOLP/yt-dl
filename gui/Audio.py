@@ -1,7 +1,7 @@
 # Imports from this project
 from shared.Audio import audio_shared
 from gui.Settings import set_save
-from gui.Process import process_start, process_output
+from gui.Process import run_process_mto
 
 
 def Audio(window):
@@ -16,9 +16,7 @@ def Audio(window):
                        window.settings.Youtubedl.audioDir,
                        window.settings.Youtubedl.cookie)
 
-    window.process = process_start(window, cmd, window.aud_output_console, window.aud_download_button, window.process)
-
-    process_output(window, window.aud_output_console, window.aud_download_button, window.process)
+    run_process_mto(window, cmd, window.aud_output_console, window.aud_download_button)
 
     if (window.settings.autoClose):
         exit()  # problably not the cleanest solution but doesn't left processes behind
