@@ -66,8 +66,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAcceptDrops(True)
 
         # region ===== startup =====
-        pffmpeg = glob.glob(f"{spath}yt-dl\ffmpeg*")
-        pffprobe = glob.glob(f"{spath}yt-dl\ffprobe*")
+        pffmpeg = glob.glob(f"{spath}ffmpeg*")
+        pffprobe = glob.glob(f"{spath}ffprobe*")
         if (not pffmpeg and not pffprobe):
             self.floc = False
         else:  # THis code is absolutely terrible :)
@@ -105,10 +105,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ytex = [self.settings.Python.python, ytdlp[0]]
                 self.Vista = True
         else:
-            self.ytex = [python, ytdlp[0]]
+            self.ytex = [python+"python", ytdlp[0]]
             self.Vista = False
-
-        print(self.ytex)
 
         # changing size and position of the window
         if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:

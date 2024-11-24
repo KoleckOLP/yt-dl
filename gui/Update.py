@@ -86,7 +86,6 @@ def listVersions(window):
 
     # yt-dlp version
     if window.ytex:
-        print(window.ytex, " --version")
         cmd = window.ytex + ["--version"]  # yt-dlp is in a known location (portable)
     else:
         cmd = ["yt-dlp", "--version"]  # yt-dlp should be in users path, and it's not my problem (non portable)
