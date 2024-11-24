@@ -36,9 +36,12 @@ def update_depend(window):
     pips = window.settings.Python.pip.split(" ")
     cmd = [f"{window.settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
     run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python")
-
-    cmd = pips + ["install", "-Ur", f"req-gui.txt"]
+    if window.Vista:
+        pips + ["install", "-U", "-r", f"req-Vista.txt"]
+    else:
+        cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
     run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "pip")
+
 
 
 def upd_auto_toggle(window):
@@ -83,9 +86,10 @@ def listVersions(window):
 
     # yt-dlp version
     if window.ytex:
-        cmd = window.ytex+["--version"]
+        print(window.ytex, " --version")
+        cmd = window.ytex + ["--version"]  # yt-dlp is in a known location (portable)
     else:
-        cmd = ["yt-dlp", "--version"]  # I have no clue if the non-portable even works
+        cmd = ["yt-dlp", "--version"]  # yt-dlp should be in users path, and it's not my problem (non portable)
     try:
         run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "yt-dlp", False)  # this one looks so innocent
     except Exception as e:
