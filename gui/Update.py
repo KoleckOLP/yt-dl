@@ -39,7 +39,10 @@ def update_depend(window):
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
     process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
-    cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
+    if window.Vista:
+        pips + ["install", "-U", "-r", f"req-Vista.txt"]
+    else:
+        cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
     process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
@@ -88,9 +91,10 @@ def listVersions(window):
 
     # yt-dlp version
     if window.ytex:
-        cmd = window.ytex+["--version"]
+        print(window.ytex, " --version")
+        cmd = window.ytex + ["--version"]  # yt-dlp is in a known location (portable)
     else:
-        cmd = ["yt-dlp", "--version"]  # I have no clue if the non-portable even works
+        cmd = ["yt-dlp", "--version"]  # yt-dlp should be in users path, and it's not my problem (non portable)
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False)
 

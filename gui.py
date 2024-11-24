@@ -77,15 +77,6 @@ class MainWindow(QtWidgets.QMainWindow):
             directorySplit = "\\".join(directorySplit)
             self.floc = directorySplit
 
-        # this code is probably Windows only, and it's ugly af
-        pytonLoc = os.path.dirname(sys.executable)+os.path.sep
-        pythonw = sys.executable.replace("python.exe", "pythonw.exe")
-        youtubedl = glob.glob(f"{pytonLoc}Scripts{os.path.sep}yt-dlp*")
-        if (not youtubedl):
-            self.ytex = False
-        else:
-            self.ytex = [f"{pythonw}", f"{pytonLoc}Scripts{os.path.sep}yt-dlp.exe"]
-
         if (os.path.exists(settingsPath)):
             try:
                 self.settings = Settings.fromJson(settingsPath)
@@ -102,6 +93,22 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
 
         self.setWindowTitle(f"yt-dl {ver}")
+
+                # this code is probably Windows only, and it's ugly af
+        python = os.path.dirname(sys.executable)+os.path.sep  # location of the python yt-dl was started from
+        ytdlp = glob.glob(f"{python}Scripts{os.path.sep}yt-dlp*")
+        if (not ytdlp):
+            ytdlp = glob.glob(f"{self.settings.Python.python[:-6]}Scripts{os.path.sep}yt-dlp*")
+            if (not ytdlp):
+                self.ytex = False
+            else:
+                self.ytex = [self.settings.Python.python, ytdlp[0]]
+                self.Vista = True
+        else:
+            self.ytex = [python, ytdlp[0]]
+            self.Vista = False
+
+        print(self.ytex)
 
         # changing size and position of the window
         if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:
