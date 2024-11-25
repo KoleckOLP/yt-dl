@@ -31,7 +31,7 @@ def Video(window):
                        window.settings.Youtubedl.videoDir,
                        window.settings.Youtubedl.cookie)
 
-    window.process = process_start(window, cmd, window.vid_output_console,  window.vid_download_button, window.process)
+    window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 
     process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
@@ -39,8 +39,8 @@ def Video(window):
         #attempt putting the downloaded video into the clipboard
         latest_file = max(glob.glob(f"{window.settings.Youtubedl.videoDir}*"), key=os.path.getctime)
         latest_file = latest_file.replace("‘", "*")  # this character makes set-clipboard fail, and prolly is not the only one
-        Powershell_process = subprocess.run(
-            ['powershell', 'Set-Clipboard', '-Path',  f'\'{latest_file}\''], 
+        Powershell_process = subprocess.run(  # codefactor is mad about this, also this is windows only and doesn't check for platform
+            ['powershell', 'Set-Clipboard', '-Path', f'\'{latest_file}\''], 
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True

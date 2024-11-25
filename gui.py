@@ -272,9 +272,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if not os.path.exists(loc):
             loc = "." + os.path.sep  # if path does not exist open installation folder
         if (sys.platform.startswith("win")):
-            os.startfile(loc)  # does not work on macOS
+            os.startfile(loc)  # does not work on macOS, and codefactor is mad about this.
         elif (sys.platform.startswith("darwin")):
-            os.system(f"open {loc}")
+            os.system(f"open {loc}")  # codefactor is also mad about this.
         else:  # linux haiku and others
             print("sorry this platform is not supported yet")
     # endregion
