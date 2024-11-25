@@ -1,7 +1,13 @@
-try:
-    from PyQt6.QtWidgets import QFileDialog
-except ModuleNotFoundError:
+import platform
+
+win_version = platform.release()
+if float(win_version) < 10:
     from PyQt5.QtWidgets import QFileDialog
+else:
+    try:
+        from PyQt6.QtWidgets import QFileDialog
+    except ModuleNotFoundError:
+        from PyQt5.QtWidgets import QFileDialog
 # Imports from this project
 from release import settingsPath
 from shared.ReEncode import reencode_shared, reencode_shared_settings

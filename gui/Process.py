@@ -1,10 +1,16 @@
 import sys
 import subprocess
 from typing import List
-try:
-    from PyQt6 import QtWidgets, QtGui
-except ModuleNotFoundError:
+import platform
+
+win_version = platform.release()
+if float(win_version) < 10:
     from PyQt5 import QtWidgets, QtGui
+else:
+    try:
+        from PyQt6 import QtWidgets, QtGui
+    except ModuleNotFoundError:
+        from PyQt5 import QtWidgets, QtGui
 
 
 def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "youtube_dl"):

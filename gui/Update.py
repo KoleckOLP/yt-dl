@@ -1,10 +1,17 @@
 import os, sys
-try:
-    from PyQt6 import QtWidgets, QtGui
-    from PyQt6.QtCore import QT_VERSION_STR
-except ModuleNotFoundError:
+import platform
+
+win_version = platform.release()
+if float(win_version) < 10:
     from PyQt5 import QtWidgets, QtGui
     from PyQt5.QtCore import QT_VERSION_STR
+else:
+    try:
+        from PyQt6 import QtWidgets, QtGui
+        from PyQt6.QtCore import QT_VERSION_STR
+    except ModuleNotFoundError:
+        from PyQt5 import QtWidgets, QtGui
+        from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import settingsPath, ver
 from gui.Process import process_start, process_output

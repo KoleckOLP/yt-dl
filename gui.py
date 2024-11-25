@@ -1,16 +1,23 @@
-from logging.handlers import DEFAULT_TCP_LOGGING_PORT
+﻿from logging.handlers import DEFAULT_TCP_LOGGING_PORT
 import os
 import sys
 import glob
+import platform
 
-try:
-    from PyQt6 import QtWidgets, uic
-    from PyQt6.QtWidgets import QMessageBox, QApplication
-    from PyQt6.QtCore import QT_VERSION_STR
-except ModuleNotFoundError:
+win_version = platform.release()
+if float(win_version) < 10:
     from PyQt5 import QtWidgets, uic
     from PyQt5.QtWidgets import QMessageBox
     from PyQt5.QtCore import QT_VERSION_STR
+else:
+    try:
+        from PyQt6 import QtWidgets, uic
+        from PyQt6.QtWidgets import QMessageBox, QApplication
+        from PyQt6.QtCore import QT_VERSION_STR
+    except Exception as e:
+        from PyQt5 import QtWidgets, uic
+        from PyQt5.QtWidgets import QMessageBox
+        from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
