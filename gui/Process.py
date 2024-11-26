@@ -2,8 +2,7 @@ from typing import List
 import sys, subprocess, platform
 
 if (platform.system().lower() == "windows"):
-    win_version = int(platform.version().split(".")[0])
-    if win_version < 10:
+    if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets
     else:
         try:

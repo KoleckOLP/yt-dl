@@ -1,8 +1,7 @@
 import platform
 
 if (platform.system().lower() == "windows"):
-    win_version = int(platform.version().split(".")[0])
-    if win_version < 10:
+    if (int(platform.version().split(".")[0]) < 10):
         from PyQt5.QtWidgets import QFileDialog
     else:
         try:

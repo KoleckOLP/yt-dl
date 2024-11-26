@@ -2,8 +2,7 @@
 import os, sys, glob, platform
 
 if (platform.system().lower() == "windows"):
-    win_version = int(platform.version().split(".")[0])
-    if win_version < 10:
+    if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets, uic
         from PyQt5.QtWidgets import QMessageBox
         from PyQt5.QtCore import QT_VERSION_STR
@@ -101,9 +100,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 # this code is probably Windows only, and it's ugly af
         python = os.path.dirname(sys.executable)+os.path.sep  # location of the python yt-dl was started from
-        ytdlp = glob.glob(f"{python}Scripts{os.path.sep}yt-dlp*")
+        ytdlp = glob.glob(f"{python}Scripts{os.path.sep}yt-dlp*")  # check if python that launch yt-dl has yt-dlp
         if (not ytdlp):
-            ytdlp = glob.glob(f"{self.settings.Python.python[:-6]}Scripts{os.path.sep}yt-dlp*")
+            ytdlp = glob.glob(f"{self.settings.Python.python[:-6]}Scripts{os.path.sep}yt-dlp*")  # check if user configured python has yt-dlp, specific to Vista build
             if (not ytdlp):
                 self.ytex = False
             else:
