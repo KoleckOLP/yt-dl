@@ -81,10 +81,10 @@ class MainWindow(QtWidgets.QMainWindow):
             directorySplit = "\\".join(directorySplit)
             self.floc = directorySplit
 
-        pgit = pffmpeg = glob.glob(f"{spath}git{os.path.sep}bin{os.path.sep}ffmpeg*")
-        if pgit:
+        pgit = glob.glob(f"{spath}git{os.path.sep}bin{os.path.sep}git*")
+        if pgit:  # using portable git
             self.gloc = True
-        else:
+        else:  # using non portable git
             self.gloc = False
 
         if (os.path.exists(settingsPath)):
