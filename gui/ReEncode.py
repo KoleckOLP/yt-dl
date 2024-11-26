@@ -32,7 +32,7 @@ def Reencode(window):
 
             window.process = process_start(window, line, window.ree_output_console, window.sub_download_button, window.process)
 
-            process_output(window, window.ree_output_console, window.sub_download_button, window.process)
+            process_output(window, window.ree_output_console, window.sub_download_button, window.process, True, "Re-encode")
 
 
 def ree_settings(window):

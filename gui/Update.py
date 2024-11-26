@@ -37,14 +37,14 @@ def update_yt_dl(window):
         cmd = ["git", "pull", "--recurse-submodules"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
 
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
 
 
 def update_depend(window):
     pips = window.settings.Python.pip.split(" ")
     cmd = [f"{window.settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
 
     if (platform.system().lower() == "windows"):  # platform windows
         if (int(platform.version().split(".")[0]) < 10):  # older than windows 10
@@ -53,20 +53,20 @@ def update_depend(window):
         else:
                 cmd = pips + ["install", "-U", "pyqt6"]  # in 10-11 update pyqt6 and yt-dlp
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
     else:  # platforms where I don't control dependecies, meaning they might not come from pip
         cmd = pips + ["install", "-U", "pyqt5"]  # try each dependenci on it's own.
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
 
         cmd = pips + ["install", "-U", "pyqt6"]  # try each dependenci on it's own.
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
 
     if window.settings.Youtubedl.fromPip:  # no matter what plaform if yt-dlp is from pip than update it
         cmd = pips + ["install", "-U", "yt-dlp"]
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
 
 
 def upd_auto_toggle(window):
@@ -77,7 +77,7 @@ def upd_auto_toggle(window):
 
 def missingDependency(window, name, e):  # still kinda ugly function
     window.upd_output_console.append(f"{name}: {str(e)}\n")
-    window.upd_update_button.setText("Update")
+    window.upd_update_button.setText("Update")  # I have no clue if this should be Update or List xD
     window.running = False
     window.status("Ready.")
     tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
@@ -97,7 +97,7 @@ def listVersions(window):
         cmd = ["git.exe", "--version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
     except Exception as e:
         missingDependency(window, "git", e)
 
@@ -106,7 +106,7 @@ def listVersions(window):
     # python version
     cmd = [window.settings.Python.python, "-V"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
 
     # qt version
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
@@ -121,7 +121,7 @@ def listVersions(window):
 
         window.upd_output_console.append("yt-dlp ")
 
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
     except Exception as e:
         missingDependency(window, "yt-dlp", e)
 
@@ -134,7 +134,7 @@ def listVersions(window):
         cmd = ["ffmpeg", "-version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False)
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
     except Exception as e:
         missingDependency(window, "ffmpeg", e)
 
