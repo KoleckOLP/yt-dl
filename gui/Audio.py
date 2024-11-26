@@ -1,3 +1,4 @@
+import sys
 # Imports from this project
 from shared.Audio import audio_shared
 from gui.Settings import set_save
@@ -21,7 +22,7 @@ def Audio(window):
     process_output(window, window.aud_output_console, window.aud_download_button, window.process)
 
     if (window.settings.autoClose):
-        exit()  # problably not the cleanest solution but doesn't left processes behind
+        sys.exit()  # problably not the cleanest solution but doesn't left processes behind
 
 
 def aud_playlist_bar_toggle(window):

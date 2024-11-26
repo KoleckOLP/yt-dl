@@ -1,17 +1,18 @@
-import os, sys
+import os
 import platform
 
-win_version = platform.release()
-if float(win_version) < 10:
-    from PyQt5 import QtWidgets, QtGui
-    from PyQt5.QtCore import QT_VERSION_STR
-else:
-    try:
-        from PyQt6 import QtWidgets, QtGui
-        from PyQt6.QtCore import QT_VERSION_STR
-    except ModuleNotFoundError:
+if (platform.system().lower() == "windows"):
+    win_version = int(platform.version().split(".")[0])
+    if win_version < 10:
         from PyQt5 import QtWidgets, QtGui
         from PyQt5.QtCore import QT_VERSION_STR
+    else:
+        try:
+            from PyQt6 import QtWidgets, QtGui
+            from PyQt6.QtCore import QT_VERSION_STR
+        except ModuleNotFoundError:
+            from PyQt5 import QtWidgets, QtGui
+            from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import settingsPath, ver
 from gui.Process import process_start, process_output
@@ -98,7 +99,6 @@ def listVersions(window):
 
     # yt-dlp version
     if window.ytex:
-        print(window.ytex, " --version")
         cmd = window.ytex + ["--version"]  # yt-dlp is in a known location (portable)
     else:
         cmd = ["yt-dlp", "--version"]  # yt-dlp should be in users path, and it's not my problem (non portable)

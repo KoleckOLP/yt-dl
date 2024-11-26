@@ -1,3 +1,4 @@
+import sys
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
 from gui.Settings import set_save
@@ -55,7 +56,7 @@ def Video(window):
                 f.write(Powershell_process.stderr)
 
         if (window.settings.autoClose):
-            exit()  # problably not the cleanest solution but doesn't left processes behind
+            sys.exit()  # problably not the cleanest solution but doesn't left processes behind
 
 
 def vid_quality(window):

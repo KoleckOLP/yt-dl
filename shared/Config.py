@@ -79,9 +79,9 @@ class Settings:
 
     @staticmethod
     def loadDefault():
-        if(spath.find("yt-dl_portable")):
-            defpython = "..\python\python"
-            defpip = "..\python\python -m pip"
+        if(spath.find("yt-dl_portable")):  # this clearly doesn't work.
+            defpython = "..\\python\\python"
+            defpip = "..\\python\\python -m pip"
         else:
             defpython = "python"
             defpip = "pip"

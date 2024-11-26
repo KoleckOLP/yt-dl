@@ -1,16 +1,15 @@
-import sys
-import subprocess
 from typing import List
-import platform
+import sys, subprocess, platform
 
-win_version = platform.release()
-if float(win_version) < 10:
-    from PyQt5 import QtWidgets, QtGui
-else:
-    try:
-        from PyQt6 import QtWidgets, QtGui
-    except ModuleNotFoundError:
-        from PyQt5 import QtWidgets, QtGui
+if (platform.system().lower() == "windows"):
+    win_version = int(platform.version().split(".")[0])
+    if win_version < 10:
+        from PyQt5 import QtWidgets
+    else:
+        try:
+            from PyQt6 import QtWidgets
+        except ModuleNotFoundError:
+            from PyQt5 import QtWidgets
 
 
 def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "youtube_dl"):
@@ -51,7 +50,7 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
                 QtWidgets.QApplication.processEvents()
             else:
                 process.terminate()
-                exit()  # for some reason killing the subprocess and closing the window dit not kill the app, huh exit does not exists?
+                sys.exit()  # for some reason killing the subprocess and closing the window dit not kill the app, huh exit does not exists?
         print("\a")
         if output_clear:
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")

@@ -1,4 +1,4 @@
-import os
+import os, sys
 # Imports from this project
 from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_paths_for_ffmpeg, subs_shared_lines_for_ffmpeg
 from gui.Process import process_start, process_output
@@ -44,7 +44,7 @@ def Subs(window):
     temp.cleanup()
 
     if (window.settings.autoClose):
-        exit()  # problably not the cleanest solution but doesn't left processes behind
+        sys.exit()  # problably not the cleanest solution but doesn't left processes behind
 
 
 def sub_lang(window):

@@ -1,23 +1,21 @@
 ﻿from logging.handlers import DEFAULT_TCP_LOGGING_PORT
-import os
-import sys
-import glob
-import platform
+import os, sys, glob, platform
 
-win_version = platform.release()
-if float(win_version) < 10:
-    from PyQt5 import QtWidgets, uic
-    from PyQt5.QtWidgets import QMessageBox
-    from PyQt5.QtCore import QT_VERSION_STR
-else:
-    try:
-        from PyQt6 import QtWidgets, uic
-        from PyQt6.QtWidgets import QMessageBox, QApplication
-        from PyQt6.QtCore import QT_VERSION_STR
-    except Exception as e:
+if (platform.system().lower() == "windows"):
+    win_version = int(platform.version().split(".")[0])
+    if win_version < 10:
         from PyQt5 import QtWidgets, uic
         from PyQt5.QtWidgets import QMessageBox
         from PyQt5.QtCore import QT_VERSION_STR
+    else:
+        try:
+            from PyQt6 import QtWidgets, uic
+            from PyQt6.QtWidgets import QMessageBox, QApplication
+            from PyQt6.QtCore import QT_VERSION_STR
+        except Exception as e:
+            from PyQt5 import QtWidgets, uic
+            from PyQt5.QtWidgets import QMessageBox
+            from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
@@ -114,8 +112,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             self.ytex = [python, ytdlp[0]]
             self.Vista = False
-
-        print(self.ytex)
 
         # changing size and position of the window
         if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:
@@ -240,7 +236,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if button == QMessageBox.StandardButton.Ok:
                 self.SaveDefaultConfig("ok")
             else:
-                exit()
+                sys.exit()
 
     def SaveDefaultConfig(self, i):  # only exists for pyqt5 support, not needed in pyqt6
         if QT_VERSION_STR[0] == '6':
@@ -250,7 +246,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if "ok" in text:
             WriteDefaultJson(self)
         else:
-            exit()
+            sys.exit()
 
     enabledColor = "#383838"
     disabledColor = "#242424"
