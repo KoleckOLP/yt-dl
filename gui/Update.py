@@ -9,7 +9,7 @@ if (platform.system().lower() == "windows"):
         try:
             from PyQt6 import QtWidgets, QtGui
             from PyQt6.QtCore import QT_VERSION_STR
-        except ModuleNotFoundError:
+        except Exception as e:
             from PyQt5 import QtWidgets, QtGui
             from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
@@ -31,9 +31,9 @@ def Update(window):
 
 
 def update_yt_dl(window):
-    if window.floc:
+    if window.gloc:  # is in portable
         cmd = [f"{window.floc+os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "pull", "--recurse-submodules"]
-    else:
+    else:  # is not in portable
         cmd = ["git", "pull", "--recurse-submodules"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
 
@@ -46,12 +46,27 @@ def update_depend(window):
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
     process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
-    if window.Vista:
-        pips + ["install", "-U", "-r", f"req-Vista.txt"]
-    else:
-        cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    if (platform.system().lower() == "windows"):  # platform windows
+        if (int(platform.version().split(".")[0]) < 10):  # older than windows 10
+            if (platform.version().lower() != "vista"):
+                cmd = pips + ["install", "-U", "pyqt5"]  # on 7-8.1 update pyqt5 and yt-dlp
+        else:
+                cmd = pips + ["install", "-U", "pyqt6"]  # in 10-11 update pyqt6 and yt-dlp
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+    else:  # platforms where I don't control dependecies, meaning they might not come from pip
+        cmd = pips + ["install", "-U", "pyqt5"]  # try each dependenci on it's own.
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+
+        cmd = pips + ["install", "-U", "pyqt6"]  # try each dependenci on it's own.
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
+
+    if window.settings.Youtubedl.fromPip:  # no matter what plaform if yt-dlp is from pip than update it
+        cmd = pips + ["install", "-U", "yt-dlp"]
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process)
 
 
 def upd_auto_toggle(window):
@@ -76,7 +91,7 @@ def listVersions(window):
     # yt-dl version
     window.upd_output_console.append(f"yt-dl {ver}\n\n")
 
-    if window.floc:
+    if window.gloc:
         cmd = [f"{window.floc + os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "-v"]
     else:
         cmd = ["git.exe", "--version"]

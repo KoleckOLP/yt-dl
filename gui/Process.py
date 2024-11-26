@@ -7,7 +7,7 @@ if (platform.system().lower() == "windows"):
     else:
         try:
             from PyQt6 import QtWidgets
-        except ModuleNotFoundError:
+        except Exception as e:
             from PyQt5 import QtWidgets
 
 
@@ -50,7 +50,7 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
             else:
                 process.terminate()
                 sys.exit()  # for some reason killing the subprocess and closing the window dit not kill the app, huh exit does not exists?
-        print("\a")
+        print("\a", end="")  # play alert sound without printing a new line
         if output_clear:
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
         download_button.setText(button_text)

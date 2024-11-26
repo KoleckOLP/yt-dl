@@ -74,12 +74,18 @@ class MainWindow(QtWidgets.QMainWindow):
         pffprobe = glob.glob(f"{spath}ffprobe*")
         if (not pffmpeg and not pffprobe):
             self.floc = False
-        else:  # THis code is absolutely terrible :)
+        else:  # This code is absolutely terrible :)
             directorySplit = pffmpeg[0]
             directorySplit = directorySplit.split("\\")
             directorySplit = directorySplit[:-1]
             directorySplit = "\\".join(directorySplit)
             self.floc = directorySplit
+
+        pgit = pffmpeg = glob.glob(f"{spath}git{os.path.sep}bin{os.path.sep}ffmpeg*")
+        if pgit:
+            self.gloc = True
+        else:
+            self.gloc = False
 
         if (os.path.exists(settingsPath)):
             try:
@@ -107,10 +113,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ytex = False
             else:
                 self.ytex = [self.settings.Python.python, ytdlp[0]]
-                self.Vista = True
         else:
             self.ytex = [python+"python", ytdlp[0]]
-            self.Vista = False
 
         # changing size and position of the window
         if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:
