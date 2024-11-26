@@ -24,9 +24,9 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
             output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
 
         if (sys.platform.startswith("win")):  # (os.name == "nt"):
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, creationflags=0x08000000, universal_newlines=True, encoding="utf8", errors="ignore")  # this one does not check if another process is running
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000, universal_newlines=True, encoding="utf8", errors="ignore", stdin=subprocess.DEVNULL)  # this one does not check if another process is running, stdin=subprocess.DEVNULL
         else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"):  # other oeses should be fine with this
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True, errors="ignore")
+            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, errors="ignore")
     else:
         process.terminate()
         window.running = False
@@ -38,7 +38,7 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
         while True:
             if window.isVisible():  # this should make sure that if window dies the subprocess dies too.
                 test = process.stdout.readline()
-                if not test:
+                if test == '' and process.poll() is not None:
                     break
                 test = str(test)
                 if "\\n" in test:
