@@ -110,7 +110,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ytex = [self.settings.Python.python, ytdlp[0]]
                 self.Vista = True
         else:
-            self.ytex = [python, ytdlp[0]]
+            self.ytex = [python+"python", ytdlp[0]]
             self.Vista = False
 
         # changing size and position of the window
