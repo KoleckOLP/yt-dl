@@ -21,7 +21,7 @@ from gui.Audio import Audio, aud_playlist_bar_toggle
 from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
 from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
 from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
-from gui.Update import Update, upd_auto_toggle
+from gui.Update import Update, upd_auto_toggle, upd_button_change
 from gui.Settings import set_save, set_load, set_makeScript, WriteDefaultJson
 from shared.ReEncode import reencode_shared_settings
 from shared.Config import Settings
@@ -186,6 +186,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tabWidget.setCurrentIndex(4)
             Update(self)
 
+        self.upd_update_combobox.currentIndexChanged.connect(lambda: upd_button_change(self))
         self.upd_update_button.clicked.connect(lambda: Update(self))
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))

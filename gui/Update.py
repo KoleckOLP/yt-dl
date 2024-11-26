@@ -29,6 +29,16 @@ def Update(window):
     else:
         listVersions(window)
 
+def upd_button_change(window):
+    if window.upd_update_combobox.currentIndex() == 0:
+        window.upd_update_button.setText("Update")
+    elif window.upd_update_combobox.currentIndex() == 1:
+        window.upd_update_button.setText("Update")
+    elif window.upd_update_combobox.currentIndex() == 2:
+        window.upd_update_button.setText("Update")
+    else:
+        window.upd_update_button.setText("List")
+
 
 def update_yt_dl(window):
     if window.gloc:  # is in portable
@@ -77,7 +87,7 @@ def upd_auto_toggle(window):
 
 def missingDependency(window, name, e):  # still kinda ugly function
     window.upd_output_console.append(f"{name}: {str(e)}\n")
-    window.upd_update_button.setText("Update")  # I have no clue if this should be Update or List xD
+    window.upd_update_button.setText("List")  # I have no clue if this should be Update or List xD
     window.running = False
     window.status("Ready.")
     tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
@@ -89,7 +99,7 @@ def missingDependency(window, name, e):  # still kinda ugly function
 
 def listVersions(window):
     # yt-dl version
-    window.upd_output_console.append(f"yt-dl {ver}\n\n")
+    window.upd_output_console.append(f"yt-dl {ver}\n")
 
     if window.gloc:
         cmd = [f"{window.floc + os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "-v"]
@@ -97,16 +107,20 @@ def listVersions(window):
         cmd = ["git.exe", "--version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
+        window.upd_output_console.append("")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "List")  # should be List soon.
     except Exception as e:
         missingDependency(window, "git", e)
 
-    window.upd_output_console.append("")
-
     # python version
     cmd = [window.settings.Python.python, "-V"]
-    window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
-    process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
+    try:
+        window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "python")
+        window.upd_output_console.append("")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "List")  # should be List soon.
+    except Exception as e:
+        missingDependency(window, "python", e)
+
 
     # qt version
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
@@ -121,11 +135,9 @@ def listVersions(window):
 
         window.upd_output_console.append("yt-dlp ")
 
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "List")  # should be List soon.
     except Exception as e:
         missingDependency(window, "yt-dlp", e)
-
-    window.upd_output_console.append("")
 
     # ffmpeg version
     if window.floc:
@@ -134,7 +146,8 @@ def listVersions(window):
         cmd = ["ffmpeg", "-version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "ffmpeg")
-        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "Update")  # should be List soon.
+        window.upd_output_console.append("")
+        process_output(window, window.upd_output_console, window.upd_update_button, window.process, False, "List")  # should be List soon.
     except Exception as e:
         missingDependency(window, "ffmpeg", e)
 
