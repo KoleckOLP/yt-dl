@@ -1,5 +1,4 @@
-import os
-import platform
+import os, platform
 
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
