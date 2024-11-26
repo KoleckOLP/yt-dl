@@ -24,7 +24,7 @@ def Reencode(window):
         for line in result:
             window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
 
-            run_process_mto(window, line, window.ree_output_console, window.ree_reencode_button)
+            run_process_mto(window, line, window.ree_output_console, window.ree_reencode_button, button_text = "Re-encode")
 
 
 def ree_settings(window):

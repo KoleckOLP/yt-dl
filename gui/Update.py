@@ -1,4 +1,4 @@
-import os, sys
+import os
 try:
     from PyQt6 import QtWidgets, QtGui
     from PyQt6.QtCore import QT_VERSION_STR
@@ -29,18 +29,18 @@ def update_yt_dl(window):
     else:
         cmd = ["git", "pull", "--recurse-submodules"]
 
-    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "git")  # for some reason it missed half of the letters
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "git", True, "Update")  # for some reason it missed half of the letters
 
 
 def update_depend(window):
     pips = window.settings.Python.pip.split(" ")
     cmd = [f"{window.settings.Python.python}", "-m", "pip", "install", "-U", "pip"]
-    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python")
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python", True, "Update")
     if window.Vista:
         pips + ["install", "-U", "-r", f"req-Vista.txt"]
     else:
         cmd = pips + ["install", "-U", "-r", f"req-gui.txt"]
-    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "pip")
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "pip", True, "Update")
 
 
 
@@ -52,7 +52,7 @@ def upd_auto_toggle(window):
 
 def missingDependency(window, name, e):  # still kinda ugly function
     window.upd_output_console.append(f"{name}: {str(e)}\n")
-    window.upd_update_button.setText("Update")
+    window.upd_update_button.setText("List")
     window.running = False
     window.status("Ready.")
     tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
@@ -71,7 +71,7 @@ def listVersions(window):
     else:
         cmd = ["git", "--version"]
     try:
-        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "git", False)
+        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "git", False, "List")
     except Exception as e:
         missingDependency(window, "git", e)
 
@@ -79,7 +79,7 @@ def listVersions(window):
 
     # python version
     cmd = [window.settings.Python.python, "-V"]
-    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python", False)
+    run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "python", False, "List")
 
     # qt version
     window.upd_output_console.append(f"qt {QT_VERSION_STR}\n")
@@ -90,7 +90,7 @@ def listVersions(window):
     else:
         cmd = ["yt-dlp", "--version"]  # yt-dlp should be in users path, and it's not my problem (non portable)
     try:
-        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "yt-dlp", False)  # this one looks so innocent
+        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "yt-dlp", False, "List")  # this one looks so innocent
     except Exception as e:
         missingDependency(window, "yt-dlp", e)
 
@@ -102,7 +102,7 @@ def listVersions(window):
     else:
         cmd = ["ffmpeg", "-version"]
     try:
-        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "ffmpeg", False)
+        run_process_sto(window, cmd, window.upd_output_console, window.upd_update_button, False, "ffmpeg", False, "List")
     except Exception as e:
         missingDependency(window, "ffmpeg", e)
 
