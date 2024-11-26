@@ -1,3 +1,0 @@
-pyqt6
-wheel
-yt-dlp
