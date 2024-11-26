@@ -6,15 +6,15 @@ if (platform.system().lower() == "windows"):
         from PyQt5 import QtWidgets, uic
         from PyQt5.QtWidgets import QMessageBox
         from PyQt5.QtCore import QT_VERSION_STR  #, Qt
-    else:
-        try:
-            from PyQt6 import QtWidgets, uic
-            from PyQt6.QtWidgets import QMessageBox
-            from PyQt6.QtCore import QT_VERSION_STR  #, Qt
-        except Exception as e:
-            from PyQt5 import QtWidgets, uic
-            from PyQt5.QtWidgets import QMessageBox
-            from PyQt5.QtCore import QT_VERSION_STR  #, Qt
+
+try:
+    from PyQt6 import QtWidgets, uic
+    from PyQt6.QtWidgets import QMessageBox
+    from PyQt6.QtCore import QT_VERSION_STR  #, Qt
+except Exception as e:
+    from PyQt5 import QtWidgets, uic
+    from PyQt5.QtWidgets import QMessageBox
+    from PyQt5.QtCore import QT_VERSION_STR  #, Qt
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle
@@ -90,6 +90,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:  # using non portable git
             self.gloc = False
 
+        print(self.gloc)
+
         if (os.path.exists(settingsPath)):
             try:
                 self.settings = Settings.fromJson(settingsPath)
@@ -118,6 +120,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ytex = [self.settings.Python.python, ytdlp[0]]
         else:
             self.ytex = [python+"python", ytdlp[0]]
+
+        print(self.ytex)
 
         # changing size and position of the window
         if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:

@@ -4,13 +4,13 @@ if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets, QtGui
         from PyQt5.QtCore import QT_VERSION_STR
-    else:
-        try:
-            from PyQt6 import QtWidgets, QtGui
-            from PyQt6.QtCore import QT_VERSION_STR
-        except Exception as e:
-            from PyQt5 import QtWidgets, QtGui
-            from PyQt5.QtCore import QT_VERSION_STR
+
+try:
+    from PyQt6 import QtWidgets, QtGui
+    from PyQt6.QtCore import QT_VERSION_STR
+except Exception as e:
+    from PyQt5 import QtWidgets, QtGui
+    from PyQt5.QtCore import QT_VERSION_STR
 # Imports from this project
 from release import settingsPath, ver
 from gui.Process import process_start, process_output
@@ -41,7 +41,7 @@ def upd_button_change(window):
 
 def update_yt_dl(window):
     if window.gloc:  # is in portable
-        cmd = [f"{window.floc+os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "pull", "--recurse-submodules"]
+        cmd = [f"{window.floc+os.path.sep}git{os.path.sep}cmd{os.path.sep}git", "pull", "--recurse-submodules"]
     else:  # is not in portable
         cmd = ["git", "pull", "--recurse-submodules"]
     window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
@@ -101,9 +101,9 @@ def listVersions(window):
     window.upd_output_console.append(f"yt-dl {ver}\n")
 
     if window.gloc:
-        cmd = [f"{window.floc + os.path.sep}git{os.path.sep}cmd{os.path.sep}git.exe", "-v"]
+        cmd = [f"{window.floc + os.path.sep}git{os.path.sep}cmd{os.path.sep}git", "-v"]
     else:
-        cmd = ["git.exe", "--version"]
+        cmd = ["git", "--version"]
     try:
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "git")
         window.upd_output_console.append("")

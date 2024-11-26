@@ -4,11 +4,11 @@ import sys, subprocess, platform
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets
-    else:
-        try:
-            from PyQt6 import QtWidgets
-        except Exception as e:
-            from PyQt5 import QtWidgets
+
+try:
+    from PyQt6 import QtWidgets
+except Exception as e:
+    from PyQt5 import QtWidgets
 
 
 def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "youtube_dl"):
