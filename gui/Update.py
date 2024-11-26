@@ -58,7 +58,7 @@ def update_depend(window):
 
     if (platform.system().lower() == "windows"):  # platform windows
         if (int(platform.version().split(".")[0]) < 10):  # older than windows 10
-            if (platform.version().lower() != "vista"):
+            if (platform.release().lower() != "vista"):
                 cmd = pips + ["install", "-U", "pyqt5"]  # on 7-8.1 update pyqt5 and yt-dlp
         else:
                 cmd = pips + ["install", "-U", "pyqt6"]  # in 10-11 update pyqt6 and yt-dlp
