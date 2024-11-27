@@ -28,6 +28,9 @@ ffplay.exe
 yt-dl
 audio/
 videos/
+powershell/
+git/
+python/
 
 # temp folders
 ffdir/
