@@ -37,14 +37,14 @@ def Video(window):
     process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
     if (platform.system().lower() == "windows"):
-        if (int(platform.version().split(".")[0]) >= 10):
-            print("auchie")
+        if (float(f"{platform.version().split('.')[0]}.{platform.version().split('.')[1]}") >= 6.1):  # Checking if version is 6.1 (Windows 7) or higher
             if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
                 #attempt putting the downloaded video into the clipboard
                 latest_file = max(glob.glob(f"{window.settings.Youtubedl.videoDir}*"), key=os.path.getctime)
                 latest_file = latest_file.replace("‘", "*")  # this character makes set-clipboard fail, and prolly is not the only one
+                cmd = [f"{window.floc + os.path.sep}powershell{os.path.sep}pwsh", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; $list = [System.Windows.Forms.Clipboard]::GetFileDropList(); $list.Clear(); $list.Add('{latest_file}'); [System.Windows.Forms.Clipboard]::SetFileDropList($list)"]
                 Powershell_process = subprocess.run(  # codefactor is mad about this, also this is windows only and doesn't check for platform
-                    ['powershell', 'Set-Clipboard', '-Path', f'\'{latest_file}\''],
+                    cmd,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE,
                     universal_newlines=True

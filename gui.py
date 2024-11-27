@@ -90,8 +90,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:  # using non portable git
             self.gloc = False
 
-        print(self.gloc)
-
         if (os.path.exists(settingsPath)):
             try:
                 self.settings = Settings.fromJson(settingsPath)
@@ -120,8 +118,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ytex = [self.settings.Python.python, ytdlp[0]]
         else:
             self.ytex = [python+"python", ytdlp[0]]
-
-        print(self.ytex)
 
         # changing size and position of the window
         if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:
