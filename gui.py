@@ -74,6 +74,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.tabWidget.setStyleSheet(f"background-color: #121212; border-color: #121212; color: {color}")
 
+        self.tabWidget.setStyleSheet(f"""
+            QTabBar::tab:selected {{
+                background-color: #383838; /* Change to your desired color */
+                color: {color}
+            }}
+            QTabBar::tab {{
+                background-color: #121212; /* Color for unselected tabs */
+                color: {color}
+            }}
+        """)
+
         #self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.show()
         self.raise_()
