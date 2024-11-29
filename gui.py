@@ -65,6 +65,15 @@ class MainWindow(QtWidgets.QMainWindow):
         super().__init__(*args, **kwargs)
         uic.loadUi(f"gui{os.path.sep}gui.ui", self)
 
+        if platform.system().lower() == "windows":
+            is_windows_11 = int(platform.version().split('.')[2]) > 20000
+            is_qt6 = QT_VERSION_STR[0] == '6'
+            color = "#ffffff" if (is_windows_11 and is_qt6) or not is_windows_11 else "#000000"
+        else:
+            color = "#ffffff"
+
+        self.tabWidget.setStyleSheet(f"background-color: #121212; border-color: #121212; color: {color}")
+
         #self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
         self.show()
         self.raise_()
