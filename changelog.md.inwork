@@ -68,18 +68,14 @@ Loads and loads of stability improvements and bug fixes and small UI imprvements
         - ffmpeg 7.1 (ffmpeg7 - MacPorts)
 
     - Haiku OS x86/x64
-        - git 2.45.2 (Git - HaikuDepot)
-        - python 3.10.14 (Python3.10 - HaikuDepot)
-        - qt 5.15.15 (pyqt5_python310 - HaikuDepot)
-        - yt-dlp 2024.11.18 (yt-dlp - HaikuDepot)
+        - git 2.48.1 (Git - HaikuDepot)
+        - python 3.10.16 (Python3.10 - HaikuDepot)
+        - qt 6.7.2 (pyqt6_python310 - HaikuDepot)
+        - yt-dlp 2025.03.31 (yt-dlp - HaikuDepot)
         - ffmpeg 6.1.2 (ffmpeg6 - HaikuDepot)
         
     - Linux x64
-        - git
-        - python
-        - qt
-        - yt-dlp 2024-11-18
-        - ffmpeg
+        - for some reason you have to make a venv to make it work, but linux users are their own beasts so whatever.
 
 ## New in 2.2.2.2 Released Testing: 
 No new features
