@@ -294,8 +294,10 @@ class MainWindow(QtWidgets.QMainWindow):
             loc = "." + os.path.sep  # if path does not exist open installation folder
         if (sys.platform.startswith("win")):
             os.startfile(loc)  # does not work on macOS, and codefactor is mad about this.
-        elif (sys.platform.startswith("darwin") or sys.platform.startswith("haiku") or sys.platform.startswith("linux")):
+        elif (sys.platform.startswith("darwin") or sys.platform.startswith("haiku")):
             os.system(f"open {loc}")  # codefactor is also mad about this.
+        elif (sys.platform.startswith("linux")):
+            os.system(f"xdg-open {loc}")  # I was lead astray by Ubuntu having open command Fedora and other distros doesn't
         else:  # platforms that are not haiku linux macOS or Windows
             print("sorry this platform is not supported yet")
     # endregion
