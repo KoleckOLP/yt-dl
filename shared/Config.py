@@ -79,7 +79,7 @@ class Settings:
 
     @staticmethod
     def loadDefault():
-        if "yt-dl_portable" in spath:  # if you are running the portable version of yt-dl, this is the default path for python and pip
+        if "portable" in os.path.basename(os.path.normpath(spath)):  # if you are running the portable version of yt-dl, this is the default path for python and pip
             defpython = "..\\python\\python"
             defpip = "..\\python\\python -m pip"
         else:  # if you are not running the portable version of yt-dl, this takes the executable of the current python interpreter and uses that as the default python and pip
