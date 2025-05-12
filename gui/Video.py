@@ -36,7 +36,7 @@ def Video(window):
 
     process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
-    if (platform.system().lower() == "windows"):
+    if (platform.system().lower() == "windows" and window.settings.clipboard):  # platform windows
         if (float(f"{platform.version().split('.')[0]}.{platform.version().split('.')[1]}") >= 6.1):  # Checking if version is 6.1 (Windows 7) or higher
             if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
                 #attempt putting the downloaded video into the clipboard

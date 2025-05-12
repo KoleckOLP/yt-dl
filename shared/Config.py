@@ -39,7 +39,7 @@ class WindowSettings:
         self.windowPosY = windowPosY
 
 class Settings:
-    def __init__(self, Python: PythonSettings, Ytdlp: YtdlpSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int, autoClose: bool):
+    def __init__(self, Python: PythonSettings, Ytdlp: YtdlpSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int, autoClose: bool, clipboard: bool):
         self.Python = Python
         self.Ytdlp = Ytdlp
         self.Ffmpeg = Ffmpeg
@@ -48,6 +48,7 @@ class Settings:
         self.defaultTab = defaultTab
         self.defaultCodec = defaultCodec
         self.autoClose = autoClose
+        self.clipboard = clipboard
 
     def toJson(self, path):
         with open(path, "w") as fh:
@@ -77,7 +78,8 @@ class Settings:
                         x["autoUpdate"],
                         x["defaultTab"],
                         x["defaultCodec"],
-                        x["autoClose"])
+                        x["autoClose"],
+                        x["clipboard"])
 
     @staticmethod
     def loadDefault():
@@ -123,4 +125,5 @@ class Settings:
                         False,  # I would recommend not having auto update on, it's annoying.
                         0,  # audio tab
                         0,  # hevc_opus
+                        False,
                         False)  # raf autoClose

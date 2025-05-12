@@ -14,6 +14,7 @@ def set_save(window):
     window.settings.autoUpdate = window.set_aup_checkbox.isChecked()
     window.settings.defaultTab = window.set_Tab_combobox.currentIndex()
     window.settings.autoClose = window.set_close_checkbox.isChecked()
+    window.settings.clipboard = window.set_clipboard_checkbox.isChecked()
     if window.vid_best_radio.isChecked():
         window.settings.Ytdlp.quality = "best"
     elif window.vid_normal_radio.isChecked():

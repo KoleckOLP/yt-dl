@@ -1172,8 +1172,8 @@
           </property>
          </widget>
         </item>
-        <item row="10" column="0" colspan="5">
-         <widget class="QLabel" name="label">
+        <item row="10" column="0" colspan="3">
+         <widget class="QLabel" name="set_aditional_label">
           <property name="font">
            <font>
             <pointsize>15</pointsize>
@@ -1187,6 +1187,16 @@
           </property>
           <property name="text">
            <string>Aditional:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="3" colspan="2">
+         <widget class="QCheckBox" name="set_clipboard_checkbox">
+          <property name="styleSheet">
+           <string notr="true">Color: #FFFFFF;</string>
+          </property>
+          <property name="text">
+           <string>copy download to clipboard</string>
           </property>
          </widget>
         </item>

@@ -112,7 +112,7 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 self.settings = Settings.fromJson(settingsPath)
             except KeyError as e:
-                print(e)
+                #print(e)
                 if QT_VERSION_STR[0] == '6':
                     self.messagePopup("Settings error", QMessageBox.Icon.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
                 else:
