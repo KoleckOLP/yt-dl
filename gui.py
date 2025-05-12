@@ -166,6 +166,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_playlist_checkbox.clicked.connect(lambda: vid_playlist_bar_toggle(self))
         self.vid_custom_radio.toggled.connect(lambda: vid_quality_bar_toggle(self))
         self.vid_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
+        self.vid_best_radio.setChecked(True)  # set default radio button to best quality
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
