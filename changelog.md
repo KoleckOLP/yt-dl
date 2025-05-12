@@ -1,23 +1,110 @@
+## New in 2.2.3.1 Released Testing:
+Normal quality download copy video to clipboard, Windows 7-11 using powershell 7, requires copy to clipboard to be checked in settings
+- Not possible on Windows Vista, macOS, Linux or Haiku OS with current implementation.
+- On HaikuOS and Linux the open folder button now works.
+- Quality choise now saves in the video tab
+- python pip and yt-dlp detection now works.
+- UI color was changed
+
+Loads and loads of stability improvements and bug fixes and small UI imprvements, won't list them all, check comits.<br>
+
+### Portable builds and their dependecies:
+
+    - Windows 8.1-11 x64
+        - git 2.47.1
+        - python 3.12.7 (3.13.0 has problems with PyQt6-Sip)
+        - qt 6.7.1 / 5.15.11
+        - yt-dlp 2024-11-18
+        - ffmpeg 7.1
+        - powershell 7.4.6
+
+    - Windows 8.1-11 x86
+        - git 2.47.1
+        - python 3.12.7 (3.13.0 has problems with PyQt6-Sip)
+        - qt 6.7.1 / 5.15.11
+        - yt-dlp 2024-11-18
+        - ffmpeg 7.1
+
+    - Windows 7-8.0 x64
+        - git 2.46.2
+        - python 3.11.9
+        - qt 5.15.11
+        - yt-dlp 2024-11-18
+        - ffmpeg 7.1
+        - powershell 7.4.6
+
+    - Windows 7-8.0 x86
+        - git 2.46.2
+        - python 3.11.9
+        - qt 5.15.11
+        - yt-dlp 2024-11-18
+        - ffmpeg 7.1
+        - powershell 7.4.6
+
+    - Windows Vista x64
+        - git 2.37.1
+        - python 3.7.17
+        - qt 5.9.2-5.9.3
+        - python 3.11.9
+        - yt-dlp 2024-11-18
+        - ffmpeg 7 xpmod
+
+    - Windows Vista x86
+        - git 2.37.1
+        - python 3.7.17
+        - qt 5.9.2-5.9.3
+        - python 3.11.9
+        - yt-dlp 2024-11-18
+        - ffmpeg 7 xpmod
+### Non-Portable builds and their dependencies (platforms I tested):
+
+    - macOS 15.1.1 Aarch64
+        - git(git - MacPorts)
+        - python 3.13.0 (python313 - MacPorts)
+        - qt 6.7.1 (pyqt6 - pip) compiled from source
+        - yt-dlp 2024-11-18 (yt-dlp - pip)
+        - ffmpeg 7.1 (ffmpeg7 - MacPorts)
+
+    - macOS 10.14.6 x64
+        - git 2.47.1 (git - MacPorts)
+        - python 3.12.7 (python312 - MacPorts)
+        - qt 6.7.1 (py312-pyqt6 - MacPorts)
+        - yt-dlp 2024-11-18 (yt-dlp - pip)
+        - ffmpeg 7.1 (ffmpeg7 - MacPorts)
+
+    - Haiku OS x86/x64
+        - git 2.48.1 (Git - HaikuDepot)
+        - python 3.10.16 (Python3.10 - HaikuDepot)
+        - qt 6.7.2 (pyqt6_python310 - HaikuDepot)
+        - yt-dlp 2025.03.31 (yt-dlp - HaikuDepot)
+        - ffmpeg 6.1.2 (ffmpeg6 - HaikuDepot)
+        
+    - Linux x64
+        - for some reason you have to make a venv to make it work, but linux users are their own beasts so whatever.
+
 ## New in 2.2.2.2 Released Testing: 
-No new features
-original portable build is now called yt-dl-x64_10-11_portable_2.2.2.2.7z
-brand new build for 32bit Windows Vista called yt-dl-x86_vista_portable_2.2.2.2.7z
+No new features<br>
+original portable build is now called yt-dl-x64_10-11_portable_2.2.2.2.7z <br>
+brand new build for 32bit Windows Vista called yt-dl-x86_vista_portable_2.2.2.2.7z <br>
 dependencies in this version are:
+
     - git 2.44.0.windows.1 (runs but fails to download I think, will be looked into, latest version)
     - Python 3.7.9 (seems to be the latest working, 3.8.0 would just crash, Aug. 17, 2020)
     - qt 5.9.3 (this is a really old qt version but newer would just crash, released Nov. 24, 2017)
         - sip 4.19.8 (might be possible to update but I don't know yet, Feb. 17, 2018)
     - yt-dlp 2023.11.16 (this is actually the latest version and it just works!)
     - ffmpeg 2.8.5 (I could probably get a newer one working but I haven't tested more, Jan. 15, 2016)
+
 there is a change that I could make more version for example for Windows 7-8.1
 it's highly unlikely that there will be an XP version but who knows.
 
 ## New in 2.2.2.1 Released Testing:
-Option to automatically close the program when download finishes, requested by Raf
-Default quality is now "normal" with extenction mp4, requested by Raf (he requested mp4 and option to choose defaultQuality, that will come in a later release)
-Fixed downloading whole youtube channel (was a utf-8 decoding issue)
-Fixed Best quality download not working in 2.2.2.0
+Option to automatically close the program when download finishes, requested by Raf<br>
+Default quality is now "normal" with extenction mp4, requested by Raf (he requested mp4 and option to choose defaultQuality, that will come in a later release)<br>
+Fixed downloading whole youtube channel (was a utf-8 decoding issue)<br>
+Fixed Best quality download not working in 2.2.2.0<br>
 updated dependencies:
+
     - git 2.43.0.windows.1 - 2.44.0.windows.1
     - Python 3.12.1 - 3.12.2
     - qt 6.6.1 (unchanged)
@@ -29,15 +116,18 @@ info about this update is probaby lost.
 
 ## New in 2.2.1.10 Released Testing:
 updated dependecies:
+
     - git 2.42.0.windows.2 - 2.43.0.windows.1
     - Python 3.12.0 - 3.12.1
     - qt 6.5.3 - 6.6.1
     - yt-dlp 2023.10.13 - 2023.12.30
     - ffmpeg 2023-10-23 - 2024-01-01
+
 new update to panic_fix.bat this time it uninstalls all of qt6 and installs it back, fixes stuff if qt really breaks.
 
 ## New in 2.2.1.9 Released Testing:
 updated dependencies:
+
     - git 2.42.0.windows.2 - unchange
     - Python 3.11.5 - 3.12.0
     - qt 6.5.2 - 6.5.3
@@ -45,35 +135,35 @@ updated dependencies:
     - ffmpeg 2023.09.29 - 2023.10.23
 
 ## New in 2.2.1.8 Released Testing:
-updated dependencies
+updated dependencies<br>
 added panic_fix.bat, if while updating program crashes run panic fix to repair dependencies
 
 ## New in 2.2.1.7 Released Testing:
-updated dependencies
-tested on Windows 8.1 (doesn't work) - Might be fixed in the future
+updated dependencies<br>
+tested on Windows 8.1 (doesn't work) - Might be fixed in the future<br>
 Minimum OS is Windows 10 x64
 
 ## New in 2.2.1.6 Unreleased:
 Bugfixing for macOS
 
 ## New in 2.2.1.5 Released Testing:
-Added window size and position now gets saved on exit
-Added window size and position now gets loaded on startup
+Added window size and position now gets saved on exit<br>
+Added window size and position now gets loaded on startup<br>
 Fixed an issue where your custom ReEncode config would get overridden if you pressed save in Settings
 
 ## New in 2.2.1.4 Released Testing:
 Subs nolonger crash
 
 ## New in 2.2.1.3 Released Testing:
-Updating dependencies 
+Updating dependencies<br>
 fixing some issues with the last release of portable not working
 
 ## New in 2.2.1.2 Released Testing:
 yt-dl repo was archived and not yt-dl portable is just the way I release yt-dl for windows.
 
 ## New in 2.2.1.1 Unreleased Testing:
-CLI was depricated
-Cookies now also work in List Quality
+CLI was depricated<br>
+Cookies now also work in List Quality<br>
 kinda forgot to update the changelog
 
 ## New in 2.2.0.0 Unreleased Testing:
