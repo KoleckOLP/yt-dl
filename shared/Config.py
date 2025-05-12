@@ -14,12 +14,13 @@ class PythonSettings:
         self.pip = pip
 
 
-class YoutubedlSettings:
-    def __init__(self, audioDir: str, videoDir: str, fromPip: bool, cookie: bool):
+class YtdlpSettings:
+    def __init__(self, audioDir: str, videoDir: str, fromPip: bool, cookie: bool, quality: str):
         self.audioDir = audioDir
         self.videoDir = videoDir
         self.fromPip = fromPip
         self.cookie = cookie
+        self.quality = quality
 
 
 class FfmpegSettings:
@@ -38,9 +39,9 @@ class WindowSettings:
         self.windowPosY = windowPosY
 
 class Settings:
-    def __init__(self, Python: PythonSettings, Youtubedl: YoutubedlSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int, autoClose: bool):
+    def __init__(self, Python: PythonSettings, Ytdlp: YtdlpSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int, autoClose: bool):
         self.Python = Python
-        self.Youtubedl = Youtubedl
+        self.Ytdlp = Ytdlp
         self.Ffmpeg = Ffmpeg
         self.Window = Window
         self.autoUpdate = autoUpdate
@@ -59,10 +60,11 @@ class Settings:
             x = json.loads(fh.read())
         return Settings(PythonSettings(x["Python"]["python"],
                                        x["Python"]["pip"]),
-                        YoutubedlSettings(x["Youtubedl"]["audioDir"],
-                                          x["Youtubedl"]["videoDir"],
-                                          x["Youtubedl"]["fromPip"],
-                                          x["Youtubedl"]["cookie"]),
+                        YtdlpSettings(x["Ytdlp"]["audioDir"],
+                                          x["Ytdlp"]["videoDir"],
+                                          x["Ytdlp"]["fromPip"],
+                                          x["Ytdlp"]["cookie"],
+                                          x["Ytdlp"]["quality"]),
                         FfmpegSettings(x["Ffmpeg"]["videoCodec"],
                                        x["Ffmpeg"]["audioCodec"],
                                        x["Ffmpeg"]["videoQuality"],
@@ -80,8 +82,8 @@ class Settings:
     @staticmethod
     def loadDefault():
         if "portable" in os.path.basename(os.path.normpath(spath)):  # if you are running the portable version of yt-dl, this is the default path for python and pip
-            defpython = "..\\python\\python"
-            defpip = "..\\python\\python -m pip"
+            defpython = "..\\python\\python.exe"
+            defpip = "..\\python\\python.exe -m pip"
         else:  # if you are not running the portable version of yt-dl, this takes the executable of the current python interpreter and uses that as the default python and pip
             defpython = os.path.basename(sys.executable)
             defpip = os.path.basename(sys.executable) + " -m pip"
@@ -100,10 +102,11 @@ class Settings:
 
         return Settings(PythonSettings(defpython,  # python executable name
                                        defpip),  # pip executable name/command
-                        YoutubedlSettings(audioDirDefault,  # audio folder inside of yt-dl
+                        YtdlpSettings(audioDirDefault,  # audio folder inside of yt-dl
                                           videoDirDefault,  # video folder inside of yt-dl
                                           ytdlppip,  # this is true if yt-dlp was installed with pip, false if it was installed with other package manager or manually
-                                          False),  # cookie, is currently not dected, but it is not needed for most users, so it's false by default
+                                          False,  # cookie, is currently not dected, but it is not needed for most users, so it's false by default
+                                          "best"), # set the default quality to best.
                         FfmpegSettings("libx265",  # This is just fine
                                        "opus",  # same as above
                                        "24,24,24",  # same as above

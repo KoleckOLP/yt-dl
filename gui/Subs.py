@@ -6,7 +6,7 @@ from gui.Settings import set_save
 
 
 def Subs(window):
-    window.settings.Youtubedl.cookie = window.sub_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+    window.settings.Ytdlp.cookie = window.sub_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
     set_save(window)  # not a great idea but save the changed ehh state of the checkbox
 
     result = subs_shared_download(window.sub_url_bar.text(),
@@ -15,7 +15,7 @@ def Subs(window):
                                   window.sub_lang_bar.text(),
                                   window.floc,
                                   window.ytex,
-                                  window.settings.Youtubedl.cookie)
+                                  window.settings.Ytdlp.cookie)
 
     cmd, temp = result
 
@@ -23,7 +23,7 @@ def Subs(window):
 
     process_output(window, window.sub_output_console, window.sub_download_button, window.process)
 
-    subpath, newsubpath = subs_shared_paths_for_ffmpeg(temp.name + os.path.sep, window.settings.Youtubedl.videoDir)
+    subpath, newsubpath = subs_shared_paths_for_ffmpeg(temp.name + os.path.sep, window.settings.Ytdlp.videoDir)
 
     FfmpegLines = subs_shared_lines_for_ffmpeg(window, subpath, newsubpath)
 

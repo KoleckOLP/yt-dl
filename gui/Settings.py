@@ -6,14 +6,20 @@ from shared.Config import Settings
 
 
 def set_save(window):
-    window.settings.Youtubedl.audioDir = window.set_audio_bar.text()
-    window.settings.Youtubedl.videoDir = window.set_videos_bar.text()
+    window.settings.Ytdlp.audioDir = window.set_audio_bar.text()
+    window.settings.Ytdlp.videoDir = window.set_videos_bar.text()
     window.settings.Python.python = window.set_py_bar.text()
     window.settings.Python.pip = window.set_pip_bar.text()
-    window.settings.Youtubedl.fromPip = window.set_ydpip_checkbox.isChecked()
+    window.settings.Ytdlp.fromPip = window.set_ydpip_checkbox.isChecked()
     window.settings.autoUpdate = window.set_aup_checkbox.isChecked()
     window.settings.defaultTab = window.set_Tab_combobox.currentIndex()
     window.settings.autoClose = window.set_close_checkbox.isChecked()
+    if window.vid_best_radio.isChecked():
+        window.settings.Ytdlp.quality = "best"
+    elif window.vid_normal_radio.isChecked():
+        window.settings.Ytdlp.quality = "normal"
+    elif window.vid_custom_radio.isChecked():
+        window.settings.Ytdlp.quality = "custom"
     ree_settings_save(window)
 
 
@@ -49,4 +55,4 @@ def set_makeScript(window):  # I had an issue getting the venv working with gui
 def WriteDefaultJson(window):
     window.settings = Settings.loadDefault()
     window.settings.toJson(settingsPath)
-    set_load(window, window.settings.Youtubedl.audioDir, window.settings.Youtubedl.videoDir, window.settings.Python.python, window.settings.Python.pip, window.settings.Youtubedl.fromPip, window.settings.autoUpdate, window.settings.Ffmpeg.audioCodec, window.settings.Ffmpeg.videoCodec, window.settings.Ffmpeg.audioBitrate, window.settings.Ffmpeg.videoQuality, window.settings.Ffmpeg.append, window.settings.defaultTab, window.settings.autoClose)
+    set_load(window, window.settings.Ytdlp.audioDir, window.settings.Ytdlp.videoDir, window.settings.Python.python, window.settings.Python.pip, window.settings.Ytdlp.fromPip, window.settings.autoUpdate, window.settings.Ffmpeg.audioCodec, window.settings.Ffmpeg.videoCodec, window.settings.Ffmpeg.audioBitrate, window.settings.Ffmpeg.videoQuality, window.settings.Ffmpeg.append, window.settings.defaultTab, window.settings.autoClose)

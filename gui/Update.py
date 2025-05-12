@@ -72,7 +72,7 @@ def update_depend(window):
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")
 
-    if window.settings.Youtubedl.fromPip:  # no matter what plaform if yt-dlp is from pip than update it
+    if window.settings.Ytdlp.fromPip:  # no matter what plaform if yt-dlp is from pip than update it
         cmd = pips + ["install", "-U", "yt-dlp"]
         window.process = process_start(window, cmd, window.upd_output_console, window.upd_update_button, window.process, False, "pip")
         process_output(window, window.upd_output_console, window.upd_update_button, window.process, True, "Update")

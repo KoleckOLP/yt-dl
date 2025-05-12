@@ -6,7 +6,7 @@ from gui.Process import process_start, process_output
 
 
 def Audio(window):
-    window.settings.Youtubedl.cookie = window.aud_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+    window.settings.Ytdlp.cookie = window.aud_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
     set_save(window)  # not a great idea but save the changed ehh state of the checkbox
 
     cmd = audio_shared(window.aud_url_bar.text(),
@@ -14,8 +14,8 @@ def Audio(window):
                        window.aud_playlist_bar.text(),
                        window.floc,
                        window.ytex,
-                       window.settings.Youtubedl.audioDir,
-                       window.settings.Youtubedl.cookie)
+                       window.settings.Ytdlp.audioDir,
+                       window.settings.Ytdlp.cookie)
 
     window.process = process_start(window, cmd, window.aud_output_console, window.aud_download_button, window.process)
 

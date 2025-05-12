@@ -152,30 +152,38 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====aud_controls=====
-        self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.audioDir))
+        self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.audioDir))
         self.aud_download_button.clicked.connect(lambda: Audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
-        self.aud_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
+        self.aud_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
         # region =====vid_controls=====
-        self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
+        self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.videoDir))
         self.vid_download_button.clicked.connect(lambda: Video(self))
         self.vid_quality_button.clicked.connect(lambda: vid_quality(self))
         self.vid_playlist_checkbox.clicked.connect(lambda: vid_playlist_bar_toggle(self))
         self.vid_custom_radio.toggled.connect(lambda: vid_quality_bar_toggle(self))
-        self.vid_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
-        self.vid_best_radio.setChecked(True)  # set default radio button to best quality
+        self.vid_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        if self.settings.Ytdlp.quality == "best":
+            self.vid_best_radio.setChecked(True)
+        elif self.settings.Ytdlp.quality == "normal":
+            self.vid_normal_radio.setChecked(True)
+        elif self.settings.Ytdlp.quality == "custom":
+            self.vid_custom_radio.setChecked(True)
+        self.vid_best_radio.toggled.connect(lambda: set_save(self))
+        self.vid_normal_radio.toggled.connect(lambda: set_save(self))
+        self.vid_custom_radio.toggled.connect(lambda: set_save(self))
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
         # region =====sub_controls=====
-        self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Youtubedl.videoDir))
+        self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.videoDir))
         self.sub_download_button.clicked.connect(lambda: Subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
-        self.sub_cookie_checkbox.setChecked(self.settings.Youtubedl.cookie)
+        self.sub_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
@@ -217,7 +225,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # region =====set_controls=====
         self.set_loaddef_button.clicked.connect(lambda: WriteDefaultJson(self))
-        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose))
+        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Ytdlp.audioDir, self.settings.Ytdlp.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Ytdlp.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
         self.set_launch_button.clicked.connect(lambda: set_makeScript(self))
         self.set_save_button.clicked.connect(lambda: set_save(self))
@@ -228,7 +236,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
-        set_load(self, self.settings.Youtubedl.audioDir, self.settings.Youtubedl.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Youtubedl.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose)
+        set_load(self, self.settings.Ytdlp.audioDir, self.settings.Ytdlp.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Ytdlp.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose)
         # endregion
 
         # region ==========🎓ABOUT🎓==========

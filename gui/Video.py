@@ -9,7 +9,7 @@ import os, subprocess, glob, datetime
 
 
 def Video(window):
-    window.settings.Youtubedl.cookie = window.vid_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+    window.settings.Ytdlp.cookie = window.vid_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
     set_save(window)  # not a great idea but save the changed ehh state of the checkbox
 
     if window.vid_normal_radio.isChecked():
@@ -29,8 +29,8 @@ def Video(window):
                        qual,
                        window.floc,
                        window.ytex,
-                       window.settings.Youtubedl.videoDir,
-                       window.settings.Youtubedl.cookie)
+                       window.settings.Ytdlp.videoDir,
+                       window.settings.Ytdlp.cookie)
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 
@@ -40,7 +40,7 @@ def Video(window):
         if (float(f"{platform.version().split('.')[0]}.{platform.version().split('.')[1]}") >= 6.1):  # Checking if version is 6.1 (Windows 7) or higher
             if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
                 #attempt putting the downloaded video into the clipboard
-                latest_file = max(glob.glob(f"{window.settings.Youtubedl.videoDir}*"), key=os.path.getctime)
+                latest_file = max(glob.glob(f"{window.settings.Ytdlp.videoDir}*"), key=os.path.getctime)
                 latest_file = latest_file.replace("‘", "*")  # this character makes set-clipboard fail, and prolly is not the only one
                 cmd = [f"{window.floc + os.path.sep}powershell{os.path.sep}pwsh", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; $list = [System.Windows.Forms.Clipboard]::GetFileDropList(); $list.Clear(); $list.Add('{latest_file}'); [System.Windows.Forms.Clipboard]::SetFileDropList($list)"]
                 Powershell_process = subprocess.run(  # codefactor is mad about this, also this is windows only and doesn't check for platform
