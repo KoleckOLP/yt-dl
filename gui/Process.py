@@ -11,7 +11,7 @@ except Exception as e:
     from PyQt5 import QtWidgets
 
 
-def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "youtube_dl"):
+def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "yt-dlp"):
     if not window.running:
         window.running = True
         window.status("Busy.")
@@ -22,6 +22,7 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
         if output_clear:
             output_console.setHtml("")  # clearing the output_console
             output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
+            output_console.insertPlainText(f"#yt-dl# debug `{' '.join(cmd)}`\n\n")
 
         if (sys.platform.startswith("win")):  # (os.name == "nt"):
             process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000, universal_newlines=True, encoding="utf8", errors="ignore", stdin=subprocess.DEVNULL)  # this one does not check if another process is running, stdin=subprocess.DEVNULL
