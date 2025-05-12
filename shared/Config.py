@@ -1,4 +1,4 @@
-import json, sys, os, subprocess
+import json, sys, os, subprocess, platform
 # Imports from this projects
 from release import videoDirDefault, audioDirDefault, spath
 
@@ -82,8 +82,12 @@ class Settings:
     @staticmethod
     def loadDefault():
         if "portable" in os.path.basename(os.path.normpath(spath)):  # if you are running the portable version of yt-dl, this is the default path for python and pip
-            defpython = "..\\python\\python.exe"
-            defpip = "..\\python\\python.exe -m pip"
+            if platform.release().lower() == "vista":
+                defpython = "..\\python-3119\\python.exe"
+                defpip = "..\\python-3119\\python.exe -m pip"
+            else:
+                defpython = "..\\python\\python.exe"
+                defpip = "..\\python\\python.exe -m pip"
         else:  # if you are not running the portable version of yt-dl, this takes the executable of the current python interpreter and uses that as the default python and pip
             defpython = os.path.basename(sys.executable)
             defpip = os.path.basename(sys.executable) + " -m pip"
