@@ -1,4 +1,4 @@
-import json
+import json, sys, os, subprocess
 # Imports from this projects
 from release import videoDirDefault, audioDirDefault, spath
 
@@ -79,19 +79,31 @@ class Settings:
 
     @staticmethod
     def loadDefault():
-        if(spath.find("yt-dl_portable")):  # this clearly doesn't work.
+        if "yt-dl_portable" in spath:  # if you are running the portable version of yt-dl, this is the default path for python and pip
             defpython = "..\\python\\python"
             defpip = "..\\python\\python -m pip"
-        else:
-            defpython = "python"
-            defpip = "pip"
+        else:  # if you are not running the portable version of yt-dl, this takes the executable of the current python interpreter and uses that as the default python and pip
+            defpython = os.path.basename(sys.executable)
+            defpip = os.path.basename(sys.executable) + " -m pip"
 
-        return Settings(PythonSettings(defpython,  # I don't like this because some systems need python3 or python3.x here
-                                       defpip),  # some systems might have pip3.x here
+        try:
+            result = subprocess.run(['pip', 'show', 'yt-dlp'], capture_output=True, text=True)
+            if result.returncode == 0:
+                # This means pip found yt-dlp, hence it was installed with pip
+                ytdlppip = True
+            else:
+                # yt-dlp is not found in pip
+                ytdlppip = False
+        except Exception as e:
+            print(f"Error checking with pip: {e}")
+            ytdlppip = False
+
+        return Settings(PythonSettings(defpython,  # python executable name
+                                       defpip),  # pip executable name/command
                         YoutubedlSettings(audioDirDefault,  # audio folder inside of yt-dl
                                           videoDirDefault,  # video folder inside of yt-dl
-                                          True,
-                                          False),  # only true if youtube-dl is from pip which this just assumes
+                                          ytdlppip,  # this is true if yt-dlp was installed with pip, false if it was installed with other package manager or manually
+                                          False),  # cookie, is currently not dected, but it is not needed for most users, so it's false by default
                         FfmpegSettings("libx265",  # This is just fine
                                        "opus",  # same as above
                                        "24,24,24",  # same as above
@@ -100,7 +112,7 @@ class Settings:
                         WindowSettings(0,
                                        0,
                                        0,
-                                       0),
+                                       0), # defaul window size and position, this is set to 0,0,0,0 so it will be set to the default size and position of the OS
                         False,  # I would recommend not having auto update on, it's annoying.
                         0,  # audio tab
                         0,  # hevc_opus
