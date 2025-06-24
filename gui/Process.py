@@ -1,14 +1,45 @@
 from typing import List
 import sys, subprocess, platform
+from collections import deque
 
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets
+        from PyQt6.QtCore import QThread, pyqtSignal
 
 try:
     from PyQt6 import QtWidgets
+    from PyQt6.QtCore import QThread, pyqtSignal
 except Exception as e:
     from PyQt5 import QtWidgets
+    from PyQt5.QtCore import QThread, pyqtSignal
+
+
+class ProcessThread(QThread):
+    line_received = pyqtSignal(str)
+
+    def __init__(self, process, window):
+        super().__init__()
+        self.process = process
+        self.window = window
+        self._running = True
+
+    def run(self):
+        while self._running:
+            line = self.process.stdout.readline()
+            if line == '' and self.process.poll() is not None:
+                break
+            if "\\n" in line:
+                line = line.replace("\\n", "\n")
+            self.line_received.emit(line)
+        self.finished.emit()
+
+    def stop(self):
+        self._running = False
+        try:
+            self.process.terminate()
+        except Exception:
+            pass
 
 
 def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "yt-dlp"):
@@ -62,3 +93,28 @@ def process_output(window, output_console: QtWidgets.QTextBrowser, download_butt
         QtWidgets.QApplication.processEvents()
         scrollbar = output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
+
+
+def process_output_threaded(window, output_console, download_button, process, output_clear=True, button_text="Download"):
+    thread = ProcessThread(process, window)
+
+    def handle_line(line):
+        output_console.insertPlainText(line)
+        scrollbar = output_console.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+
+    def on_finished():
+        if output_clear:
+            output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
+        download_button.setText(button_text)
+        window.running = False
+        window.status("Ready.")
+        tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
+        if tabName.startswith("*"):
+            window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
+
+    thread.line_received.connect(handle_line)
+    thread.finished.connect(on_finished)
+    thread.start()
+
+    return thread

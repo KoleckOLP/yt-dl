@@ -1,7 +1,7 @@
 import os, sys
 # Imports from this project
 from shared.Subs import subs_shared_list, subs_shared_download, subs_shared_paths_for_ffmpeg, subs_shared_lines_for_ffmpeg
-from gui.Process import process_start, process_output
+from gui.Process import process_start, process_output_threaded
 from gui.Settings import set_save
 
 
@@ -21,7 +21,8 @@ def Subs(window):
 
     window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 
-    process_output(window, window.sub_output_console, window.sub_download_button, window.process)
+    thread = process_output_threaded(window, window.sub_output_console, window.sub_download_button, window.process)
+    window.thread = thread
 
     subpath, newsubpath = subs_shared_paths_for_ffmpeg(temp.name + os.path.sep, window.settings.Ytdlp.videoDir)
 
@@ -39,7 +40,8 @@ def Subs(window):
 
             window.process = process_start(window, line, window.sub_output_console, window.sub_download_button, window.process)
 
-            process_output(window, window.sub_output_console, window.sub_download_button, window.process)
+            thread = process_output_threaded(window, window.sub_output_console, window.sub_download_button, window.process)
+            window.thread = thread
 
     temp.cleanup()
 
@@ -54,7 +56,8 @@ def sub_lang(window):
 
     window.process = process_start(window, cmd, window.sub_output_console, window.sub_download_button, window.process)
 
-    process_output(window, window.sub_output_console, window.sub_download_button, window.process)
+    thread = process_output_threaded(window, window.sub_output_console, window.sub_download_button, window.process)
+    window.thread = thread
 
 
 def sub_playlist_bar_toggle(window):

@@ -2,7 +2,7 @@ import sys, platform
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
 from gui.Settings import set_save
-from gui.Process import process_start, process_output
+from gui.Process import process_start, process_output_threaded
 from shared.Shared import hasCookie
 
 import os, subprocess, glob, datetime
@@ -34,7 +34,8 @@ def Video(window):
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+    thread = process_output_threaded(window, window.vid_output_console, window.vid_download_button, window.process)
+    window.thread = thread
 
     if (platform.system().lower() == "windows" and window.settings.clipboard):  # platform windows
         if (float(f"{platform.version().split('.')[0]}.{platform.version().split('.')[1]}") >= 6.1):  # Checking if version is 6.1 (Windows 7) or higher
@@ -69,7 +70,8 @@ def vid_quality(window):
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
 
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
+    thread = process_output_threaded(window, window.vid_output_console, window.vid_download_button, window.process)
+    window.thread = thread
 
 
 def vid_playlist_bar_toggle(window):
