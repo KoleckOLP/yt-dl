@@ -10,7 +10,7 @@ def subs_shared_list(url: str, ytex):
     if ytex:
         cmd = ytex+["--list-subs", "--no-playlist", f"{url}"]
     else:
-        cmd = ["youtube-dl", "--list-subs", "--no-playlist", f"{url}"]
+        cmd = ["yt-dlp", "--list-subs", "--no-playlist", f"{url}"]
     return cmd
 
 
