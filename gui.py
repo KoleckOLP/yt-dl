@@ -3,16 +3,16 @@ import os, sys, glob, platform
 
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
-        from PyQt5 import QtWidgets, uic
+        from PyQt5 import QtWidgets, uic, QtGui
         from PyQt5.QtWidgets import QMessageBox
         from PyQt5.QtCore import QT_VERSION_STR  #, Qt
 
 try:
-    from PyQt6 import QtWidgets, uic
+    from PyQt6 import QtWidgets, uic, QtGui
     from PyQt6.QtWidgets import QMessageBox
     from PyQt6.QtCore import QT_VERSION_STR  #, Qt
 except Exception as e:
-    from PyQt5 import QtWidgets, uic
+    from PyQt5 import QtWidgets, uic, QtGui
     from PyQt5.QtWidgets import QMessageBox
     from PyQt5.QtCore import QT_VERSION_STR  #, Qt
 # Imports from this project
@@ -83,10 +83,7 @@ class MainWindow(QtWidgets.QMainWindow):
             }}
         """)
 
-        #self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
-        self.show()
-        self.raise_()
-        self.activateWindow()
+        # !!! show was here before !!!
 
         self.setAcceptDrops(True)
 
@@ -125,7 +122,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.setWindowTitle(f"yt-dl {ver}")
 
-                # this code is probably Windows only, and it's ugly af
+        # this code is probably Windows only, and it's ugly af
         python = os.path.dirname(sys.executable)+os.path.sep  # location of the python yt-dl was started from
         ytdlp = glob.glob(f"{python}Scripts{os.path.sep}yt-dlp*")  # check if python that launch yt-dl has yt-dlp
         if (not ytdlp):
@@ -146,16 +143,28 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.tabWidget.setCurrentIndex(self.settings.defaultTab)  # the code will not get here if settings is undefined.
 
+        #self.setWindowFlags(self.windowFlags() | Qt.WindowStaysOnTopHint)
+        self.show()
+        self.raise_()
+        self.activateWindow()
+
         self.running = False
         self.status("Ready.")
         self.process = ""
         # endregion
+
+        # set fixed width font for consoles.
+        font = QtGui.QFont()
+        font.setFamily("Monospace")
+        font.setStyleHint(QtGui.QFont.StyleHint.Monospace)
+        font.setPointSize(11)      
 
         # region =====aud_controls=====
         self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.audioDir))
         self.aud_download_button.clicked.connect(lambda: Audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
         self.aud_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        self.aud_output_console.setFont(font)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
@@ -175,6 +184,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.vid_best_radio.toggled.connect(lambda: set_save(self))
         self.vid_normal_radio.toggled.connect(lambda: set_save(self))
         self.vid_custom_radio.toggled.connect(lambda: set_save(self))
+        self.vid_output_console.setFont(font)
         self.vid_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Video) paste a link and hit download.")
         # endregion
 
@@ -184,6 +194,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
         self.sub_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        self.sub_output_console.setFont(font)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
