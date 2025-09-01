@@ -210,6 +210,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_folder_button.clicked.connect(lambda: self.openFolder(self.ree_location_bar.text()))
         self.ree_settings_combobox.activated.connect(lambda: ree_settings(self))
         self.ree_settings_button.clicked.connect(lambda: ree_settings_save(self))
+        self.ree_output_console.setFont(font)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
         self.ree_location_bar.setAcceptDrops(True)
         # endregion

@@ -13,7 +13,6 @@ from release import settingsPath
 from shared.ReEncode import reencode_shared, reencode_shared_settings
 from gui.Process import process_start, process_output
 
-
 def Reencode(window):
     location = window.ree_location_bar.text()
     videoc = window.ree_videoc_bar.text()
@@ -30,9 +29,9 @@ def Reencode(window):
         for line in result:
             window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
 
-            window.process = process_start(window, line, window.ree_output_console, window.sub_download_button, window.process)
+            window.process = process_start(window, line, window.ree_output_console, window.ree_reencode_button, window.process)
 
-            process_output(window, window.ree_output_console, window.sub_download_button, window.process, True, "Re-encode")
+            process_output(window, window.ree_output_console, window.ree_reencode_button, window.process, True, "Re-encode")
 
 
 def ree_settings(window):
