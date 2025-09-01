@@ -15,6 +15,7 @@ except Exception as e:
     from PyQt5 import QtWidgets, uic, QtGui
     from PyQt5.QtWidgets import QMessageBox
     from PyQt5.QtCore import QT_VERSION_STR  #, Qt
+        
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
 from gui.Audio import Audio, aud_playlist_bar_toggle

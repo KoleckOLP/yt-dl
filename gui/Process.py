@@ -5,7 +5,7 @@ from collections import deque
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets
-        from PyQt6.QtCore import QThread, pyqtSignal
+        from PyQt5.QtCore import QThread, pyqtSignal
 
 try:
     from PyQt6 import QtWidgets
