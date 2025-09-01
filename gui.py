@@ -232,6 +232,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.upd_update_button.clicked.connect(lambda: Update(self))
         self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
+        self.upd_output_console.setFont(font)
         self.upd_output_console.append("#yt-dl# Welcome to yt-dl-gui (Update) pick and option and click Update.")
         # endregion
 
