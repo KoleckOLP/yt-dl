@@ -255,7 +255,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.about_box.setHtml(f"<p style=\"font-size: 18px; white-space: pre\">HorseArmored Inc. (C){year}<br>" +
                                f"Version: {ver} ({curb} branch)<br>" +
                                f"Last updated on: {lstupdt}<br>" +
-                               f"My webpage: <a href=\"https://tiny.cc/koleq\">https://tiny.cc/koleq</a><br>" +
+                               f"My website: <a href=\"https://tiny.cc/koleq\">https://tiny.cc/koleq</a><br>" +
                                f"Project page: <a href=\"https://github.com/KoleckOLP/yt-dl\">https://github.com/KoleckOLP/yt-dl</a><br>" +
                                f"need help? ask here: <a href=\"https://discord.gg/W88375j\">https://discord.gg/W88375j</a><br>" +
                                f"yt-dlp (C)2021-{year} yt-dlp contributors<br>"
