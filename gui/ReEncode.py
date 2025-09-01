@@ -4,10 +4,12 @@ if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
         from PyQt5.QtWidgets import QFileDialog
 
+
 try:
     from PyQt6.QtWidgets import QFileDialog
-except ModuleNotFoundError:
+except Exception as e:
     from PyQt5.QtWidgets import QFileDialog
+        
 # Imports from this project
 from release import settingsPath
 from shared.ReEncode import reencode_shared, reencode_shared_settings

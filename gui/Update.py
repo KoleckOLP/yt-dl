@@ -4,13 +4,14 @@ if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
         from PyQt5 import QtWidgets, QtGui
         from PyQt5.QtCore import QT_VERSION_STR
-
+        
 try:
     from PyQt6 import QtWidgets, QtGui
     from PyQt6.QtCore import QT_VERSION_STR
 except Exception as e:
     from PyQt5 import QtWidgets, QtGui
     from PyQt5.QtCore import QT_VERSION_STR
+        
 # Imports from this project
 from release import settingsPath, ver
 from gui.Process import process_start
