@@ -1,5 +1,8 @@
 from typing import List
 import sys, subprocess, platform
+import threading
+from queue import Queue, Empty
+from PyQt6.QtCore import pyqtSignal, QObject
 
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
@@ -11,54 +14,109 @@ except Exception as e:
     from PyQt5 import QtWidgets
 
 
-def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, process_name: str = "yt-dlp"):
-    if not window.running:
-        window.running = True
-        window.status("Busy.")
-        download_button.setText("Stop!")
-        tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
-        window.tabWidget.setTabText(window.tabWidget.currentIndex(), "*" + tabName)
-
-        if output_clear:
-            output_console.setHtml("")  # clearing the output_console
-            output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
-            output_console.insertPlainText(f"#yt-dl# debug `{' '.join(cmd)}`\n\n")
-
-        if (sys.platform.startswith("win")):  # (os.name == "nt"):
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000, universal_newlines=True, encoding="utf8", errors="ignore", stdin=subprocess.DEVNULL)  # this one does not check if another process is running, stdin=subprocess.DEVNULL
-        else:  # (sys.platform.startswith(("linux", "darwin", "freebsd"))): #(os.name == "posix"):  # other oeses should be fine with this
-            process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, errors="ignore")
-    else:
-        process.terminate()
-        window.running = False
-    return process
+class OutputEmitter(QObject):
+    output_signal = pyqtSignal(str)
+    error_signal = pyqtSignal(str)
+    finished_signal = pyqtSignal()
 
 
-def process_output(window, output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process: subprocess.Popen = "", output_clear: bool = True, button_text: str = "Download"):
+def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process_worker=None, output_clear: bool = True, process_name: str = "yt-dlp", collect_output: bool = False):
     if window.running:
+        # Only call terminate_process if it exists
+        if hasattr(window, 'process_worker') and window.process_worker:
+            if hasattr(window.process_worker, 'terminate_process'):
+                window.process_worker.terminate_process()
+        window.running = False
+        return None
+
+    window.running = True
+    window.status("Busy.")
+    download_button.setText("Stop!")
+    tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
+    window.tabWidget.setTabText(window.tabWidget.currentIndex(), "*" + tabName)
+
+    if output_clear:
+        output_console.setHtml("")
+        output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
+        output_console.insertPlainText(f"#yt-dl# debug `{' '.join(cmd)}`\n\n")
+
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000 if sys.platform.startswith("win") else 0, universal_newlines=True, encoding="utf8", errors="ignore", stdin=subprocess.DEVNULL)
+    q = Queue()
+    emitter = OutputEmitter()
+    window.process_worker = emitter  # for compatibility
+
+    def enqueue_output(pipe, tag):
+        for line in iter(pipe.readline, ''):
+            q.put((tag, line))
+        pipe.close()
+
+    t_out = threading.Thread(target=enqueue_output, args=(process.stdout, 'stdout'))
+    t_err = threading.Thread(target=enqueue_output, args=(process.stderr, 'stderr'))
+    t_out.daemon = True
+    t_err.daemon = True
+    t_out.start()
+    t_err.start()
+
+    collected = [] if collect_output else None
+
+    def process_queue():
         while True:
-            if window.isVisible():  # this should make sure that if window dies the subprocess dies too.
-                test = process.stdout.readline()
-                if test == '' and process.poll() is not None:
+            try:
+                tag, line = q.get(timeout=0.1)
+            except Empty:
+                if process.poll() is not None:
                     break
-                test = str(test)
-                if "\\n" in test:
-                    test = test.replace("\\n", "\n")
-                output_console.insertPlainText(test)
-                scrollbar = output_console.verticalScrollBar()
-                scrollbar.setValue(scrollbar.maximum())
-                QtWidgets.QApplication.processEvents()
+                continue
+            if tag == 'stderr':
+                emitter.error_signal.emit(line)
             else:
-                process.terminate()
-                sys.exit()  # for some reason killing the subprocess and closing the window dit not kill the app, huh exit does not exists?
-        print("\a", end="")  # play alert sound without printing a new line
-        if output_clear:
+                emitter.output_signal.emit(line)
+                if collect_output:
+                    collected.append(line)
+        emitter.finished_signal.emit()
+
+    t_proc = threading.Thread(target=process_queue)
+    t_proc.daemon = True
+    t_proc.start()
+
+    def handle_output(line):
+        if collect_output:
+            return  # Do not print real-time output when collecting
+        if "\r" in line:
+            text = line.split("\r")[-1].rstrip("\n")
+            cursor = output_console.textCursor()
+            cursor.movePosition(cursor.End)
+            cursor.select(cursor.LineUnderCursor)
+            cursor.removeSelectedText()
+            cursor.deletePreviousChar()
+            cursor.insertText(text)
+            output_console.setTextCursor(cursor)
+        else:
+            output_console.insertPlainText(line)
+        scrollbar = output_console.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+        QtWidgets.QApplication.processEvents()
+
+    def handle_error(line):
+        output_console.insertPlainText('[stderr] ' + line)
+        scrollbar = output_console.verticalScrollBar()
+        scrollbar.setValue(scrollbar.maximum())
+        QtWidgets.QApplication.processEvents()
+
+    def handle_finished():
+        if not collect_output:
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
-        download_button.setText(button_text)
+        download_button.setText("Download")
         window.running = False
         window.status("Ready.")
         tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
-        window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
+        if tabName.startswith("*"):
+            window.tabWidget.setTabText(window.tabWidget.currentIndex(), tabName[1:])
         QtWidgets.QApplication.processEvents()
         scrollbar = output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
+
+    emitter.output_signal.connect(handle_output)
+    emitter.error_signal.connect(handle_error)
+    emitter.finished_signal.connect(handle_finished)
+    return emitter if not collect_output else (emitter, collected)

@@ -17,12 +17,12 @@ except Exception as e:
     from PyQt5.QtCore import QT_VERSION_STR  #, Qt
 # Imports from this project
 from release import year, lstupdt, spath, curb, ver, settingsPath, audioDirDefault, videoDirDefault
-from gui.Audio import Audio, aud_playlist_bar_toggle
-from gui.Video import Video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
-from gui.Subs import Subs, sub_lang, sub_playlist_bar_toggle
-from gui.ReEncode import Reencode, ree_settings, ree_settings_save, ree_choose
-from gui.Update import Update, upd_auto_toggle, upd_button_change
-from gui.Settings import set_save, set_load, set_makeScript, WriteDefaultJson
+from gui.Audio import audio, aud_playlist_bar_toggle
+from gui.Video import video, vid_quality, vid_playlist_bar_toggle, vid_quality_bar_toggle
+from gui.Subs import subs, sub_lang, sub_playlist_bar_toggle
+from gui.ReEncode import reencode, ree_settings, ree_settings_save, ree_choose
+from gui.Update import update, upd_auto_toggle, upd_button_change
+from gui.Settings import set_save, set_load, set_make_script, write_default_json
 from shared.ReEncode import reencode_shared_settings
 from shared.Config import Settings
 
@@ -55,11 +55,11 @@ class MainWindow(QtWidgets.QMainWindow):
     # endregion
 
     def closeEvent(self, e):  # when closing the app it's size and position gets saved, there alsoe has to be "e" even if it's not used or it throws an error
-        self.settings.Window.windowWidth = self.geometry().width()
-        self.settings.Window.windowHeight = self.geometry().height()
-        self.settings.Window.windowPosX = self.pos().x()
-        self.settings.Window.windowPosY = self.pos().y()
-        self.settings.toJson(settingsPath)
+        self.settings.window_settings.window_width = self.geometry().width()
+        self.settings.window_settings.window_height = self.geometry().height()
+        self.settings.window_settings.window_pos_x = self.pos().x()
+        self.settings.window_settings.window_pos_y = self.pos().y()
+        self.settings.to_json(settingsPath)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -91,16 +91,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setAcceptDrops(True)
 
         # region ===== startup =====
+
+        # ffmpeg detection
         pffmpeg = glob.glob(f"{spath}ffmpeg*")
         pffprobe = glob.glob(f"{spath}ffprobe*")
         if (not pffmpeg and not pffprobe):
             self.floc = False
-        else:  # This code is absolutely terrible :)
+        else:
             directorySplit = pffmpeg[0]
             directorySplit = directorySplit.split("\\")
             directorySplit = directorySplit[:-1]
             directorySplit = "\\".join(directorySplit)
             self.floc = directorySplit
+
+        # deno detection
+        pdeno = glob.glob(f"{spath}deno*")
+        if not pdeno:
+            self.deno = False
+        else:
+            self.deno = pdeno[0]
 
         pgit = glob.glob(f"{spath}git{os.path.sep}bin{os.path.sep}git*")
         if pgit:  # using portable git
@@ -110,18 +119,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if (os.path.exists(settingsPath)):
             try:
-                self.settings = Settings.fromJson(settingsPath)
+                self.settings = Settings.from_json(settingsPath)
             except KeyError as e:
                 #print(e)
                 if QT_VERSION_STR[0] == '6':
-                    self.messagePopup("Settings error", QMessageBox.Icon.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
+                    self.messagePopup("Settings error", QMessageBox.Icon.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.save_default_config)
                 else:
-                    self.messagePopup("Settings error", QMessageBox.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.SaveDefaultConfig)
+                    self.messagePopup("Settings error", QMessageBox.Critical, "Your config file is not up to date,\nPress OK to load default config.", self.save_default_config)
         else:
             if QT_VERSION_STR[0] == '6':
-                self.messagePopup("Settings error", QMessageBox.Icon.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
+                self.messagePopup("Settings error", QMessageBox.Icon.Critical, "You are missing a config file,\nPress OK to load default config.", self.save_default_config)
             else:
-                self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.SaveDefaultConfig)
+                self.messagePopup("Settings error", QMessageBox.Critical, "You are missing a config file,\nPress OK to load default config.", self.save_default_config)
 
         self.setWindowTitle(f"yt-dl {ver}")
 
@@ -129,22 +138,22 @@ class MainWindow(QtWidgets.QMainWindow):
         python = os.path.dirname(sys.executable)+os.path.sep  # location of the python yt-dl was started from
         ytdlp = glob.glob(f"{python}Scripts{os.path.sep}yt-dlp*")  # check if python that launch yt-dl has yt-dlp
         if (not ytdlp):
-            ytdlp = glob.glob(f"{self.settings.Python.python[:-6]}Scripts{os.path.sep}yt-dlp*")  # check if user configured python has yt-dlp, specific to Vista build
+            ytdlp = glob.glob(f"{self.settings.python_settings.python[:-6]}Scripts{os.path.sep}yt-dlp*")  # check if user configured python has yt-dlp, specific to Vista build
             if (not ytdlp):
                 self.ytex = False
             else:
-                self.ytex = [self.settings.Python.python, ytdlp[0]]
+                self.ytex = [self.settings.python_settings.python, ytdlp[0]]
         else:
             self.ytex = [python+"python", ytdlp[0]]
 
         # changing size and position of the window
-        if self.settings.Window.windowWidth != 0 or self.settings.Window.windowHeight != 0:
-            self.resize(self.settings.Window.windowWidth, self.settings.Window.windowHeight)
+        if self.settings.window_settings.window_width != 0 or self.settings.window_settings.window_height != 0:
+            self.resize(self.settings.window_settings.window_width, self.settings.window_settings.window_height)
 
-        if self.settings.Window.windowPosX != 0 or self.settings.Window.windowPosY != 0:
-            self.move(self.settings.Window.windowPosX, self.settings.Window.windowPosY)
+        if self.settings.window_settings.window_pos_x != 0 or self.settings.window_settings.window_pos_y != 0:
+            self.move(self.settings.window_settings.window_pos_x, self.settings.window_settings.window_pos_y)
 
-        self.tabWidget.setCurrentIndex(self.settings.defaultTab)  # the code will not get here if settings is undefined.
+        self.tabWidget.setCurrentIndex(self.settings.default_tab)  # the code will not get here if settings is undefined.
 
         self.running = False
         self.status("Ready.")
@@ -152,25 +161,25 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====aud_controls=====
-        self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.audioDir))
-        self.aud_download_button.clicked.connect(lambda: Audio(self))
+        self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.ytdlp_settings.audio_dir))
+        self.aud_download_button.clicked.connect(lambda: audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
-        self.aud_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        self.aud_cookie_checkbox.setChecked(self.settings.ytdlp_settings.cookie)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
 
         # region =====vid_controls=====
-        self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.videoDir))
-        self.vid_download_button.clicked.connect(lambda: Video(self))
+        self.vid_folder_button.clicked.connect(lambda: self.openFolder(self.settings.ytdlp_settings.video_dir))
+        self.vid_download_button.clicked.connect(lambda: video(self))
         self.vid_quality_button.clicked.connect(lambda: vid_quality(self))
         self.vid_playlist_checkbox.clicked.connect(lambda: vid_playlist_bar_toggle(self))
         self.vid_custom_radio.toggled.connect(lambda: vid_quality_bar_toggle(self))
-        self.vid_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
-        if self.settings.Ytdlp.quality == "best":
+        self.vid_cookie_checkbox.setChecked(self.settings.ytdlp_settings.cookie)
+        if self.settings.ytdlp_settings.quality == "best":
             self.vid_best_radio.setChecked(True)
-        elif self.settings.Ytdlp.quality == "normal":
+        elif self.settings.ytdlp_settings.quality == "normal":
             self.vid_normal_radio.setChecked(True)
-        elif self.settings.Ytdlp.quality == "custom":
+        elif self.settings.ytdlp_settings.quality == "custom":
             self.vid_custom_radio.setChecked(True)
         self.vid_best_radio.toggled.connect(lambda: set_save(self))
         self.vid_normal_radio.toggled.connect(lambda: set_save(self))
@@ -179,11 +188,11 @@ class MainWindow(QtWidgets.QMainWindow):
         # endregion
 
         # region =====sub_controls=====
-        self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.Ytdlp.videoDir))
-        self.sub_download_button.clicked.connect(lambda: Subs(self))
+        self.sub_folder_button.clicked.connect(lambda: self.openFolder(self.settings.ytdlp_settings.video_dir))
+        self.sub_download_button.clicked.connect(lambda: subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
-        self.sub_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        self.sub_cookie_checkbox.setChecked(self.settings.ytdlp_settings.cookie)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
 
@@ -195,7 +204,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ree_settings(self)  # load option on startup
         self.ree_choose_button.clicked.connect(lambda: ree_choose(self))
-        self.ree_reencode_button.clicked.connect(lambda: Reencode(self))
+        self.ree_reencode_button.clicked.connect(lambda: reencode(self))
         self.ree_folder_button.clicked.connect(lambda: self.openFolder(self.ree_location_bar.text()))
         self.ree_settings_combobox.activated.connect(lambda: ree_settings(self))
         self.ree_settings_button.clicked.connect(lambda: ree_settings_save(self))
@@ -212,22 +221,22 @@ class MainWindow(QtWidgets.QMainWindow):
             self.upd_update_combobox.setCurrentIndex(1)
 
         QtWidgets.QApplication.processEvents()
-        if self.settings.autoUpdate:
+        if self.settings.auto_update:
             self.tabWidget.setCurrentIndex(4)
-            Update(self)
+            update(self)
 
         self.upd_update_combobox.currentIndexChanged.connect(lambda: upd_button_change(self))
-        self.upd_update_button.clicked.connect(lambda: Update(self))
-        self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.autoUpdate}\"")
+        self.upd_update_button.clicked.connect(lambda: update(self))
+        self.upd_auto_button.setText(f"Autoupdate=\"{self.settings.auto_update}\"")
         self.upd_auto_button.clicked.connect(lambda: upd_auto_toggle(self))
         self.upd_output_console.append("#yt-dl# Welcome to yt-dl-gui (Update) pick and option and click Update.")
         # endregion
 
         # region =====set_controls=====
-        self.set_loaddef_button.clicked.connect(lambda: WriteDefaultJson(self))
+        self.set_loaddef_button.clicked.connect(lambda: write_default_json(self))
         self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Ytdlp.audioDir, self.settings.Ytdlp.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Ytdlp.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
-        self.set_launch_button.clicked.connect(lambda: set_makeScript(self))
+        self.set_launch_button.clicked.connect(lambda: set_make_script(self))
         self.set_save_button.clicked.connect(lambda: set_save(self))
         self.set_Tab_combobox.addItem("Audio")  # setting up items in combo list
         self.set_Tab_combobox.addItem("Video")
@@ -236,7 +245,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_Tab_combobox.addItem("Update")
         self.set_Tab_combobox.addItem("Settings")
         self.set_Tab_combobox.addItem("About")
-        set_load(self, self.settings.Ytdlp.audioDir, self.settings.Ytdlp.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Ytdlp.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose)
+        set_load(
+            self,
+            self.settings.ytdlp_settings.audio_dir,
+            self.settings.ytdlp_settings.video_dir,
+            self.settings.python_settings.python,
+            self.settings.python_settings.pip,
+            self.settings.ytdlp_settings.from_pip,
+            self.settings.auto_update,
+            self.settings.ffmpeg_settings.audio_codec,
+            self.settings.ffmpeg_settings.video_codec,
+            self.settings.ffmpeg_settings.audio_bitrate,
+            self.settings.ffmpeg_settings.video_quality,
+            self.settings.ffmpeg_settings.append,
+            self.settings.default_tab,
+            self.settings.auto_close
+        )
         # endregion
 
         # region ==========🎓ABOUT🎓==========
@@ -268,17 +292,17 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if QT_VERSION_STR[0] == '6':
             if button == QMessageBox.StandardButton.Ok:
-                self.SaveDefaultConfig("ok")
+                self.save_default_config("ok")
             else:
                 sys.exit()
 
-    def SaveDefaultConfig(self, i):  # only exists for pyqt5 support, not needed in pyqt6
+    def save_default_config(self, i):  # only exists for pyqt5 support, not needed in pyqt6
         if QT_VERSION_STR[0] == '6':
             text = i
         else:
             text: str = i.text().lower()
         if "ok" in text:
-            WriteDefaultJson(self)
+            write_default_json(self)
         else:
             sys.exit()
 

@@ -2,14 +2,17 @@ import os
 from release import spath
 
 
-def shared(playlist: bool, numb: str, floc: str, ytex: str, directory: str):
+def shared(playlist: bool, numb: str, floc: str, ytex: str, directory: str, deno: str = False):
     if ytex:
         cmd = ytex
     else:
         cmd = ["yt-dlp"]
 
     if floc:
-        cmd = cmd + ["--prefer-ffmpeg", "--ffmpeg-location", floc]
+        cmd = cmd + ["--ffmpeg-location", floc]
+
+    if deno:
+        cmd = cmd + ["--js-runtimes", "deno:" + deno, "--remote-components", "ejs:github"]
 
     if playlist:  # yes playlist
         cmd = cmd + ["-o", f"{directory}%(playlist_index)s. %(title)s.%(ext)s", "--yes-playlist", "-i"]
@@ -20,8 +23,7 @@ def shared(playlist: bool, numb: str, floc: str, ytex: str, directory: str):
     return cmd
 
 
-def hasCookie(checkbox: bool, cmd: list):
+def has_cookie(checkbox: bool, cmd: list):
     if checkbox:
-        if os.path.exists(spath + "cookies.txt"):
-            cmd = cmd + ["--cookies", spath + "cookies.txt"]
+        cmd = cmd + ["--cookies-from-browser", "firefox"]
     return cmd

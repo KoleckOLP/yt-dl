@@ -6,21 +6,21 @@ from shared.Config import Settings
 
 
 def set_save(window):
-    window.settings.Ytdlp.audioDir = window.set_audio_bar.text()
-    window.settings.Ytdlp.videoDir = window.set_videos_bar.text()
-    window.settings.Python.python = window.set_py_bar.text()
-    window.settings.Python.pip = window.set_pip_bar.text()
-    window.settings.Ytdlp.fromPip = window.set_ydpip_checkbox.isChecked()
-    window.settings.autoUpdate = window.set_aup_checkbox.isChecked()
-    window.settings.defaultTab = window.set_Tab_combobox.currentIndex()
-    window.settings.autoClose = window.set_close_checkbox.isChecked()
+    window.settings.ytdlp_settings.audio_dir = window.set_audio_bar.text()
+    window.settings.ytdlp_settings.video_dir = window.set_videos_bar.text()
+    window.settings.python_settings.python = window.set_py_bar.text()
+    window.settings.python_settings.pip = window.set_pip_bar.text()
+    window.settings.ytdlp_settings.from_pip = window.set_ydpip_checkbox.isChecked()
+    window.settings.auto_update = window.set_aup_checkbox.isChecked()
+    window.settings.default_tab = window.set_Tab_combobox.currentIndex()
+    window.settings.auto_close = window.set_close_checkbox.isChecked()
     window.settings.clipboard = window.set_clipboard_checkbox.isChecked()
     if window.vid_best_radio.isChecked():
-        window.settings.Ytdlp.quality = "best"
+        window.settings.ytdlp_settings.quality = "best"
     elif window.vid_normal_radio.isChecked():
-        window.settings.Ytdlp.quality = "normal"
+        window.settings.ytdlp_settings.quality = "normal"
     elif window.vid_custom_radio.isChecked():
-        window.settings.Ytdlp.quality = "custom"
+        window.settings.ytdlp_settings.quality = "custom"
     ree_settings_save(window)
 
 
@@ -40,7 +40,7 @@ def set_load(window, audio, video, py, pip, ydpip, aup, acodec, vcodec, abit, vq
     window.set_close_checkbox.setChecked(close)
 
 
-def set_makeScript(window):  # I had an issue getting the venv working with gui
+def set_make_script(window):  # I had an issue getting the venv working with gui
     if (sys.platform.startswith("win")):
         f = open("yt-dl_gui.vbs", "w")
         f.write(f"Set WshShell = CreateObject(\"WScript.Shell\")\nWshShell.Run \"cmd /c cd /d {spath} & pythonw.exe gui.py\", 0\nSet WshShell = Nothing")
@@ -53,7 +53,22 @@ def set_makeScript(window):  # I had an issue getting the venv working with gui
         f.write(f"#!/bin/sh\n\ncd {spath} && {window.settings.Python.python} gui.py")
         f.close()
 
-def WriteDefaultJson(window):
-    window.settings = Settings.loadDefault()
-    window.settings.toJson(settingsPath)
-    set_load(window, window.settings.Ytdlp.audioDir, window.settings.Ytdlp.videoDir, window.settings.Python.python, window.settings.Python.pip, window.settings.Ytdlp.fromPip, window.settings.autoUpdate, window.settings.Ffmpeg.audioCodec, window.settings.Ffmpeg.videoCodec, window.settings.Ffmpeg.audioBitrate, window.settings.Ffmpeg.videoQuality, window.settings.Ffmpeg.append, window.settings.defaultTab, window.settings.autoClose)
+def write_default_json(window):
+    window.settings = Settings.load_default()
+    window.settings.to_json(settingsPath)
+    set_load(
+        window,
+        window.settings.ytdlp_settings.audio_dir,
+        window.settings.ytdlp_settings.video_dir,
+        window.settings.python_settings.python,
+        window.settings.python_settings.pip,
+        window.settings.ytdlp_settings.from_pip,
+        window.settings.auto_update,
+        window.settings.ffmpeg_settings.audio_codec,
+        window.settings.ffmpeg_settings.video_codec,
+        window.settings.ffmpeg_settings.audio_bitrate,
+        window.settings.ffmpeg_settings.video_quality,
+        window.settings.ffmpeg_settings.append,
+        window.settings.default_tab,
+        window.settings.auto_close
+    )

@@ -2,45 +2,44 @@ import sys, platform
 # Imports from this project
 from shared.Video import video_list_shared, video_shared
 from gui.Settings import set_save
-from gui.Process import process_start, process_output
-from shared.Shared import hasCookie
+from gui.Process import process_start
+from shared.Shared import has_cookie
 
 import os, subprocess, glob, datetime
 
 
-def Video(window):
-    window.settings.Ytdlp.cookie = window.vid_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be se to the whatever is the setting.
+def video(window):
+    window.settings.ytdlp_settings.cookie = window.vid_cookie_checkbox.isChecked()  # overwrites whatever is in the setting, but it should be set to whatever is the setting.
     set_save(window)  # not a great idea but save the changed ehh state of the checkbox
 
     if window.vid_normal_radio.isChecked():
-        qualityChose = ""
+        quality_choice = ""
         qual = "best[ext=mp4]"  # these are useless
     elif window.vid_custom_radio.isChecked():
-        qualityChose = "2"
+        quality_choice = "2"
         qual = window.vid_quality_bar.text()
     else:
-        qualityChose = "1"
+        quality_choice = "1"
         qual = "bestvideo+bestaudio"  # these are useless
 
     cmd = video_shared(window.vid_url_bar.text(),
                        window.vid_playlist_checkbox.isChecked(),
                        window.vid_playlist_bar.text(),
-                       qualityChose,
+                       quality_choice,
                        qual,
                        window.floc,
                        window.ytex,
-                       window.settings.Ytdlp.videoDir,
-                       window.settings.Ytdlp.cookie)
+                       window.settings.ytdlp_settings.video_dir,
+                       window.settings.ytdlp_settings.cookie,
+                       getattr(window, 'deno', False))
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
-
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
     if (platform.system().lower() == "windows" and window.settings.clipboard):  # platform windows
         if (float(f"{platform.version().split('.')[0]}.{platform.version().split('.')[1]}") >= 6.1):  # Checking if version is 6.1 (Windows 7) or higher
             if window.vid_normal_radio.isChecked() and not window.vid_playlist_checkbox.isChecked(): #only ty to put video in clipboard if it's normal quality, and not playlist
                 #attempt putting the downloaded video into the clipboard
-                latest_file = max(glob.glob(f"{window.settings.Ytdlp.videoDir}*"), key=os.path.getctime)
+                latest_file = max(glob.glob(f"{window.settings.ytdlp_settings.video_dir}*"), key=os.path.getctime)
                 latest_file = latest_file.replace("‘", "*")  # this character makes set-clipboard fail, and prolly is not the only one
                 cmd = [f"{window.floc + os.path.sep}powershell{os.path.sep}pwsh", "-Command", f"Add-Type -AssemblyName System.Windows.Forms; $list = [System.Windows.Forms.Clipboard]::GetFileDropList(); $list.Clear(); $list.Add('{latest_file}'); [System.Windows.Forms.Clipboard]::SetFileDropList($list)"]
                 Powershell_process = subprocess.run(  # codefactor is mad about this, also this is windows only and doesn't check for platform
@@ -58,18 +57,16 @@ def Video(window):
                         f.write(Powershell_process.stdout)
                         f.write(Powershell_process.stderr)
 
-        if (window.settings.autoClose):
+        if (window.settings.auto_close):
             sys.exit()  # problably not the cleanest solution but doesn't left processes behind
 
 
 def vid_quality(window):
     cmd = video_list_shared(window.vid_url_bar.text(), window.ytex)
 
-    cmd = hasCookie(window.vid_cookie_checkbox.isChecked(), cmd)
+    cmd = has_cookie(window.vid_cookie_checkbox.isChecked(), cmd)
 
     window.process = process_start(window, cmd, window.vid_output_console, window.vid_download_button, window.process)
-
-    process_output(window, window.vid_output_console, window.vid_download_button, window.process)
 
 
 def vid_playlist_bar_toggle(window):

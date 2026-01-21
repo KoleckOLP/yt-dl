@@ -119,11 +119,11 @@ def reencode_shared_settings(call_window, setting=0):  # still could be done bet
                          "190k",
                          ".mp3",
                          "mp3"],
-                        [call_window.settings.Ffmpeg.videoCodec,
-                         call_window.settings.Ffmpeg.videoQuality,
-                         call_window.settings.Ffmpeg.audioCodec,
-                         call_window.settings.Ffmpeg.audioBitrate,
-                         call_window.settings.Ffmpeg.append,
+                        [call_window.settings.ffmpeg_settings.video_codec,
+                         call_window.settings.ffmpeg_settings.video_quality,
+                         call_window.settings.ffmpeg_settings.audio_codec,
+                         call_window.settings.ffmpeg_settings.audio_bitrate,
+                         call_window.settings.ffmpeg_settings.append,
                          "custom"]]
 
     if setting == "len":

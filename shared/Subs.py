@@ -3,7 +3,7 @@ import glob
 import tempfile
 from typing import List
 # Imports from this project
-from shared.Shared import shared, hasCookie
+from shared.Shared import shared, has_cookie
 
 
 def subs_shared_list(url: str, ytex):
@@ -19,7 +19,8 @@ def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: s
 
     cmd = shared(playlist, numb, floc, ytex, temp.name+os.path.sep)
 
-    cmd = cmd + ["--write-sub", "--write-auto-sub", "--sub-format", "vtt", "--skip-download", f"{url}"]
+    # Add --convert-subs srt to convert vtt to srt automatically
+    cmd = cmd + ["--write-sub", "--write-auto-sub", "--sub-format", "vtt", "--convert-subs", "srt", "--skip-download", f"{url}"]
 
     if lang:
         if lang == "all":
@@ -27,7 +28,7 @@ def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: s
         else:
             cmd = cmd + ["--sub-lang", lang]
 
-    cmd = hasCookie(cookie, cmd)
+    cmd = has_cookie(cookie, cmd)
 
     return (cmd, temp)
 

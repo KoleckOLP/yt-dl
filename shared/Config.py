@@ -15,115 +15,101 @@ class PythonSettings:
 
 
 class YtdlpSettings:
-    def __init__(self, audioDir: str, videoDir: str, fromPip: bool, cookie: bool, quality: str):
-        self.audioDir = audioDir
-        self.videoDir = videoDir
-        self.fromPip = fromPip
+    def __init__(self, audio_dir: str, video_dir: str, from_pip: bool, cookie: bool, quality: str):
+        self.audio_dir = audio_dir
+        self.video_dir = video_dir
+        self.from_pip = from_pip
         self.cookie = cookie
         self.quality = quality
 
 
 class FfmpegSettings:
-    def __init__(self, videoCodec: str, audioCodec: str, videoQuality: str, audioBitrate: str, append: str):
-        self.videoCodec = videoCodec
-        self.audioCodec = audioCodec
-        self.videoQuality = videoQuality
-        self.audioBitrate = audioBitrate
+    def __init__(self, video_codec: str, audio_codec: str, video_quality: str, audio_bitrate: str, append: str):
+        self.video_codec = video_codec
+        self.audio_codec = audio_codec
+        self.video_quality = video_quality
+        self.audio_bitrate = audio_bitrate
         self.append = append
 
 class WindowSettings:
-    def __init__(self, windowWidth: int, windowHeight: int, windowPosX: int, windowPosY: int):
-        self.windowWidth = windowWidth
-        self.windowHeight = windowHeight
-        self.windowPosX = windowPosX
-        self.windowPosY = windowPosY
+    def __init__(self, window_width: int, window_height: int, window_pos_x: int, window_pos_y: int):
+        self.window_width = window_width
+        self.window_height = window_height
+        self.window_pos_x = window_pos_x
+        self.window_pos_y = window_pos_y
 
 class Settings:
-    def __init__(self, Python: PythonSettings, Ytdlp: YtdlpSettings, Ffmpeg: FfmpegSettings, Window: WindowSettings, autoUpdate: bool, defaultTab: int, defaultCodec: int, autoClose: bool, clipboard: bool):
-        self.Python = Python
-        self.Ytdlp = Ytdlp
-        self.Ffmpeg = Ffmpeg
-        self.Window = Window
-        self.autoUpdate = autoUpdate
-        self.defaultTab = defaultTab
-        self.defaultCodec = defaultCodec
-        self.autoClose = autoClose
+    def __init__(self, python_settings: PythonSettings, ytdlp_settings: YtdlpSettings, ffmpeg_settings: FfmpegSettings, window_settings: WindowSettings, auto_update: bool, default_tab: int, default_codec: int, auto_close: bool, clipboard: bool):
+        self.python_settings = python_settings
+        self.ytdlp_settings = ytdlp_settings
+        self.ffmpeg_settings = ffmpeg_settings
+        self.window_settings = window_settings
+        self.auto_update = auto_update
+        self.default_tab = default_tab
+        self.default_codec = default_codec
+        self.auto_close = auto_close
         self.clipboard = clipboard
 
-    def toJson(self, path):
+    def to_json(self, path):
         with open(path, "w") as fh:
             x = json.dumps(self, indent=4, cls=Encoder)
             fh.writelines(x)
 
     @staticmethod
-    def fromJson(path):
+    def from_json(path):
         with open(path, "r") as fh:
             x = json.loads(fh.read())
-        return Settings(PythonSettings(x["Python"]["python"],
-                                       x["Python"]["pip"]),
-                        YtdlpSettings(x["Ytdlp"]["audioDir"],
-                                          x["Ytdlp"]["videoDir"],
-                                          x["Ytdlp"]["fromPip"],
-                                          x["Ytdlp"]["cookie"],
-                                          x["Ytdlp"]["quality"]),
-                        FfmpegSettings(x["Ffmpeg"]["videoCodec"],
-                                       x["Ffmpeg"]["audioCodec"],
-                                       x["Ffmpeg"]["videoQuality"],
-                                       x["Ffmpeg"]["audioBitrate"],
-                                       x["Ffmpeg"]["append"]),
-                        WindowSettings(x["Window"]["windowWidth"],
-                                       x["Window"]["windowHeight"],
-                                       x["Window"]["windowPosX"],
-                                       x["Window"]["windowPosY"]),
-                        x["autoUpdate"],
-                        x["defaultTab"],
-                        x["defaultCodec"],
-                        x["autoClose"],
+        return Settings(PythonSettings(x["python_settings"]["python"],
+                                       x["python_settings"]["pip"]),
+                        YtdlpSettings(x["ytdlp_settings"]["audio_dir"],
+                                      x["ytdlp_settings"]["video_dir"],
+                                      x["ytdlp_settings"]["from_pip"],
+                                      x["ytdlp_settings"]["cookie"],
+                                      x["ytdlp_settings"]["quality"]),
+                        FfmpegSettings(x["ffmpeg_settings"]["video_codec"],
+                                       x["ffmpeg_settings"]["audio_codec"],
+                                       x["ffmpeg_settings"]["video_quality"],
+                                       x["ffmpeg_settings"]["audio_bitrate"],
+                                       x["ffmpeg_settings"]["append"]),
+                        WindowSettings(x["window_settings"]["window_width"],
+                                       x["window_settings"]["window_height"],
+                                       x["window_settings"]["window_pos_x"],
+                                       x["window_settings"]["window_pos_y"]),
+                        x["auto_update"],
+                        x["default_tab"],
+                        x["default_codec"],
+                        x["auto_close"],
                         x["clipboard"])
 
     @staticmethod
-    def loadDefault():
-        if "portable" in os.path.basename(os.path.normpath(spath)):  # if you are running the portable version of yt-dl, this is the default path for python and pip
+    def load_default():
+        if "portable" in os.path.basename(os.path.normpath(spath)):
             if platform.release().lower() == "vista":
                 defpython = "..\\python-3119\\python.exe"
                 defpip = "..\\python-3119\\python.exe -m pip"
             else:
                 defpython = "..\\python\\python.exe"
                 defpip = "..\\python\\python.exe -m pip"
-        else:  # if you are not running the portable version of yt-dl, this takes the executable of the current python interpreter and uses that as the default python and pip
+        else:
             defpython = os.path.basename(sys.executable)
             defpip = os.path.basename(sys.executable) + " -m pip"
 
         try:
             result = subprocess.run(['pip', 'show', 'yt-dlp'], capture_output=True, text=True)
             if result.returncode == 0:
-                # This means pip found yt-dlp, hence it was installed with pip
                 ytdlppip = True
             else:
-                # yt-dlp is not found in pip
                 ytdlppip = False
         except Exception as e:
             print(f"Error checking with pip: {e}")
             ytdlppip = False
 
-        return Settings(PythonSettings(defpython,  # python executable name
-                                       defpip),  # pip executable name/command
-                        YtdlpSettings(audioDirDefault,  # audio folder inside of yt-dl
-                                          videoDirDefault,  # video folder inside of yt-dl
-                                          ytdlppip,  # this is true if yt-dlp was installed with pip, false if it was installed with other package manager or manually
-                                          False,  # cookie, is currently not dected, but it is not needed for most users, so it's false by default
-                                          "best"), # set the default quality to best.
-                        FfmpegSettings("libx265",  # This is just fine
-                                       "opus",  # same as above
-                                       "24,24,24",  # same as above
-                                       "190k",  # same as above
-                                       "_custom.mkv"),  # same as above
-                        WindowSettings(0,
-                                       0,
-                                       0,
-                                       0), # defaul window size and position, this is set to 0,0,0,0 so it will be set to the default size and position of the OS
-                        False,  # I would recommend not having auto update on, it's annoying.
-                        0,  # audio tab
-                        0,  # hevc_opus
+        return Settings(PythonSettings(defpython, defpip),
+                        YtdlpSettings(audioDirDefault, videoDirDefault, ytdlppip, False, "best"),
+                        FfmpegSettings("libx265", "opus", "24,24,24", "190k", "_custom.mkv"),
+                        WindowSettings(0, 0, 0, 0),
                         False,
-                        False)  # raf autoClose
+                        0,
+                        0,
+                        False,
+                        False)
