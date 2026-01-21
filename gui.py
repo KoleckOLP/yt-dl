@@ -173,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.aud_folder_button.clicked.connect(lambda: self.openFolder(self.settings.ytdlp_settings.audio_dir))
         self.aud_download_button.clicked.connect(lambda: audio(self))
         self.aud_playlist_checkbox.clicked.connect(lambda: aud_playlist_bar_toggle(self))
-        self.aud_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        self.aud_cookie_checkbox.setChecked(self.settings.ytdlp_settings.cookie)
         self.aud_output_console.setFont(font)
         self.aud_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Audio) paste a link and hit download.")
         # endregion
@@ -203,7 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sub_download_button.clicked.connect(lambda: subs(self))
         self.sub_lang_button.clicked.connect(lambda: sub_lang(self))
         self.sub_playlist_checkbox.toggled.connect(lambda: sub_playlist_bar_toggle(self))
-        self.sub_cookie_checkbox.setChecked(self.settings.Ytdlp.cookie)
+        self.sub_cookie_checkbox.setChecked(self.settings.ytdlp_settings.cookie)
         self.sub_output_console.setFont(font)
         self.sub_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Subtitles) paste a link and hit download.")
         # endregion
@@ -229,6 +229,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ree_folder_button.clicked.connect(lambda: self.openFolder(self.ree_location_bar.text()))
         self.ree_settings_combobox.activated.connect(lambda: ree_settings(self))
         self.ree_settings_button.clicked.connect(lambda: ree_settings_save(self))
+        self.ree_output_console.setFont(font)
         self.ree_output_console.setHtml("#yt-dl# Welcome to yt-dl-gui (Re-encode) paste a link and hit download.")
         self.ree_location_bar.setAcceptDrops(True)
         # endregion
@@ -256,7 +257,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # region =====set_controls=====
         self.set_loaddef_button.clicked.connect(lambda: write_default_json(self))
-        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.Ytdlp.audioDir, self.settings.Ytdlp.videoDir, self.settings.Python.python, self.settings.Python.pip, self.settings.Ytdlp.fromPip, self.settings.autoUpdate, self.settings.Ffmpeg.audioCodec, self.settings.Ffmpeg.videoCodec, self.settings.Ffmpeg.audioBitrate, self.settings.Ffmpeg.videoQuality, self.settings.Ffmpeg.append, self.settings.defaultTab, self.settings.autoClose))
+        self.set_loadcur_button.clicked.connect(lambda: set_load(self, self.settings.ytdlp_settings.audio_dir, self.settings.ytdlp_settings.video_dir, self.settings.python_settings.python, self.settings.python_settings.pip, self.settings.ytdlp_settings.from_pip, self.settings.auto_update, self.settings.ffmpeg_settings.audio_codec, self.settings.ffmpeg_settings.video_codec, self.settings.ffmpeg_settings.audio_bitrate, self.settings.ffmpeg_settings.video_quality, self.settings.ffmpeg_settings.append, self.settings.default_tab, self.settings.auto_close))
         self.set_folder_button.clicked.connect(lambda: self.openFolder(spath))
         self.set_launch_button.clicked.connect(lambda: set_make_script(self))
         self.set_save_button.clicked.connect(lambda: set_save(self))
