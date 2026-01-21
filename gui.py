@@ -204,7 +204,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ree_settings(self)  # load option on startup
         self.ree_choose_button.clicked.connect(lambda: ree_choose(self))
-        self.ree_reencode_button.clicked.connect(lambda: reencode(self))
+        def ree_reencode_action():
+            if hasattr(self, 'process') and getattr(self, 'running', False):
+                # If running, stop the process
+                if hasattr(self, 'process_worker') and hasattr(self.process_worker, 'terminate_process'):
+                    self.process_worker.terminate_process()
+                self.running = False
+                self.ree_reencode_button.setText("Re-encode")
+            else:
+                reencode(self)
+        self.ree_reencode_button.clicked.connect(ree_reencode_action)
         self.ree_folder_button.clicked.connect(lambda: self.openFolder(self.ree_location_bar.text()))
         self.ree_settings_combobox.activated.connect(lambda: ree_settings(self))
         self.ree_settings_button.clicked.connect(lambda: ree_settings_save(self))

@@ -28,9 +28,8 @@ def reencode(window):
         window.ree_output_console.insertPlainText(result)
     else:
         for line in result:
-            window.sub_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
-
-            window.process = process_start(window, line, window.ree_output_console, window.sub_download_button, window.process)
+            window.ree_output_console.insertPlainText("#yt-dl# starting ffmpeg please wait...\n")
+            window.process = process_start(window, line, window.ree_output_console, window.ree_reencode_button, window.process)
 
 
 def ree_settings(window):

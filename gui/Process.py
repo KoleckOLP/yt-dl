@@ -15,9 +15,25 @@ except Exception as e:
 
 
 class OutputEmitter(QObject):
-    output_signal = pyqtSignal(str)
-    error_signal = pyqtSignal(str)
-    finished_signal = pyqtSignal()
+        output_signal = pyqtSignal(str)
+        error_signal = pyqtSignal(str)
+        finished_signal = pyqtSignal()
+
+        def __init__(self):
+            super().__init__()
+            self.process = None
+
+        def terminate_process(self):
+            if self.process:
+                try:
+                    self.process.terminate()
+                except Exception:
+                    pass
+                try:
+                    self.process.kill()
+                except Exception:
+                    pass
+                self.process = None
 
 
 def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process_worker=None, output_clear: bool = True, process_name: str = "yt-dlp", collect_output: bool = False):
@@ -43,6 +59,7 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000 if sys.platform.startswith("win") else 0, universal_newlines=True, encoding="utf8", errors="ignore", stdin=subprocess.DEVNULL)
     q = Queue()
     emitter = OutputEmitter()
+    emitter.process = process
     window.process_worker = emitter  # for compatibility
 
     def enqueue_output(pipe, tag):
@@ -106,7 +123,11 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
     def handle_finished():
         if not collect_output:
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
-        download_button.setText("Download")
+        # Set button text based on which button is used
+        if hasattr(download_button, 'objectName') and download_button.objectName() == 'ree_reencode_button':
+            download_button.setText("Re-encode")
+        else:
+            download_button.setText("Download")
         window.running = False
         window.status("Ready.")
         tabName = window.tabWidget.tabText(window.tabWidget.currentIndex())
