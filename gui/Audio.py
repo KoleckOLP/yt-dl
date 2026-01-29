@@ -15,7 +15,8 @@ def audio(window):
                        window.floc,
                        window.ytex,
                        window.settings.ytdlp_settings.audio_dir,
-                       window.settings.ytdlp_settings.cookie)
+                       window.settings.ytdlp_settings.cookie,
+                       getattr(window, 'deno', False))
 
     window.process = process_start(window, cmd, window.aud_output_console, window.aud_download_button, window.process)
 
