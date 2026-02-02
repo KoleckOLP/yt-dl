@@ -4,6 +4,7 @@ import threading
 from queue import Queue, Empty
 from PyQt6.QtCore import pyqtSignal, QObject
 import shlex  # Add this import at the top
+import time  # Add this import at the top
 
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
@@ -92,6 +93,10 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
     collected = [] if collect_output else None
 
     def process_queue():
+        buffer = []
+        last_flush_time = time.time()
+        flush_interval = 0.1  # Flush every 100ms
+
         while True:
             try:
                 tag, line = q.get(timeout=0.1)
@@ -99,13 +104,27 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
                 if process.poll() is not None:
                     break
                 continue
+
+            buffer.append((tag, line))
+
+            # Flush the buffer periodically
+            if time.time() - last_flush_time > flush_interval:
+                flush_buffer(buffer)
+                last_flush_time = time.time()
+
+        # Flush any remaining lines in the buffer
+        flush_buffer(buffer)
+        emitter.finished_signal.emit()
+
+    def flush_buffer(buffer):
+        while buffer:
+            tag, line = buffer.pop(0)
             if tag == 'stderr':
                 emitter.error_signal.emit(line)
             else:
                 emitter.output_signal.emit(line)
                 if collect_output:
                     collected.append(line)
-        emitter.finished_signal.emit()
 
     t_proc = threading.Thread(target=process_queue)
     t_proc.daemon = True
@@ -114,28 +133,36 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
     def handle_output(line):
         if collect_output:
             return  # Do not print real-time output when collecting
-        if "\r" in line:
-            text = line.split("\r")[-1].rstrip("\n")
-            cursor = output_console.textCursor()
-            cursor.movePosition(cursor.End)
-            cursor.select(cursor.LineUnderCursor)
-            cursor.removeSelectedText()
-            cursor.deletePreviousChar()
-            cursor.insertText(text)
-            output_console.setTextCursor(cursor)
-        else:
-            output_console.insertPlainText(line)
+
+        # Use a buffer to batch updates
+        if not hasattr(handle_output, "buffer"):
+            handle_output.buffer = []
+        if not hasattr(handle_output, "last_flush_time"):
+            handle_output.last_flush_time = time.time()
+
+        handle_output.buffer.append(line)
+
+        # Flush the buffer if it reaches 3 lines or every 50ms
+        if len(handle_output.buffer) >= 3 or (time.time() - handle_output.last_flush_time > 0.05):
+            output_console.blockSignals(True)  # Prevent signals from triggering recursion
+            output_console.insertPlainText("".join(handle_output.buffer))
+            output_console.blockSignals(False)
+            handle_output.buffer.clear()
+            handle_output.last_flush_time = time.time()
+
         scrollbar = output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
-        QtWidgets.QApplication.processEvents()
 
     def handle_error(line):
         output_console.insertPlainText('[stderr] ' + line)
         scrollbar = output_console.verticalScrollBar()
         scrollbar.setValue(scrollbar.maximum())
-        QtWidgets.QApplication.processEvents()
 
     def handle_finished():
+        if hasattr(handle_output, "buffer") and handle_output.buffer:
+            output_console.insertPlainText("".join(handle_output.buffer))  # Flush remaining lines
+            handle_output.buffer.clear()
+
         if not collect_output:
             output_console.insertPlainText("#yt-dl# Process has finished.\n\n")
         # Set button text based on which button is used
