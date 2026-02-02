@@ -6,15 +6,19 @@ from typing import List
 from shared.Shared import shared, has_cookie
 
 
-def subs_shared_list(url: str, ytex):
+def subs_shared_list(url: str, ytex, deno: str = False):
     if ytex:
         cmd = ytex+["--list-subs", "--no-playlist", f"{url}"]
     else:
         cmd = ["yt-dlp", "--list-subs", "--no-playlist", f"{url}"]
+    
+    if deno:
+        cmd = cmd + ["--js-runtimes", "deno:" + deno, "--remote-components", "ejs:github"]
+    
     return cmd
 
 
-def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str, ytex: str, cookie: bool):
+def subs_shared_download(url: str, playlist: bool, numb: str, lang: str, floc: str, ytex: str, cookie: bool, deno: str = False):
     temp = tempfile.TemporaryDirectory()
 
     cmd = shared(playlist, numb, floc, ytex, temp.name+os.path.sep)

@@ -3,6 +3,7 @@ import sys, subprocess, platform
 import threading
 from queue import Queue, Empty
 from PyQt6.QtCore import pyqtSignal, QObject
+import shlex  # Add this import at the top
 
 if (platform.system().lower() == "windows"):
     if (int(platform.version().split(".")[0]) < 10):
@@ -36,7 +37,20 @@ class OutputEmitter(QObject):
                 self.process = None
 
 
+def sanitize_command(cmd: List[str]) -> List[str]:
+    """Escape or replace illegal characters in the command."""
+    sanitized = []
+    for part in cmd:
+        if sys.platform.startswith("win"):
+            # Escape special characters for Windows
+            part = part.replace("&", "^&")
+        sanitized.append(part)
+    return sanitized
+
+
 def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser, download_button: QtWidgets.QPushButton, process_worker=None, output_clear: bool = True, process_name: str = "yt-dlp", collect_output: bool = False):
+    cmd = sanitize_command(cmd)  # Sanitize the command before execution
+
     if window.running:
         # Only call terminate_process if it exists
         if hasattr(window, 'process_worker') and window.process_worker:
@@ -55,8 +69,9 @@ def process_start(window, cmd: List[str], output_console: QtWidgets.QTextBrowser
         output_console.setHtml("")
         output_console.insertPlainText(f"#yt-dl# starting {process_name} please wait...\n")
         output_console.insertPlainText(f"#yt-dl# debug `{' '.join(cmd)}`\n\n")
+        print(f"#yt-dl# debug `{' '.join(cmd)}`\n\n")
 
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000 if sys.platform.startswith("win") else 0, universal_newlines=True, encoding="utf8", errors="ignore", stdin=subprocess.DEVNULL)
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=0x08000000 if sys.platform.startswith("win") else 0, universal_newlines=True, encoding="utf8", errors="replace", stdin=subprocess.DEVNULL)
     q = Queue()
     emitter = OutputEmitter()
     emitter.process = process

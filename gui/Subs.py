@@ -17,6 +17,7 @@ def subs(window):
         window.floc,
         window.ytex,
         window.settings.ytdlp_settings.video_dir,
+        getattr(window, 'deno', False)
     )
     cmd += ["--write-sub", "--write-auto-sub", "--sub-format", "vtt", "--convert-subs", "srt", "--skip-download", window.sub_url_bar.text()]
     if window.sub_lang_bar.text():
@@ -31,7 +32,7 @@ def subs(window):
 
 
 def sub_lang(window):
-    cmd = subs_shared_list(window.sub_url_bar.text(), window.ytex)  # seems kinda unnecessary
+    cmd = subs_shared_list(window.sub_url_bar.text(), window.ytex, window.deno)  # seems kinda unnecessary
 
     window.sub_output_console.insertPlainText("#yt-dl# starting yt-dl please wait...\n")
 
