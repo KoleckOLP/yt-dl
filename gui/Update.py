@@ -170,13 +170,24 @@ def list_versions(window):
     # yt-dlp version
     ytex_path = window.ytex[0] if window.ytex and isinstance(window.ytex, list) else window.ytex
     if ytex_path and os.path.isfile(ytex_path):
+        window.upd_output_console.insertPlainText("yt-dlp ")
         run_and_show([ytex_path, "--version"], "yt-dlp")
     else:
+        window.upd_output_console.insertPlainText("yt-dlp ")
         run_and_show(["yt-dlp", "--version"], "yt-dlp")
 
     # ffmpeg version
+    deno_path = f"{window.deno}" if hasattr(window, 'deno') and window.deno else None
+    if deno_path and os.path.isfile(deno_path):
+        run_and_show([deno_path, "-v"], "deno")
+    else:
+        run_and_show(["deno", "-v"], "deno")
+
+    # ffmpeg version
     ffmpeg_path = f"{window.floc+os.path.sep}ffmpeg" if hasattr(window, 'floc') and window.floc else None
-    if ffmpeg_path and os.path.isfile(ffmpeg_path):
+    print("floc: "+window.floc)
+    print("ffmpeg_loc: " + ffmpeg_path)
+    if ffmpeg_path:
         run_and_show([ffmpeg_path, "-version"], "ffmpeg")
     else:
         run_and_show(["ffmpeg", "-version"], "ffmpeg")
