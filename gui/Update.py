@@ -185,8 +185,8 @@ def list_versions(window):
 
     # ffmpeg version
     ffmpeg_path = f"{window.floc+os.path.sep}ffmpeg" if hasattr(window, 'floc') and window.floc else None
-    print("floc: "+window.floc)
-    print("ffmpeg_loc: " + ffmpeg_path)
+    #print("floc: "+window.floc)
+    #print("ffmpeg_loc: " + ffmpeg_path)
     if ffmpeg_path:
         run_and_show([ffmpeg_path, "-version"], "ffmpeg")
     else:
